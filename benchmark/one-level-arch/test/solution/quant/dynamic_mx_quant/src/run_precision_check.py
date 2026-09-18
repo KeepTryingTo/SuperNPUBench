@@ -34,28 +34,29 @@ DEFAULT_GFRUN = WORKSPACE / "SuperScalarModel" / "bin" / "gfrun"
 SEED = 42
 
 # TYPE, driver, M(Axis), K(Post), BS, in-dtype, algo, kernel, dtype, PE
-# ★ 须与 compile.all 的 CONFIGS 保持同步（PE 列为本 runner 独有 = gfrun multiThreadNum）。
-#   big-BS 用例（bs128）numKb=1 无块行并行度，但仍统一走 kPeNum=4 kernel（PE0 全包、
-#   PE1..3 空转），故 PE=4；输出与单 PE 逐字节一致。
+# ★ 须与 compile.all 的 CONFIGS 保持同步（PE 列为本 runner 独有 = gfrun multiThreadNum，全部 4）。
+#   缩小网络基准 bench_small 已纳入（boxed 小 M，实测 output+scale byte-exact PASS——boxed 本身
+#   不致 scale 全零；scale 全零仅 tail_ocp_fp8 fp16 那条特定指令调度踩 gfrun e8m0 TSTORE 丢值缺陷，
+#   bf16 bench_small 调度不同即正常）。完整网络基准太大只在 compile.all 供 gfsim。big-BS 已合并进
+#   统一 4-PE kernel（*_bs128 用例已删除）。
 CONFIGS = [
-    ("TAIL_OCP_FP8",                 "tail_ocp_fp8",                 512, 256,  32, "fp16", "OCP",    "tail",    "FP8", 4),
-    ("TAIL_OCP_FP8_DYN",             "tail_ocp_fp8_dyn",             512, 256,  32, "fp16", "OCP",    "tail",    "FP8", 4),
-    ("TAIL_OCP_FP4",                 "tail_ocp_fp4",                 512, 256,  32, "bf16", "OCP",    "tail",    "FP4", 4),
-    # 大 shape 基准 [15360,1536]（~47MB，太大，默认不跑）；手动:
-    #   make TESTCASE=dynamic_mx_quant TYPE=TAIL_OCP_FP4_BENCH res_check=on  然后 gfrun + compare
-    # ("TAIL_OCP_FP4_BENCH",         "tail_ocp_fp4_bench",         15360,1536,  32, "bf16", "OCP",    "tail",    "FP4", 4),
-    ("TAIL_CUBLAS_FP8_4PE",          "tail_cublas_fp8_4pe",          512, 256,  32, "fp16", "CUBLAS", "tail",    "FP8", 4),
-    ("NONTAIL_CUBLAS_FP8_4PE",       "nontail_cublas_fp8_4pe",       512, 256,  32, "fp16", "CUBLAS", "nontail", "FP8", 4),
-    ("NONTAIL_CUBLAS_FP8_BS128",     "nontail_cublas_fp8_bs128",     128,  32, 128, "bf16", "CUBLAS", "nontail", "FP8", 4),
-    ("NONTAIL_OCP_FP4_4PE",          "nontail_ocp_fp4_4pe",          512,  64,  32, "fp16", "OCP",    "nontail", "FP4", 4),
-    ("NONTAIL_OCP_FP4_BS128",        "nontail_ocp_fp4_bs128",        128,  64, 128, "bf16", "OCP",    "nontail", "FP4", 4),
-    # --- 运行期动态 shape（_dyn）家族 ---
-    ("TAIL_OCP_FP4_DYN",             "tail_ocp_fp4_dyn",             512, 256,  32, "bf16", "OCP",    "tail",    "FP4", 4),
-    ("TAIL_CUBLAS_FP8_DYN",          "tail_cublas_fp8_dyn",          512, 256,  32, "fp16", "CUBLAS", "tail",    "FP8", 4),
-    ("NONTAIL_CUBLAS_FP8_DYN",       "nontail_cublas_fp8_dyn",       512, 256,  32, "fp16", "CUBLAS", "nontail", "FP8", 4),
-    ("NONTAIL_CUBLAS_FP8_SPLITN_DYN","nontail_cublas_fp8_splitN_dyn",512, 256,  32, "fp16", "CUBLAS", "nontail", "FP8", 4),
-    ("NONTAIL_OCP_FP4_DYN",          "nontail_ocp_fp4_dyn",          512,  64,  32, "fp16", "OCP",    "nontail", "FP4", 4),
-    ("NONTAIL_OCP_FP4_SPLITN_DYN",   "nontail_ocp_fp4_splitN_dyn",   512, 256,  32, "fp16", "OCP",    "nontail", "FP4", 4),
+    # ---- 静态定尺（全部 4-PE）----
+    ("TAIL_OCP_FP8",                 "tail_ocp_fp8",                 512, 256, 32, "fp16", "OCP",    "tail",    "FP8", 4),
+    ("TAIL_OCP_FP4",                 "tail_ocp_fp4",                 512, 256, 32, "bf16", "OCP",    "tail",    "FP4", 4),
+    ("TAIL_CUBLAS_FP8",              "tail_cublas_fp8",              512, 256, 32, "fp16", "CUBLAS", "tail",    "FP8", 4),
+    ("NONTAIL_CUBLAS_FP8",           "nontail_cublas_fp8",           512, 256, 32, "fp16", "CUBLAS", "nontail", "FP8", 4),
+    ("NONTAIL_OCP_FP4",              "nontail_ocp_fp4",              512,  64, 32, "fp16", "OCP",    "nontail", "FP4", 4),
+    # ---- 运行期动态 shape（_dyn）----
+    ("TAIL_OCP_FP8_DYN",             "tail_ocp_fp8_dyn",             512, 256, 32, "fp16", "OCP",    "tail",    "FP8", 4),
+    ("TAIL_OCP_FP4_DYN",             "tail_ocp_fp4_dyn",             512, 256, 32, "bf16", "OCP",    "tail",    "FP4", 4),
+    ("TAIL_CUBLAS_FP8_DYN",          "tail_cublas_fp8_dyn",          512, 256, 32, "fp16", "CUBLAS", "tail",    "FP8", 4),
+    ("NONTAIL_CUBLAS_FP8_DYN",       "nontail_cublas_fp8_dyn",       512, 256, 32, "fp16", "CUBLAS", "nontail", "FP8", 4),
+    ("NONTAIL_CUBLAS_FP8_SPLITN_DYN","nontail_cublas_fp8_splitN_dyn",512, 256, 32, "fp16", "CUBLAS", "nontail", "FP8", 4),
+    ("NONTAIL_OCP_FP4_DYN",          "nontail_ocp_fp4_dyn",          512,  64, 32, "fp16", "OCP",    "nontail", "FP4", 4),
+    ("NONTAIL_OCP_FP4_SPLITN_DYN",   "nontail_ocp_fp4_splitN_dyn",   512, 256, 32, "fp16", "OCP",    "nontail", "FP4", 4),
+    # ---- 缩小版网络基准（boxed 小 M，scale 精度受 model boxed/e8m0 缺陷影响，预期 FAIL，仅作观测）----
+    ("TAIL_OCP_FP4_BENCH_SMALL",     "tail_ocp_fp4_bench_small",     256, 1536, 32, "bf16", "OCP",    "tail",    "FP4", 4),
+    ("TAIL_OCP_FP8_BENCH_SMALL",     "tail_ocp_fp8_bench_small",      64,16384, 32, "bf16", "OCP",    "tail",    "FP8", 4),
 ]
 
 

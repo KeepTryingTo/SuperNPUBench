@@ -8,6 +8,8 @@ Tm ?= 16
 Tk ?= 16
 QD ?= 128
 VD ?= 128
+MaxSq ?= 256
+MaxSkv ?= 256
 PVChainK ?= 32
 X_dim ?= 1
 Y_dim ?= 1
@@ -71,6 +73,8 @@ DEFINES += -DTm=$(Tm)
 DEFINES += -DTk=$(Tk)
 DEFINES += -DFA_QD=$(QD)
 DEFINES += -DFA_VD=$(VD)
+DEFINES += -DFA_MAX_SQ=$(MaxSq)
+DEFINES += -DFA_MAX_SKV=$(MaxSkv)
 DEFINES += -DPV_CHAIN_K=$(PVChainK)
 DEFINES += -DFA_X_DIM=$(X_dim)
 DEFINES += -DFA_Y_DIM=$(Y_dim)
@@ -79,6 +83,10 @@ ifeq ($(TESTCASE),fa_2d_unroll_gmma)
 SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_2d_unroll_gmma.cpp
 else ifeq ($(TESTCASE),fa_gmma_kchains)
 SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_gmma_kchains.cpp
+else ifeq ($(TESTCASE),fa_gmma_opt)
+SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_gmma_opt.cpp
+else ifeq ($(TESTCASE),fa_gmma_dynamic)
+SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_gmma_dynamic.cpp
 else ifeq ($(TESTCASE),fa_2d_unroll_gmma_no_tstore)
 SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_2d_unroll_gmma_no_tstore.cpp
 else ifeq ($(TESTCASE),fa_fixpipe)
@@ -89,8 +97,18 @@ else ifeq ($(TESTCASE),fa_2d_unroll_gmma_subview)
 SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_2d_unroll_gmma_subview.cpp
 else ifeq ($(TESTCASE),fa_lowp)
 SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_lowp.cpp
+else ifeq ($(TESTCASE),fa_lowp_recip)
+SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_lowp.cpp
+DEFINES += -DFA_LOWP_RECIP=1
 else
-$(error Unsupported TESTCASE=$(TESTCASE); expected fa_2d_unroll_gmma, fa_gmma_kchains, fa_2d_unroll_gmma_no_tstore, fa_fixpipe, fa_subview, fa_2d_unroll_gmma_subview, or fa_lowp)
+$(error Unsupported TESTCASE=$(TESTCASE); expected fa_2d_unroll_gmma, fa_gmma_opt, fa_gmma_dynamic, fa_gmma_kchains, fa_2d_unroll_gmma_no_tstore, fa_fixpipe, fa_subview, fa_2d_unroll_gmma_subview, fa_lowp, or fa_lowp_recip)
+endif
+
+ifeq ($(TESTCASE),fa_gmma_dynamic)
+ifneq ($(FA_MODE),FP32_VECFP32)
+$(error fa_gmma_dynamic test driver currently supports FA_MODE=FP32_VECFP32)
+endif
+DYNAMIC_SUFFIX = _MaxSq$(MaxSq)_MaxSkv$(MaxSkv)
 endif
 
 ifeq ($(TESTCASE),fa_gmma_kchains)
@@ -98,9 +116,9 @@ KCHAIN_SUFFIX = _PVChainK$(PVChainK)
 endif
 
 ifeq ($(QD)_$(VD),128_128)
-TARGET = $(ELF_HEAD)_$(TESTCASE)_Sq$(Sq)_Skv$(Skv)_Tm$(Tm)_Tk$(Tk)$(KCHAIN_SUFFIX)_X$(X_dim)_Y$(Y_dim)_$(FA_MODE).elf
+TARGET = $(ELF_HEAD)_$(TESTCASE)_Sq$(Sq)_Skv$(Skv)$(DYNAMIC_SUFFIX)_Tm$(Tm)_Tk$(Tk)$(KCHAIN_SUFFIX)_X$(X_dim)_Y$(Y_dim)_$(FA_MODE).elf
 else
-TARGET = $(ELF_HEAD)_$(TESTCASE)_Sq$(Sq)_Skv$(Skv)_Tm$(Tm)_Tk$(Tk)_qD$(QD)_vD$(VD)$(KCHAIN_SUFFIX)_X$(X_dim)_Y$(Y_dim)_$(FA_MODE).elf
+TARGET = $(ELF_HEAD)_$(TESTCASE)_Sq$(Sq)_Skv$(Skv)$(DYNAMIC_SUFFIX)_Tm$(Tm)_Tk$(Tk)_qD$(QD)_vD$(VD)$(KCHAIN_SUFFIX)_X$(X_dim)_Y$(Y_dim)_$(FA_MODE).elf
 endif
 
 include ../../common/Makefile.common

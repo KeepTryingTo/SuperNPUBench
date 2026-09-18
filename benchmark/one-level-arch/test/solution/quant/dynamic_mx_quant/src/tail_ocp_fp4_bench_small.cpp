@@ -5,16 +5,17 @@
 #include "solution/quant/dynamic_mx_quant/dynamic_mx_quant_tail_ocp_fp4_dyn.hpp"
 using namespace supernpu::tile_isa::mxquant;
 
-// TAIL_OCP_FP4 大 shape 基准用例：[M=15360, N=1536], BlockSize=32, bf16 in -> fp4(e2m1) out。
-//   与 tail_ocp_fp4.cpp 同一 kernel/算法，仅换成真实规模的固定形状（专用 driver = 专用 .o，
-//   避免与 512×256 用例共享 tail_ocp_fp4.o 造成 -DPM 陈旧复用）。固定 SPMD 4-PE：M 按 tid
-//   切 4 份，每 PE 3840 行 = 30×TileM(128)，整除无 boxed 尾块。numKb = 1536/32 = 48。
-//   必须用 4 线程跑：gfrun -s softcore.multiThreadNum=4。
-//   RES_CHECK：读 gen（--M 15360 --K 1536 --block-size 32 --algo OCP --kernel tail --dtype FP4
+// TAIL_OCP_FP4 缩小版网络基准用例：[M=256, N=1536], BlockSize=32, bf16 in -> fp4(e2m1) out。
+//   与 tail_ocp_fp4_bench.cpp 完全同一 kernel/算法/结构，仅把默认形状从 [15360,1536] 缩到
+//   [256,1536]（专用 driver = 专用 .o，避免与其它用例共享 .o 造成 -DPM 陈旧复用）。缩小版
+//   足够小（256×1536 bf16≈0.75MB），可进 compile.all 默认跑、直接喂 gfsim 做网络形状时序。
+//   固定 SPMD 4-PE：M 按 tid 切 4 份，每 PE 64 行 = boxed 尾块（64 < TileM=128，seg_full=0）。
+//   numKb = 1536/32 = 48。必须用 4 线程跑：gfrun -s softcore.multiThreadNum=4。
+//   RES_CHECK：读 gen（--M 256 --K 1536 --block-size 32 --algo OCP --kernel tail --dtype FP4
 //   --in-dtype bf16 --scale-layout compact）的 input.bin，写 output.bin（每行 N/2 打包字节）+
 //   scale_output.bin（compact uint8 E8M0，scaleCols = evenAlign(N/32) = 48）。
 #ifndef PM
-#define PM 15360
+#define PM 256
 #endif
 #ifndef PN
 #define PN 1536
