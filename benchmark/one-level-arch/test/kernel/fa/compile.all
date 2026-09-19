@@ -6,20 +6,35 @@
 # subsequent shape groups (fixpipe, subview, long-context).
 : "${COMPILER_DIR:?Set COMPILER_DIR to the Linx compiler bin directory}"
 
-# fa_gmma_dynamic keeps Q and online-softmax/PV tile state across a runtime
-# KV loop. The current compiler crashes in Simple Register Coalescing, so this
-# experimental testcase is built separately while that issue is investigated.
+# fa_gmma_dynamic uses runtime Q/KV loop bounds. QK scores stay in tile
+# registers; GM scratch holds row state and one PV block at a time.
 
-# fa_gmma_kchains runs the SAME shape/mode matrix as fa_2d_unroll_gmma: the
-# Makefile defaults PVChainK=32 and auto-appends _PVChainK32 to its ELF name;
-# X_dim/Y_dim are name-only for kchains (its kernel does not stage multi-tiles).
-# Tk=256 gives 8 chains per KV block (kTk % PVChainK == 0).
+# fa_gmma_kchains runs the SAME shape/mode matrix as fa_2d_unroll_gmma.
+# The Makefile defaults PVChainK=Tk (one PV chain per KV block); the ELF
+# name auto-appends the _PVChainK suffix. X_dim/Y_dim are name-only for
+# kchains (its kernel does not stage multi-tiles). The 32-wide multi-chain
+# form is kept via an explicit PVChainK=32 pass below (kTk % PVChainK == 0
+# holds for Tk=128/256).
 
 # fa_lowp: MXFP4 Q/K/V, BF16 QK+softmax, then MXFP4 P/V matmul.
 # (Also Sq256/Skv256 — kept as the sole config of its kernel.)
 make diss TESTCASE=fa_lowp \
     COMPILER_DIR="$COMPILER_DIR" \
     FA_MODE=MXFP4_VECBF16 Sq=256 Skv=256 Tm=128 Tk=128 \
+    X_dim=1 Y_dim=2
+
+# fa_lowp_recip: TRECIP-based reciprocal path (FA_LOWP_RECIP=1), two shapes
+# (baseline + long context). Built from its own TU (src/fa_lowp_recip.cpp)
+# so it never reuses a fa_lowp.o compiled without the define (make ignores
+# -D flag changes).
+make diss TESTCASE=fa_lowp_recip \
+    COMPILER_DIR="$COMPILER_DIR" \
+    FA_MODE=MXFP4_VECBF16 Sq=256 Skv=256 Tm=128 Tk=128 \
+    X_dim=1 Y_dim=2
+
+make diss TESTCASE=fa_lowp_recip \
+    COMPILER_DIR="$COMPILER_DIR" \
+    FA_MODE=MXFP4_VECBF16 Sq=128 Skv=8192 Tm=128 Tk=128 \
     X_dim=1 Y_dim=2
 
 # Larger sequence length (Sq=Skv=1024) to exercise deeper Q-block and K/V-block
@@ -81,4 +96,30 @@ for testcase in fa_2d_unroll_gmma fa_fixpipe fa_subview fa_gmma_kchains; do
             FA_MODE="$mode" Sq=256 Skv=512 Tm=128 Tk=256 \
             X_dim=1 Y_dim=1
     done
+done
+
+# fa_gmma_kchains with the explicit 32-wide PV chain (the original k-chain
+# form; the Makefile default PVChainK=Tk builds one chain per KV block in
+# the passes above). Same three shapes.
+for mode in \
+    FP32_VECFP32 \
+    BF16_VECFP32 \
+    MXFP8_VECFP32 \
+    HIF8_VECFP32 \
+    FP8_VECFP32 \
+    FP8_VECBF16 \
+    MXFP4_VECBF16 \
+    HIF4_VECBF16; do
+    make diss TESTCASE=fa_gmma_kchains \
+        COMPILER_DIR="$COMPILER_DIR" \
+        FA_MODE="$mode" Sq=1024 Skv=1024 Tm=128 Tk=128 \
+        X_dim=1 Y_dim=2 PVChainK=32
+    make diss TESTCASE=fa_gmma_kchains \
+        COMPILER_DIR="$COMPILER_DIR" \
+        FA_MODE="$mode" Sq=128 Skv=8192 Tm=128 Tk=128 \
+        X_dim=1 Y_dim=2 PVChainK=32
+    make diss TESTCASE=fa_gmma_kchains \
+        COMPILER_DIR="$COMPILER_DIR" \
+        FA_MODE="$mode" Sq=256 Skv=512 Tm=128 Tk=256 \
+        X_dim=1 Y_dim=1 PVChainK=32
 done

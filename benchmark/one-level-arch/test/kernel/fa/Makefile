@@ -10,7 +10,7 @@ QD ?= 128
 VD ?= 128
 MaxSq ?= 256
 MaxSkv ?= 256
-PVChainK ?= 32
+PVChainK ?= $(Tk)
 X_dim ?= 1
 Y_dim ?= 1
 
@@ -98,7 +98,7 @@ SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_2d_unroll_gmma_subview.cpp
 else ifeq ($(TESTCASE),fa_lowp)
 SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_lowp.cpp
 else ifeq ($(TESTCASE),fa_lowp_recip)
-SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_lowp.cpp
+SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_lowp_recip.cpp
 DEFINES += -DFA_LOWP_RECIP=1
 else
 $(error Unsupported TESTCASE=$(TESTCASE); expected fa_2d_unroll_gmma, fa_gmma_opt, fa_gmma_dynamic, fa_gmma_kchains, fa_2d_unroll_gmma_no_tstore, fa_fixpipe, fa_subview, fa_2d_unroll_gmma_subview, fa_lowp, or fa_lowp_recip)
