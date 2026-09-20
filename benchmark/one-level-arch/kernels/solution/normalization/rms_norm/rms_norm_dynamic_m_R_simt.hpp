@@ -1,4 +1,4 @@
-// rms_norm_dynamic_m_R_simt: [512,8192].
+// rms_norm_dynamic_m_R_simt: default test shape [128,8192].
 // Fixed-shape 4PE implementation with R=[16,32,16], Tile=[32,16].
 #ifndef SUPERNPU_RMS_NORM_SIMT_DYNAMIC_M_R_SIMT_HPP
 #define SUPERNPU_RMS_NORM_SIMT_DYNAMIC_M_R_SIMT_HPP
@@ -76,6 +76,7 @@ inline void rms_norm_tile(dtype *x, const dtype *gamma, dtype *out,
     gm_t input_row(x + offset, 1, static_cast<int>(gR));
 
     // Sequentially reduce every R block into one row-sum vector.
+    // ValidCol is static: the one-argument constructor sets ValidRow.
     tile_m_v sum_rows(curtile_factal_a);
     reduce_sequential<gm_t, tile_h, tile_f, tile_m_v>(
         input_row, pair_count, tile_r, curtile_factal_a,
