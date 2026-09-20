@@ -6,8 +6,8 @@
 # subsequent shape groups (fixpipe, subview, long-context).
 : "${COMPILER_DIR:?Set COMPILER_DIR to the Linx compiler bin directory}"
 
-# fa_gmma_dynamic uses runtime Q/KV loop bounds. QK scores stay in tile
-# registers; GM scratch holds row state and one PV block at a time.
+# fa_gmma_dynamic uses runtime Q/KV loop bounds with single-pass online
+# softmax; Q, score, row state, and PV accumulation remain in tile registers.
 
 # fa_gmma_kchains runs the SAME shape/mode matrix as fa_2d_unroll_gmma.
 # The Makefile defaults PVChainK=Tk (one PV chain per KV block); the ELF
