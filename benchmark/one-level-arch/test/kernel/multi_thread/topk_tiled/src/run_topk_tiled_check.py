@@ -16,11 +16,11 @@ gfrun -s softcore.multiThreadNum=4 -f <elf>, then compare. Guards:
       compares the FP16 sortable-key multiset of the output against the top-K
       golden keys, and requires the output indices to be distinct and in range.
 
-The outer shape (batch x cols, topk) is runtime.  --rows/--cols/--topk override
-it and run each row over the full [0, cols) range; with no shape flag the
-shipped 4x8192x512 case with varied ranges is used.  No rebuild is needed while
-the shape stays within the kernel's compile-time maxima (kBatchMax / kColsMax /
-kTopKMax); exceeding them means editing those and recompiling.
+The outer shape (batch x total_len, topk) is runtime.  --batch/--total_len/--topk
+override it and run each batch entry over the full [0, total_len) range; with no
+shape flag the shipped 4x8192x512 case with varied ranges is used.  No rebuild is
+needed while the shape stays within the kernel's compile-time maxima (kBatchMax /
+kColsMax / kTopKMax); exceeding them means editing those and recompiling.
 """
 
 import argparse
@@ -37,12 +37,12 @@ ONE_LEVEL_ROOT = SCRIPT_DIR.parents[4]
 ELF_DIR = ONE_LEVEL_ROOT / "output/kernel/multi_thread/topk_tiled/elf"
 COMPARE_ROOT = ONE_LEVEL_ROOT / "compare"
 
-ROWS = 4
-COLS = 8192
+BATCH = 4
+TOTAL_LEN = 8192
 TOPK = 512
 PAD = 32  # must match kLane tail-TLOAD padding in topk_driver.h
 STARTS = [0, 123, 7, 31]
-ENDS = [COLS, 6000, 1531, COLS - 1]
+ENDS = [TOTAL_LEN, 6000, 1531, TOTAL_LEN - 1]
 
 ELF_NAME = "kernel_multi_thread_topk_tiled_topk_tiled_PE4.elf"
 EXPORTS = ("input_readback.bin", "output.bin", "errors.bin")
@@ -65,7 +65,7 @@ def make_input(seed):
         values.append(f)
         return True
 
-    total = ROWS * COLS
+    total = BATCH * TOTAL_LEN
     # Wide-range values: random sign, exponent in 2^-6..2^6, random mantissa.
     while len(values) < total - 600:
         sign = 1.0 if rng.random() < 0.5 else -1.0
@@ -81,7 +81,7 @@ def make_input(seed):
 
 def golden_topk(values, row):
     lo, hi = STARTS[row], ENDS[row]
-    base = row * COLS
+    base = row * TOTAL_LEN
     window = [(values[base + i], i) for i in range(lo, hi)]
     window.sort(key=lambda p: (-p[0], p[1]))
     return sorted(i for _, i in window[:TOPK])
@@ -96,7 +96,7 @@ def fp16_key(value):
 def golden_topk_fp16_keys(values, row):
     """Descending FP16 sortable keys of the golden top-K (ties are a multiset)."""
     lo, hi = STARTS[row], ENDS[row]
-    base = row * COLS
+    base = row * TOTAL_LEN
     keys = [fp16_key(values[base + i]) for i in range(lo, hi)]
     keys.sort(reverse=True)
     return keys[:TOPK]
@@ -114,10 +114,10 @@ def run_check(gfrun, timeout, seed, mode):
     values = make_input(seed)
     (case_dir / "input.bin").write_bytes(
         struct.pack(f"<{len(values)}f", *values))
-    (case_dir / "starts.bin").write_bytes(struct.pack(f"<{ROWS}i", *STARTS))
-    (case_dir / "ends.bin").write_bytes(struct.pack(f"<{ROWS}i", *ENDS))
+    (case_dir / "starts.bin").write_bytes(struct.pack(f"<{BATCH}i", *STARTS))
+    (case_dir / "ends.bin").write_bytes(struct.pack(f"<{BATCH}i", *ENDS))
     # TopkTilingData { int64 batch, cols, topk }
-    (case_dir / "shape.bin").write_bytes(struct.pack("<3q", ROWS, COLS, TOPK))
+    (case_dir / "shape.bin").write_bytes(struct.pack("<3q", BATCH, TOTAL_LEN, TOPK))
 
     command = [str(gfrun), "-s", "softcore.multiThreadNum=4", "-f", str(elf)]
     try:
@@ -140,16 +140,16 @@ def run_check(gfrun, timeout, seed, mode):
         return "FAIL", "input never reached the device (readback differs)"
 
     # Guard 2: device-reported errors (candidate overflow / degenerate range).
-    errors = struct.unpack(f"<{ROWS}i", (case_dir / "errors.bin").read_bytes())
+    errors = struct.unpack(f"<{BATCH}i", (case_dir / "errors.bin").read_bytes())
     if any(errors):
         return "FAIL", f"device error flags set: {errors}"
 
-    output = struct.unpack(f"<{ROWS * TOPK}i", (case_dir / "output.bin").read_bytes())
+    output = struct.unpack(f"<{BATCH * TOPK}i", (case_dir / "output.bin").read_bytes())
 
     golden_flat = []
-    for row in range(ROWS):
+    for row in range(BATCH):
         got_idx = list(output[row * TOPK:(row + 1) * TOPK])
-        base = row * COLS
+        base = row * TOTAL_LEN
 
         if got_idx == [-1] * TOPK:
             return "FAIL", f"row {row}: output never written (all -1 sentinel)"
@@ -169,7 +169,7 @@ def run_check(gfrun, timeout, seed, mode):
             continue
 
         # fp16: exact under the 16-bit FP16 key, arbitrary tie-break at the cut.
-        if len(set(got_idx)) != TOPK or any(i < 0 or i >= COLS for i in got_idx):
+        if len(set(got_idx)) != TOPK or any(i < 0 or i >= TOTAL_LEN for i in got_idx):
             return "FAIL", f"row {row}: output is not {TOPK} distinct in-range indices"
         want_keys = golden_topk_fp16_keys(values, row)
         if want_keys[0] == want_keys[-1]:
@@ -184,8 +184,8 @@ def run_check(gfrun, timeout, seed, mode):
 
     if mode == "fp32":
         (case_dir / "golden.bin").write_bytes(struct.pack(f"<{len(golden_flat)}i", *golden_flat))
-    return "PASS", (f"mode={mode} rows={ROWS} cols={COLS} topk={TOPK} "
-                    f"output {ROWS * TOPK * 4}/{ROWS * TOPK * 4} bytes exact")
+    return "PASS", (f"mode={mode} batch={BATCH} total_len={TOTAL_LEN} topk={TOPK} "
+                    f"output {BATCH * TOPK * 4}/{BATCH * TOPK * 4} bytes exact")
 
 
 def main():
@@ -195,24 +195,25 @@ def main():
     parser.add_argument("--seed", type=int, default=12345)
     parser.add_argument("--mode", choices=("fp32", "fp16"), default="fp32",
                         help="must match the kernel's kFp32Refine build")
-    parser.add_argument("--rows", type=int,
-                        help="override batch (rows); giving any shape flag uses "
-                             "full [0, cols) ranges and no longer the shipped "
+    parser.add_argument("--batch", type=int,
+                        help="override batch; giving any shape flag uses full "
+                             "[0, total_len) ranges and no longer the shipped "
                              "4x8192x512 varied-range case")
-    parser.add_argument("--cols", type=int, help="override outer cols")
+    parser.add_argument("--total_len", type=int,
+                        help="override the per-batch-entry input length (cols)")
     parser.add_argument("--topk", type=int, help="override topk")
     args = parser.parse_args()
 
-    if args.rows is not None or args.cols is not None or args.topk is not None:
-        global ROWS, COLS, TOPK, STARTS, ENDS
-        if args.rows is not None:
-            ROWS = args.rows
-        if args.cols is not None:
-            COLS = args.cols
+    if args.batch is not None or args.total_len is not None or args.topk is not None:
+        global BATCH, TOTAL_LEN, TOPK, STARTS, ENDS
+        if args.batch is not None:
+            BATCH = args.batch
+        if args.total_len is not None:
+            TOTAL_LEN = args.total_len
         if args.topk is not None:
             TOPK = args.topk
-        STARTS = [0] * ROWS
-        ENDS = [COLS] * ROWS
+        STARTS = [0] * BATCH
+        ENDS = [TOTAL_LEN] * BATCH
 
     status, detail = run_check(args.gfrun, args.timeout, args.seed, args.mode)
     print(f"{status} topk {detail}")

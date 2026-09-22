@@ -64,22 +64,24 @@ constants and `./compile.all` again).
 export COMPILER_DIR=/path/to/linx_blockisa_llvm_musl/bin
 cd test/kernel/multi_thread/topk_tiled && ./compile.all
 
-# shipped case: 4 x 8192, topk 512, varied per-row ranges
+# shipped case: batch 4 x 8192, topk 512, varied per-batch ranges
 python3 src/run_topk_tiled_check.py --gfrun <gfrun>
 
-# any runtime shape within the maxima, e.g. 131072 -> 1024
+# any runtime shape within the maxima, e.g. batch 1 x 131072 -> 1024
 python3 src/run_topk_tiled_check.py --gfrun <gfrun> \
-    --rows 1 --cols 131072 --topk 1024 --mode fp32
+    --batch 1 --total_len 131072 --topk 1024 --mode fp32
 
 # fp16 build: same flags, --mode fp16
 python3 src/run_topk_tiled_check.py --gfrun <gfrun> \
-    --rows 1 --cols 131072 --topk 1024 --mode fp16
+    --batch 1 --total_len 131072 --topk 1024 --mode fp16
 ```
 
-`--rows/--cols/--topk` override the shipped shape and run each row over the
-full `[0, cols)` range. `--mode` must match the compiled `kFp32Refine`: fp16
-mode compares the output's FP16 sortable-key multiset against the golden top-K
-keys (arbitrary tie-break), fp32 mode compares the exact index set.
+`--batch` is the outer batch count (each entry is an independent length
+`total_len` input slice, i.e. one top-k problem). `--batch/--total_len/--topk`
+override the shipped shape and run each entry over the full `[0, total_len)`
+range. `--mode` must match the compiled `kFp32Refine`: fp16 mode compares the
+output's FP16 sortable-key multiset against the golden top-K keys (arbitrary
+tie-break), fp32 mode compares the exact index set.
 
 ## Validation status
 
