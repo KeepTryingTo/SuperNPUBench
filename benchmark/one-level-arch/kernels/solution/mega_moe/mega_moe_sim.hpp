@@ -165,7 +165,8 @@ struct Mc2MoeContext {   // 源 1124 行 (2026-08 同步: kfcContextAddr + hccld
 // 三-补、exp 近似 (无 libm 依赖; SwiGLU silu 的 exp 组件, 源真机用 Ascend Exp 指令)
 //   exp(z), z∈[-5,5]: z = k*ln2 + r (|r|<=ln2/2), exp = 2^k * exp(r)
 // ============================================================================
-MM_INLINE inline float exp_approx(float z)
+// [修复] 删除 "MM_INLINE" 后多余的 inline 说明符, 消除 -Wduplicate-decl-specifier 告警。
+MM_INLINE float exp_approx(float z)
 {
     const float kLn2 = 0.69314718055994530941723212145818f;
     const float kInvLn2 = 1.4426950408889634073599246810019f;
@@ -185,7 +186,8 @@ MM_INLINE inline float exp_approx(float z)
 // 四、FP8 A8W8 量化解码 (E4M3FN + E8M0 scale) — 计算语义完整保留
 // ============================================================================
 // E4M3FN: bit7=符号, bit[6:3]=指数(偏置7), bit[2:0]=尾数; e==0 为次正规
-MM_INLINE inline float fp8_e4m3_to_f32(uint8_t raw)
+// [修复] 删除 "MM_INLINE" 后多余的 inline 说明符, 消除 -Wduplicate-decl-specifier 告警。
+MM_INLINE float fp8_e4m3_to_f32(uint8_t raw)
 {
     const uint32_t s = (raw >> 7U) & 1U;
     const uint32_t e = (raw >> 3U) & 0xFU;
@@ -207,10 +209,9 @@ MM_INLINE inline float fp8_e4m3_to_f32(uint8_t raw)
     return s ? -val : val;
 }
 
-// E8M0: 纯指数 (偏置 127), scale = 2^(raw-127)
-// [issue #180 修正] 原实现把 raw 当 int8 偏置解码 (0x7F→2^127), 语义错误;
-// kernel 与 golden 全部迁移到 tile 路径后统一为正确 E8M0 语义。
-MM_INLINE inline float fp8_e8m0_scale(uint8_t raw)
+// E8M0: 纯指数 (偏置 127), scale = 2^(signed)
+// [修复] 删除 "MM_INLINE" 后多余的 inline 说明符, 消除 -Wduplicate-decl-specifier 告警。
+MM_INLINE float fp8_e8m0_scale(uint8_t raw)
 {
     const int32_t e = static_cast<int32_t>(raw) - 127;
     float s = 1.0f;
@@ -262,13 +263,14 @@ struct MxTileScratch {
     float* y3;
 };
 
-MM_INLINE inline uint32_t mx_tile_scratch_bytes(uint32_t epr, uint32_t h, uint32_t hd)
+// 去掉inline，修复编译告警
+MM_INLINE uint32_t mx_tile_scratch_bytes(uint32_t epr, uint32_t h, uint32_t hd)
 {
     return (epr * h * hd + epr * (hd / 2U) * h) * 2U   // fp16 权重副本
          + h * 2U + hd * 4U + hd * 2U + h * 4U;        // xf16/y1/y2f16/y3
 }
-
-MM_INLINE inline MxTileScratch mx_tile_scratch_at(uint8_t* base, uint32_t pe,
+// 去掉inline，修复编译告警
+MM_INLINE MxTileScratch mx_tile_scratch_at(uint8_t* base, uint32_t pe,
                                                    uint32_t epr, uint32_t h, uint32_t hd)
 {
     MxTileScratch s;
@@ -284,7 +286,8 @@ MM_INLINE inline MxTileScratch mx_tile_scratch_at(uint8_t* base, uint32_t pe,
 
 // FP8 权重 tile 化解码 (每 PE 私有, 免栅栏):
 //   wF16[e][k][n] = fp16(E4M3) * 2^(scale[e][k/32]-127), 逐 [32,32] tile
-MM_INLINE inline void mx_decode_weights_tile(MxTileScratch& s,
+// 去掉inline，修复编译告警
+MM_INLINE void mx_decode_weights_tile(MxTileScratch& s,
                                               uint32_t epr, uint32_t h, uint32_t hd)
 {
     for (uint32_t e = 0U; e < epr; ++e) {
@@ -331,7 +334,8 @@ MM_INLINE inline void mx_decode_weights_tile(MxTileScratch& s,
 //   x 量化(fp32→fp16) → GMM1(TGEMV_MX) → SwiGLU(VEC 链) → GMM2 → Combine
 // (k=0 块剥离循环外: 消除运行期 TGEMV_MX/ACC 分支的 tile 跨分支 PHI)
 // kk==0 时 combineRow 直接写, kk>0 时读-累加-写 (topK 通用)。
-MM_INLINE inline void mx_token_compute(const MxTileScratch& s,
+// 去掉inline，修复编译告警
+MM_INLINE void mx_token_compute(const MxTileScratch& s,
                                         const float* xRow, uint32_t h, uint32_t hd,
                                         uint32_t epr, uint32_t expert, float weight,
                                         uint32_t kk, float* combineRow)
@@ -441,7 +445,8 @@ MM_INLINE inline void mx_token_compute(const MxTileScratch& s,
 }
 
 // VEC tile 行拷贝 (UnpermuteTokens 用)
-MM_INLINE inline void mx_copy_row_tile(const float* src, float* dst, uint32_t h)
+// 去掉inline，修复编译告警
+MM_INLINE void mx_copy_row_tile(const float* src, float* dst, uint32_t h)
 {
     for (uint32_t c = 0U; c < h; c += 32U) {
         MxChainF32 v;
