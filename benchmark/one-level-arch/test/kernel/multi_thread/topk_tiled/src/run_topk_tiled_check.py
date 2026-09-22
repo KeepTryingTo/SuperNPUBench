@@ -88,6 +88,8 @@ def run_check(gfrun, timeout, seed):
         struct.pack(f"<{len(values)}f", *values))
     (case_dir / "starts.bin").write_bytes(struct.pack(f"<{ROWS}i", *STARTS))
     (case_dir / "ends.bin").write_bytes(struct.pack(f"<{ROWS}i", *ENDS))
+    # TopkTilingData { int64 batch, cols, topk }
+    (case_dir / "shape.bin").write_bytes(struct.pack("<3q", ROWS, COLS, TOPK))
 
     command = [str(gfrun), "-s", "softcore.multiThreadNum=4", "-f", str(elf)]
     try:

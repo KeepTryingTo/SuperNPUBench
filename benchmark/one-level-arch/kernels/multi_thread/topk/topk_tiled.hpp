@@ -28,11 +28,21 @@ namespace topk_tiled {
 
 using namespace pto;
 
-constexpr int kBatch = 4;
-constexpr int kCols = 8192;
-constexpr int kTopK = 512;
-constexpr int kCandCap = 4096;
+// Tile geometry and the radix stay compile-time PTO contracts: kLane is the
+// M32 cell width / tile-op width, and the 256-bin radix is the algorithm.  The
+// outer shape (batch x cols, top-k) is runtime and validated against these
+// maxima — same pattern as fa_gmma_dynamic's FaGmmaTilingData.
 constexpr int kLane = 32;
+constexpr int kBatchMax = 4;
+constexpr int kColsMax = 8192;
+constexpr int kTopKMax = 512;
+constexpr int kCandCap = 4096;
+
+struct TopkTilingData {
+    int64_t batch;
+    int64_t cols;
+    int64_t topk;
+};
 
 using I32Tile = VecTileM32<int32_t, kLane, 1>;
 using U32Tile = VecTileM32<uint32_t, kLane, 1>;
@@ -174,7 +184,7 @@ inline __attribute__((always_inline)) int32_t find_threshold(Scratch &sc,
 inline __attribute__((always_inline)) void mgather_u32_m32(U32Tile &dst,
                                                            const float *base,
                                                            U32Tile &index) {
-    global_tensor<uint32_t, RowMajor<kCols, 1>> g(
+    global_tensor<uint32_t, RowMajor<kColsMax, 1>> g(
         reinterpret_cast<const uint32_t *>(base));
     MGATHER(dst, g, index);
 }
@@ -324,7 +334,7 @@ inline __attribute__((always_inline)) void round_write(int32_t *out, int round,
                                                        U32Tile &candU,
                                                        I32Tile &byte,
                                                        int32_t vc, int32_t thr,
-                                                       int32_t prefix,
+                                                       int32_t prefix, int32_t topk,
                                                        Scratch &sc) {
     const int nr = (round & 1) ^ 1;
 
@@ -381,12 +391,12 @@ inline __attribute__((always_inline)) void round_write(int32_t *out, int round,
         TMULS(eqB, eq, 4u);
         mscatter_mask_i32_m32(sc.cand[nr], candI, eqB, eamask);
     } else {
-        // round 3: pos = hist[bin+1]++ + prefix ; out[pos] if pos < kTopK.
+        // round 3: pos = hist[bin+1]++ + prefix ; out[pos] if pos < topk.
         PredM32 posmask, okmask;
         I32Tile gold2, pos, pos01, ok;
         mgather_add_s32_m32(gold2, sc.hist, idx, eact);
         TADDS(pos, gold2, prefix);
-        TCMPS<CmpMode::LT>(posmask, pos, kTopK);
+        TCMPS<CmpMode::LT>(posmask, pos, topk);
         TCVT(pos01, posmask);
         TAND(ok, pos01, eact);
         TCVT(okmask, ok);
@@ -399,14 +409,24 @@ inline __attribute__((always_inline)) void round_write(int32_t *out, int round,
 // ---- run ----------------------------------------------------------------
 
 inline __attribute__((always_inline)) void run(int32_t *output, int32_t *errors, const float *input,
-                const int32_t *starts, const int32_t *ends, Scratch *scratches) {
+                const int32_t *starts, const int32_t *ends, Scratch *scratches,
+                const TopkTilingData *tiling) {
     const uint32_t tid = get_thread_idx();
     if (tid >= 4) return;
 
-    for (int bx = static_cast<int>(tid); bx < kBatch; bx += 4) {
+    // Runtime outer shape, validated against the compile-time maxima.
+    const int32_t batch = static_cast<int32_t>(tiling->batch);
+    const int32_t cols = static_cast<int32_t>(tiling->cols);
+    const int32_t topk = static_cast<int32_t>(tiling->topk);
+    if (batch <= 0 || batch > kBatchMax || cols <= 0 || cols > kColsMax ||
+        topk <= 0 || topk > kTopKMax) {
+        return;
+    }
+
+    for (int bx = static_cast<int>(tid); bx < batch; bx += 4) {
         Scratch &sc = scratches[bx];
-        const float *row = input + bx * kCols;
-        int32_t *out = output + bx * kTopK;
+        const float *row = input + bx * cols;
+        int32_t *out = output + bx * topk;
 
         for (int32_t l = 0; l < kLane; ++l) sc.lane[l] = l;
         hist_clear(sc);
@@ -415,9 +435,9 @@ inline __attribute__((always_inline)) void run(int32_t *output, int32_t *errors,
         sc.error = 0;
 
         const int32_t x2 = clamp_lo(starts[bx], 0);
-        const int32_t x3 = clamp_hi(ends[bx], kCols);
+        const int32_t x3 = clamp_hi(ends[bx], cols);
         const int32_t n = clamp_lo(x3 - x2, 0);
-        if (n < kTopK) {
+        if (n < topk) {
             sc.error = 2;
             errors[bx] = sc.error;
             continue;
@@ -431,7 +451,7 @@ inline __attribute__((always_inline)) void run(int32_t *output, int32_t *errors,
         }
         hist_cumsum(sc);
 
-        int32_t rem = kTopK;
+        int32_t rem = topk;
         int32_t thr = find_threshold(sc, rem);
         rem -= sc.hist[thr + 1];
 
@@ -449,7 +469,7 @@ inline __attribute__((always_inline)) void run(int32_t *output, int32_t *errors,
         // tail rounds: ping-pong cand[r]/cand[nr], num[r]/num[nr]
         for (int round = 0; round < 4 && rem > 0; ++round) {
             const int r = round & 1;
-            const int32_t prefix = kTopK - rem;
+            const int32_t prefix = topk - rem;
             const int32_t count = sc.num[r];
             hist_clear(sc);
             for (int32_t t = 0; t * kLane < count; ++t) {
@@ -477,7 +497,7 @@ inline __attribute__((always_inline)) void run(int32_t *output, int32_t *errors,
                 U32Tile candU;
                 TLOAD(candU, gc);
                 I32Tile byte = candidate_byte(row, candU, round, sc);
-                round_write(out, round, candU, byte, vc, thr, prefix, sc);
+                round_write(out, round, candU, byte, vc, thr, prefix, topk, sc);
             }
         }
         errors[bx] = sc.error;
