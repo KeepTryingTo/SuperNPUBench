@@ -2,8 +2,19 @@
 
 #include <cstdint>
 #include <cmath>
+#include <type_traits>
 #include "benchmark.h"
 #include "fileop.h"
+
+#ifndef MATRIX_DTYPE
+#define MATRIX_DTYPE float
+#endif
+#ifndef VECTOR_DTYPE
+#define VECTOR_DTYPE float
+#endif
+#ifndef PACKED_FACTOR
+#define PACKED_FACTOR 1
+#endif
 
 #ifndef Tsq
 #define Tsq 128
@@ -32,20 +43,33 @@
 
 static_assert(Tsq <= FA_MAX_SQ && Tskv <= FA_MAX_SKV);
 constexpr int kGroupM = Tm <= 128 ? Tm : 128;
+constexpr int kStoredQD = FA_QD / PACKED_FACTOR;
+constexpr int kStoredSkv = FA_MAX_SKV / PACKED_FACTOR;
 static_assert(Tsq % kGroupM == 0 && FA_MAX_SQ % kGroupM == 0);
 static_assert(Tskv % Tk == 0 && FA_MAX_SKV % Tk == 0);
+static_assert(PACKED_FACTOR == 1,
+              "dynamic FA test supports unpacked FP32/BF16/FP8 inputs");
+
+using matrix_dtype = MATRIX_DTYPE;
+using vector_dtype = VECTOR_DTYPE;
 
 // Two different shapes are executed by the same ELF. The buffers for both
 // cases are distinct, so all PEs can advance without a per-case barrier.
-alignas(4096) static float q[2][FA_MAX_SQ * FA_QD];
-alignas(4096) static float k[2][FA_MAX_SKV * FA_QD];
-alignas(4096) static float v[2][FA_MAX_SKV * FA_VD];
-alignas(4096) static float out[2][FA_MAX_SQ * FA_VD];
+alignas(4096) static matrix_dtype q[2][FA_MAX_SQ * kStoredQD];
+alignas(4096) static matrix_dtype k[2][FA_MAX_SKV * kStoredQD];
+alignas(4096) static matrix_dtype v[2][kStoredSkv * FA_VD];
+alignas(4096) static vector_dtype out[2][FA_MAX_SQ * FA_VD];
 static FaGmmaTilingData shapes[2];
 static volatile uint32_t inputs_ready = 0;
 static volatile uint32_t shape_invalid = 0;
 static volatile uint32_t done[4] = {};
 volatile int fa_gmma_dynamic_errors = 0;
+
+#ifdef FA_TRACE_ONLY
+constexpr int kCaseCount = 1;
+#else
+constexpr int kCaseCount = 2;
+#endif
 
 int main() {
     const uint32_t tid = get_thread_idx();
@@ -60,7 +84,7 @@ int main() {
 #endif
         // Check that each runtime shape fits the preallocated buffers and
         // consists of complete cooperative Q/KV tiles.
-        for (int c = 0; c < 2; ++c) {
+        for (int c = 0; c < kCaseCount; ++c) {
             if (shapes[c].sq <= 0 || shapes[c].skv <= 0 ||
                 shapes[c].sq > FA_MAX_SQ || shapes[c].skv > FA_MAX_SKV ||
                 shapes[c].sq % kGroupM != 0 || shapes[c].skv % Tk != 0)
@@ -70,16 +94,37 @@ int main() {
         // first head element is 1; K's first element varies by row; every V
         // column has the same row-dependent value. The resulting output has
         // a simple weighted-average reference for both runtime shapes.
-        if (shape_invalid == 0) for (int c = 0; c < 2; ++c) {
-            for (int row = 0; row < shapes[c].sq; ++row)
-                q[c][row * FA_QD] = 1.0f;
-            for (int row = 0; row < shapes[c].skv; ++row) {
-                k[c][row * FA_QD] = static_cast<float>(row % 5);
-                for (int col = 0; col < FA_VD; ++col) {
-                    v[c][row * FA_VD + col] = static_cast<float>(row % 7);
+#ifndef FA_TRACE_ONLY
+        if (shape_invalid == 0) for (int c = 0; c < kCaseCount; ++c) {
+            if constexpr (std::is_same_v<matrix_dtype, __fp8_e4m3>) {
+                // Avoid unsupported scalar float->FP8 code generation in the
+                // test driver. These are exact positive E4M3 encodings 0..6.
+                constexpr uint8_t fp8[] = {
+                    0x00, 0x38, 0x40, 0x44, 0x48, 0x4a, 0x4c};
+                auto *qBits = reinterpret_cast<uint8_t *>(q[c]);
+                auto *kBits = reinterpret_cast<uint8_t *>(k[c]);
+                auto *vBits = reinterpret_cast<uint8_t *>(v[c]);
+                for (int row = 0; row < shapes[c].sq; ++row)
+                    qBits[row * kStoredQD] = fp8[1];
+                for (int row = 0; row < shapes[c].skv; ++row) {
+                    kBits[row * kStoredQD] = fp8[row % 5];
+                    for (int col = 0; col < FA_VD; ++col)
+                        vBits[row * FA_VD + col] = fp8[row % 7];
+                }
+            } else {
+                for (int row = 0; row < shapes[c].sq; ++row)
+                    q[c][row * kStoredQD] = static_cast<matrix_dtype>(1.0f);
+                for (int row = 0; row < shapes[c].skv; ++row) {
+                    k[c][row * kStoredQD] = static_cast<matrix_dtype>(
+                        static_cast<float>(row % 5));
+                    for (int col = 0; col < FA_VD; ++col) {
+                        v[c][row * FA_VD + col] = static_cast<matrix_dtype>(
+                            static_cast<float>(row % 7));
+                    }
                 }
             }
         }
+#endif
         inputs_ready = 1;
     } else {
         while (inputs_ready == 0) {}
@@ -88,20 +133,27 @@ int main() {
     if (shape_invalid != 0) return 1;
 
     BENCHSTART;
-    for (int c = 0; c < 2; ++c) {
-        if (!fa_gmma_dynamic<FA_QD, FA_VD, Tm, Tk>(
+    for (int c = 0; c < kCaseCount; ++c) {
+        if (!fa_gmma_dynamic<matrix_dtype, vector_dtype, PACKED_FACTOR,
+                             FA_QD, FA_VD, Tm, Tk>(
                 out[c], q[c], k[c], v[c], &shapes[c])) {
             fa_gmma_dynamic_errors = fa_gmma_dynamic_errors + 1;
         }
     }
     BENCHEND;
 
+#ifdef FA_TRACE_ONLY
+    // The timing model does not make the post-benchmark software barrier
+    // progress reliably. Trace builds stop after the measured kernel region.
+    return 0;
+#endif
+
     done[tid] = 1;
     if (tid == 0) {
         for (int pe = 0; pe < 4; ++pe) {
             while (done[pe] == 0) {}
         }
-        for (int c = 0; c < 2; ++c) {
+        for (int c = 0; c < kCaseCount; ++c) {
             float numerator = 0.0f;
             float denominator = 0.0f;
             const float scale = 1.0f / sqrtf(static_cast<float>(FA_QD));
@@ -113,7 +165,8 @@ int main() {
             const float expected = numerator / denominator;
             for (int row = 0; row < shapes[c].sq; ++row) {
                 for (int col = 0; col < FA_VD; ++col) {
-                    const float diff = out[c][row * FA_VD + col] - expected;
+                    const float diff =
+                        static_cast<float>(out[c][row * FA_VD + col]) - expected;
                     if (diff < -0.02f || diff > 0.02f)
                         fa_gmma_dynamic_errors = fa_gmma_dynamic_errors + 1;
                 }

@@ -404,13 +404,13 @@ microbench（one-level 金标准比对几乎全过）。**与精度容差无关*
 > `/tmp/res_check_run/summary_corrected.tsv`（elf / 类别 / 状态 / rc / note）。
 
 
-> **当前验证基线**：2026-09-18（544 个已编译 ELF 全量 gfrun 复测，本地代码含 fa_lowp 重构 + 3 个新 fa 测例）；
+> **当前验证基线**：2026-09-18（566 个已编译 ELF 全量 gfrun 复测，本地代码含 fa_lowp 重构 + 新 fa 测例；fa 结果为陈旧对象事故修正后复测版）；
 > TileOP-API `697f5d8`→`3be8652`（+11 提交，prefix-view 重载约束、B.ASSEMBLE WriterSizeCode 等）；pto-spec `9323e466`→`b541bbdd`；
 > gfrun 切到 `fix/gfrun-717-pto291-subview-ordering` `ec5ee047`（PTO #291 subview ordering 修复分支，含 PTO #311 分支合并）；
-> fa 64 ELF 34 PASS（unroll_gmma 15/15、kchains 18/21、**fa_gmma_opt 新测例 1/1**）；matmul 30/31；
+> fa 86 ELF 53 PASS（unroll_gmma 15/15、kchains 32链 18/21 + 单链 18/21、**fa_gmma_opt 1/1、fa_lowp_recip 1/2**）；matmul 30/31；
 > **10 个回归全部模型侧同根因**（normalization ×8 + reduction row ×2，`validCol/physicalCol` Local layout 断言，fix 分支 PTO #291 契约变化）；
 > matmul_quantize ×2 编译失败（远端 mxquant 重构破坏集成）；fixp MX 家族 ×10 编译失败（TileOP 3be8652 契约加严）。
-> 总 PASS 475，通过率 87.3%
+> 总 PASS 494，通过率 87.3%
 
 # gfrun 执行结果汇总 — 2026-09-18
 
@@ -440,23 +440,25 @@ microbench（one-level 金标准比对几乎全过）。**与精度容差无关*
 - **负面（10 个回归，全部模型侧同根因）**：normalization ×8 + reduction reducesum/reducemax_row ×2，全部 `validCol/physicalCol >= validCol` Local tile descriptor 断言——fix 分支 PTO #291 Local layout 契约变化与 TileOP 3be8652 新编码的组合效应。已核对模型 main 缺失的 22 提交（MGATHER_MASK/PMU/swimlane）与本回归无关。
 - mega_moe_sim（非 mt）>2GB FAIL→PASS：无 trace 模式下可在时限内跑完。
 
-**3. 本地 fa 改动验证（`2f272c2e`）**
+**3. 本地 fa 改动验证（`2f272c2e` + 修正提交）**
 - fa_lowp 重构（prefix 直接消费、M32 E8M0 scale carrier、recip 开关）编译通过；运行 FAIL（模型 TCVT srcTile descriptor 断言，与 kchains MXFP4 同类）。
-- **fa_gmma_opt 新测例 1/1 PASS**；fa_lowp_recip 编译通过、运行 FAIL（同 TCVT 断言）；fa_gmma_dynamic 编译器在 Simple Register Coalescing 崩溃，暂不入矩阵（compile.all 注释记录）。
+- **fa_gmma_opt 新测例 1/1 PASS**；**fa_lowp_recip 1/2**：Sq256/Skv256 **PASS**（TRECIP 路径），Sq128/Skv8192 FAIL（模型 B.ASSEMBLE descriptor 契约——深 KV 循环 512 次 TASSEMBLE，issue #717 修复区）；fa_gmma_dynamic 编译器在 Simple Register Coalescing 崩溃，暂不入矩阵（compile.all 注释记录）。
+- **fa_lowp_recip 构建事故与修复**：fa_lowp 与 fa_lowp_recip 曾共用 `fa_lowp.o`，Makefile.common 的 clean 按 TESTCASE 名删对象（`${TESTCASE}.o`），对象名 ≠ TESTCASE 名时 clean 失效、make 又不感知 -D 宏变化 → 首轮回归中的 "fa_lowp_recip" 实为无 recip 宏的 TSUB 路径代码（假 FAIL）。修复：独立编译单元 `src/fa_lowp_recip.cpp`（对象名回归 TESTCASE 名，clean 重新生效），两 shape 干净复测确认。
+- kchains 默认 PVChainK 32→Tk（单链/每 KV 块一条链，`fa_gmma_kchains.cpp` + Makefile），32 链形式经 compile.all 显式 PVChainK=32 pass 保留。
 
 **4. fa 矩阵口径（沿 09-16 之后的调整）**
-- Sq256/Skv256 三组已移除（`eb37e16a`）；本轮 fa 64 ELF：Sq1024 / Sq128-Skv8192 / Tk256(Sq256-Skv512) 三组 × 5 模式 × {unroll, fixpipe, subview} + kchains ×6 模式 + lowp/lowp_recip/gmma_opt 各 1。
+- Sq256/Skv256 三组已移除（`eb37e16a`）；本轮 fa 86 ELF：Sq1024 / Sq128-Skv8192 / Tk256(Sq256-Skv512) 三组 × 5 模式 × {unroll, fixpipe, subview} + kchains（单链 + 32 链两配置）×6 模式 + lowp 1 + lowp_recip 2（Sq256 基线 + Sq128/Skv8192 长序列）+ gmma_opt 1。
 
 ## 总体结果
 
 | 范围 | ELF 数 | PASS | FAIL | TIMEOUT | 通过率 |
 |---|---:|---:|---:|---:|---:|
 | microbenchmark | 414 | 394 | 20 | 0 | 95.2% |
-| one-level-arch (kernel) | 106 | 73 | 33 | 0 | 68.9% |
+| one-level-arch (kernel) | 128 | 92 | 36 | 0 | 71.9% |
 | solution | 24 | 8 | 16 | 0 | 33.3% |
-| **合计** | **544** | **475** | **69** | **0** | **87.3%** |
+| **合计** | **566** | **494** | **72** | **0** | **87.3%** |
 
-> vs 09-16：−36 ELF（580→544），−8 PASS（483→475），−28 FAIL（97→69），通过率 83.3%→87.3%。口径变化：fa Sq256/Skv256 移除 −24 ELF（−12 PASS/−12 FAIL，其中 kchains MXFP4 占 3）、matmul_quantize 编译失败 −2、fixp MX 编译失败 −10（−0 PASS，其 09-16 运行时全 FAIL）、新增 fa_gmma_opt/lowp_recip +2 ELF（+1 PASS/−2... 详见逐名对比）。逐名对比：**PASS→FAIL ×10**（normalization ×8 + reduction row ×2，模型侧 validCol 断言）；**FAIL→PASS ×1**（mega_moe_sim 非 mt）。可比集合（两轮同名 510 ELF）：483→474（−10 回归 +1 修复）。
+> vs 09-16（脚本化逐名对比）：−14 ELF（580→566），+11 PASS（483→494），−25 FAIL（97→72），通过率 83.3%→87.3%。同名 521：**PASS→FAIL ×10**（normalization ×8 + reduction row ×2，模型侧 validCol 断言）；**FAIL→PASS ×1**（mega_moe_sim 非 mt）。仅 09-16 有 59（P18/F41）：fa Sq256/Skv256 组 47、matmul_quantize ×2（mxquant 重构）、fixp MX ×10（全为 09-16 运行 FAIL）。仅 09-18 有 45（P38/F7）：kchains 单链 21 + 32 链重配 21（P18/F3 各）、fa_gmma_opt 1、fa_lowp_recip 2（P1/F1）。
 
 ## 算子通过率
 
@@ -466,7 +468,7 @@ microbench（one-level 金标准比对几乎全过）。**与精度容差无关*
 | micro/vector | 170 | 152 | 18 | 89.4% | compare/select TSTORE（与 09-16 一致） |
 | micro/fixp | 86 | 84 | 2 | 97.7% | MX 家族 ×10 不再编译（TileOP 3be8652 契约）；运行 FAIL 仅余 2（09-16 为 12） |
 | micro/memory + cube | 34 | 34 | 0 | 100% | 全过 |
-| one-level/fa | 64 | 34 | 30 | 53.1% | **unroll_gmma 15/15**；kchains 18/21（MXFP4 ×3 模型 TCVT）；**gmma_opt 1/1（新）**；fixpipe 0/15（PTO #291 CUBE-M）；subview 0/10（TROWMAX）；lowp/_recip 0/2（TCVT） |
+| one-level/fa | 86 | 53 | 33 | 61.6% | **unroll_gmma 15/15**；kchains 单链 18/21 + 32 链 18/21（MXFP4 ×3×2 模型 TCVT）；**gmma_opt 1/1（新）**；**lowp_recip 1/2（Sq256 PASS / 长序列 B.ASSEMBLE）**；fixpipe 0/15（PTO #291 CUBE-M）；subview 0/10（TROWMAX）；lowp 0/1（TCVT） |
 | one-level/matmul | 31 | 30 | 1 | 96.8% | hif4_l1 FAIL（RawTileSourceFits，同 09-16）；quantize ×2 编译失败（mxquant 重构集成断裂） |
 | one-level/reduction | 4 | 2 | 2 | 50% | **回归**：reducesum/reducemax_row FAIL（validCol，模型侧）；cumsum/reduceprod 过 |
 | one-level/{broadcast,concat,conv2d,element_wise,gather,vec} | 7 | 7 | 0 | 100% | 全过 |
@@ -492,7 +494,8 @@ microbench（one-level 金标准比对几乎全过）。**与精度容差无关*
 | illegal TROWMAX operand | 10 | one-level/fa | fa_subview（持续） |
 | validCol/physicalCol Local descriptor | 10 | solution + kernel | **新增回归**：normalization ×8 + reduction row ×2，模型 fix 分支 PTO #291 契约 |
 | vector compare/select TSTORE | 18 | micro/vector | 09-10 起持续 |
-| TCVT srcTile descriptor（gfrunPto291Tcvt） | 5 | one-level/fa | kchains MXFP4 ×3 + fa_lowp ×1 + lowp_recip ×1（模型侧） |
+| TCVT srcTile descriptor（gfrunPto291Tcvt） | 7 | one-level/fa | kchains MXFP4 ×6（单链 3 + 32 链 3）+ fa_lowp ×1（模型侧；**注意**：U8→E8M0 reinterpret TCVT 类型等价待规范/模型确认，pto-spec #322/#329 区域） |
+| illegal B.ASSEMBLE descriptor | 1 | one-level/fa | lowp_recip Sq128/Skv8192（深 KV 循环 512 次 TASSEMBLE，模型侧 issue #717 修复区） |
 | R2=1 result mismatch | 6 | solution | gather_v2 ×3 + view_copy ×3（09-14 起持续） |
 | RawTileSourceFits | 1 | one-level/matmul | matmul_hif4_l1_quantize（持续） |
 | rc=0 无结束标记 | 2 | solution | group_token_old/vec 非 mt（~1KB 输出即退，行为变化，待模型侧确认） |
@@ -502,7 +505,8 @@ microbench（one-level 金标准比对几乎全过）。**与精度容差无关*
 
 - **回归主线 = 模型 fix 分支验证**：gfrun `fix/gfrun-717-pto291-subview-ordering` 是为了修 PTO #291 subview ordering；10 个 normalization/reduction 回归全部是其 Local layout 契约变化所致（同根因），fa_fixpipe 断言类别迁移也源于此——这些是修复分支的已知工作面，非算子代码回归。
 - **TileOP 3be8652 双刃**：fa_2d_unroll_gmma / kchains 主路径全部通过（prefix-view 新契约验证 OK）；fixp MX ×10 与 matmul_quantize ×2 编译面受损（后者是 mxquant 重构集成断裂，SuperNPUBench 侧需跟进）。
-- **本地 fa 代码零回归落地**：unroll_gmma 15/15、kchains 18/21（仅模型侧 MXFP4）、fa_gmma_opt 新测例即过；fa_lowp 重构与 lowp_recip 的 FAIL 均为模型侧 TCVT 断言。
+- **本地 fa 代码零回归落地**：unroll_gmma 15/15、kchains 双配置 36/42（仅模型侧 MXFP4）、fa_gmma_opt 新测例即过、**fa_lowp_recip Sq256 PASS**；fa_lowp（TCVT U8→E8M0 reinterpret）与 lowp_recip 长序列（B.ASSEMBLE 深循环会话）的 FAIL 均为模型侧。
+- **fa_lowp_recip 陈旧对象事故**：首轮回归的 lowp_recip FAIL 是共享 `fa_lowp.o` 伪影（clean 按 TESTCASE 名删对象失效 + make 不感知 -D 变化），已用独立 TU 修复并干净复测；仅此一个 ELF 受影响，其余多配置构建对象名与 TESTCASE 名一致不受影响。
 - mega_moe_sim 非 mt 在无 trace 模式下修复（>2GB 输出问题是 trace 产物放大）。
 - group_token 非 mt 双变体出现 rc=0 无标记早退（新行为，需模型侧确认）。
 - micro 通过率 92.9%→95.2%（fixp MX ×10 转编译失败，运行 FAIL 30→20）。
@@ -512,12 +516,12 @@ microbench（one-level 金标准比对几乎全过）。**与精度容差无关*
 | 类别 | 09-16 (ELF,P,F) | 09-18 (ELF,P,F) | 变化 |
 |---|---|---|---|
 | microbenchmark | 424, 394, 30 | 414, 394, 20 | −10 ELF（fixp MX 编译失败，其 09-16 全为运行 FAIL）→ FAIL −10 |
-| one-level/fa | 88, 32, 56 | 64, 34, 30 | Sq256/Skv256 移除 −24；kchains 对齐后 +新测例；PASS 净 +2 |
+| one-level/fa | 88, 32, 56 | 86, 53, 33 | Sq256/Skv256 组移除 −47（其中 kchains 旧 Sq256 基线 2）；kchains 新增 42（单链 21 + 32 链 21，P36/F6）；gmma_opt +1 P；lowp_recip +2（P1/F1）；同名 41 持平（unroll 15/fixpipe 15/subview 10/lowp 1） |
 | one-level/matmul | 33, 31, 2 | 31, 30, 1 | quantize ×2 编译失败（−1 P −1 F） |
 | one-level/reduction | 4, 4, 0 | 4, 2, 2 | **回归 ×2**（validCol，模型侧） |
 | one-level 其他 kernel | 7, 7, 0 | 7, 7, 0 | 持平 |
 | solution | 24, 15, 9 | 24, 8, 16 | **回归 ×8**（normalization，模型侧）+ 修复 ×1（mega_moe_sim）− 行为变化 ×2（group_token 非 mt） |
-| **合计** | **580, 483, 97** | **544, 475, 69** | 可比 510 同名：−10 回归 +1 修复 |
+| **合计** | **580, 483, 97** | **566, 494, 72** | 同名 521：PASS→FAIL ×10（模型侧）；FAIL→PASS ×1（mega_moe_sim）；移除 59（P18/F41）；新增 45（P38/F7） |
 
 ---
 
