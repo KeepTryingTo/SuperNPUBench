@@ -8,34 +8,30 @@
 // on a per-PE GM histogram, as tile ops.
 //
 // Layout: the 256 S32 bins are one 1KB S32 CUBE_M32 grouped tile. A single
-// grouped ND2M32 TLOAD (ValidCol=8, ValidRow=32) packs the dense stream so that
-// cell_q[r] = bin[8r+q]; the eight physical CELLs sit along the logical columns
-// and are addressable with B.SUBVIEW. hist[256:384] is the zero pad the load
-// reads past the sentinel.
+// grouped ND2M32 TLOAD packs the dense stream so that cell_q[r] = bin[8r+q];
+// the eight physical CELLs sit along the logical columns and are addressable
+// with B.SUBVIEW. hist[256:384] is the zero pad the load reads past the
+// sentinel.
 //
 // Dataflow:
-//   1. group_tload_832          one 1KB TLOAD of the 256 bins
+//   1. TLOAD                    one 1KB ND2M32 load of the 256 bins (API)
 //   2. within-group suffix      parallel pair tree of binary TADDs over
 //                               B.SUBVIEW CELL reads (depth 3); cell_q becomes
 //                               sum_{j>=q} bin[8r+j], cell_0 the group total
-//   3. across-group suffix      a 32-lane TSHUF scan of cell_0 (the group
-//                               totals), then the shifted-by-one scan added
-//                               back to all eight cells
+//   3. across-group suffix      a 32-lane TSHUF scan of cell_0 (API), then the
+//                               shifted-by-one scan added back to all cells
 //   4. eight strided TSTOREs    scatter cell_q[r] -> hist[8r+q]
 //
-// Output cost / future work: step 4 is a stride-8 scatter done as eight
-// [32,1] strided TSTOREs, and it dominates the kernel wall time (per byte a
-// grouped store is several times cheaper). Two ways to collapse it into one
-// large-packet 1KB write:
-//   * TADD + assemble - have the final broadcast TADD write the eight CELLs
-//     into a [32,8] parent via a destination-side B.ASSEMBLE, then issue one
-//     grouped TSTORE. Not available today: the TEPL `_ASS` producer path
-//     crashes the LinxV5 backend, and the working region assemble route only
-//     accepts a RowMajor destination with CUBE subview sources, so a CUBE
-//     parent cannot be built from computed CELLs.
-//   * TSTORE microarchitecture coalescing - merge the eight strided
-//     [32,1] stores into a single large-packet write in the TLSU.
-// Until one of those lands, the strided stores are kept.
+// Status: the grouped load/store/zero-fill (TLOAD / TSTORE / TEXPANDS) and the
+// TSHUF scan go through the TileOP API.  Two hand-written blocks remain, both
+// blocked on TileOP API gaps (LinxISA/Linx-TileOP-API#211):
+//   * the B.SUBVIEW CELL reads in step 2 -- TEPL elementwise does not accept
+//     subview sources (only TOR_ASS does);
+//   * the step-4 strided stores -- the intended destination-side B.ASSEMBLE
+//     collapse needs an INIT-capable *computed* producer, which does not exist
+//     (TEPL _ASS cannot write the INIT slot; llvm-project#103 is fixed but not
+//     sufficient).  Until then step 4 keeps the eight strided [32,1] stores,
+//     which dominate the kernel wall time.
 
 namespace histogram_cumsum_m32 {
 
@@ -46,67 +42,25 @@ constexpr int kLane = 32;
 using I32Tile = VecTileM32<int32_t, kLane, 1>;
 using U32Tile = VecTileM32<uint32_t, kLane, 1>;
 
-struct GroupTileS32 {
-    linx_tile_carrier<1024> carrier;
-    linx_tile_carrier<1024>::RegisterType &data() { return carrier.Register; }
-};
+// Typed 1KB CUBE_M32 parent (8 cells): the 256 S32 bins as one grouped tile.
+using GroupTileS32 = VecTileM32<int32_t, kLane, 8>;
 
-// One 1KB grouped ND2M32 load: T(r,q) = bin[8r+q], i.e. the eight physical
+// One 1KB grouped ND2M32 load: cell_q[r] = bin[8r+q], i.e. the eight physical
 // CELLs sit along the 8 logical columns so B.SUBVIEW can address CELL q.
 inline void group_tload_832(GroupTileS32 &dst, const int32_t *base) {
-    asm volatile(
-        "BSTART.TLSU TLOAD, %D[DataType]\n"
-        "B.DATR ND2M32, Zero\n"
-        "B.DIM zero, %c[ValidCol], ->lb0\n"
-        "B.DIM zero, %c[ValidRow], ->lb1\n"
-        "B.IOT mask=1111, last, ->%[dst]<%Z[TileSize]>\n"
-        "B.IOR [%[base], %[stride]], []\n"
-        : [dst] "=Tr"(dst.data())
-        : [base] "r"(base), [stride] "r"(8 * sizeof(int32_t)),
-          [DataType] "i"(type_traits<int32_t>::TypeCode),
-          [TileSize] "i"(tile_type_traits<linx_tile_carrier<1024>>::TilesizeCode),
-          [ValidCol] "i"(8), [ValidRow] "i"(kLane)
-        : "memory");
+    global_tensor<int32_t, RowMajor<kLane, 8>> g(base);
+    TLOAD(dst, g);
 }
 
-// Grouped contiguous store of a 1KB tile: writes the 256 words flat.
+// Grouped contiguous store of the 1KB tile: writes the 256 words flat.
 inline void group_tstore(int32_t *base, GroupTileS32 &src) {
-    asm volatile(
-        "BSTART.TLSU TSTORE, %D[DataType]\n"
-        "B.DATR M322ND, Null\n"
-        "B.DIM zero, %c[ValidCol], ->lb0\n"
-        "B.DIM zero, %c[ValidRow], ->lb1\n"
-        "B.IOT %[src], mask=1111, last\n"
-        "B.IOR [%[base], %[stride]], []\n"
-        :
-        : [base] "r"(base), [stride] "r"(sizeof(int32_t)),
-          [src] "Tr"(src.data()),
-          [DataType] "i"(type_traits<int32_t>::TypeCode),
-          [ValidCol] "i"(1), [ValidRow] "i"(8 * kLane)
-        : "memory");
+    global_tensor<int32_t, RowMajor<kLane, 8>> g(base);
+    TSTORE(g, src);
 }
 
-// Broadcast a scalar into a grouped 1KB tile (used by topk's GM zeroing
-// helper). TEXPANDS (TEPL 59), raw block form.
+// Broadcast a scalar into the grouped 1KB tile (topk's GM zeroing helper).
 inline void group_texpands(GroupTileS32 &dst, int32_t scalar) {
-    // Anti-fold: keep a compile-time-constant scalar off the zero register so
-    // B.IOR [reg],[] still matches an instruction (wrapper convention).
-    asm("" : "+r"(scalar));
-    asm volatile(
-        "BSTART.TEPL 59, %D[DataType]\n"
-        "B.DATR CUBE_M32, Null\n"
-        "B.DIM zero, %c[ValidCol], ->lb0\n"
-        "B.DIM zero, %c[ValidRow], ->lb1\n"
-        "B.DIM zero, %c[Col], ->lb2\n"
-        "B.IOT mask=1111, last, ->%[dst]<%Z[TileSize]>\n"
-        "B.IOR [%[scalar]],[]\n"
-        : [dst] "=Tr"(dst.data())
-        : [scalar] "r"(scalar),
-          [DataType] "i"(type_traits<int32_t>::TypeCode),
-          [TileSize] "i"(tile_type_traits<
-                           linx_tile_carrier<1024>>::TilesizeCode),
-          [ValidCol] "i"(1), [ValidRow] "i"(8 * kLane), [Col] "i"(1)
-        : "memory");
+    TEXPANDS(dst, scalar);
 }
 
 // Pure copy of CELL `cell` out of the grouped parent: dst = parent.cell[cell].
@@ -170,27 +124,12 @@ inline void group_tadd_cell_tail(I32Tile &dst, GroupTileS32 &parent,
         : "memory");
 }
 
-// TSHUF row shift (TEPL 118). mode 1 shifts lane r <- lane r+b inside each
-// segment of segmentWidth = 2 << segmentCode lanes; boundary != 0 zero-fills
-// the out-of-range tail. control = mode | (segmentCode<<8) | (boundary<<16).
+// TSHUF row shift. mode 1 shifts lane r <- lane r+b inside each segment of
+// segmentWidth = 2 << segmentCode lanes; boundary != 0 zero-fills the
+// out-of-range tail. control = mode | (segmentCode<<8) | (boundary<<16).
 inline void tshuf_shift_i32(I32Tile &dst, I32Tile &src, U32Tile &controls,
                             uint64_t control) {
-    asm("" : "+r"(control));
-    asm volatile(
-        "BSTART.TEPL 118, %D[DataType]\n"
-        "B.DATR CUBE_M32, Zero\n"
-        "B.DIM zero, %c[ValidCol], ->lb0\n"
-        "B.DIM zero, %c[ValidRow], ->lb1\n"
-        "B.DIM zero, %c[Cols], ->lb2\n"
-        "B.IOT %[src], %[ctrl], mask=1111, last, ->%[dst]<%Z[DstSize]>\n"
-        "B.IOR [%[control]],[]\n"
-        : [dst] "=Tr"(dst.data())
-        : [src] "Tr"(src.data()), [ctrl] "Tr"(controls.data()),
-          [control] "r"(control),
-          [DataType] "i"(type_traits<int32_t>::TypeCode),
-          [DstSize] "i"(tile_type_traits<I32Tile::TileDType>::TilesizeCode),
-          [ValidCol] "i"(1), [ValidRow] "i"(kLane), [Cols] "i"(1)
-        : "memory");
+    TSHUF(dst, src, controls, control);
 }
 
 // Strided [32,1] S32 TSTORE: writes src[r] to base + r*strideBytes. With
