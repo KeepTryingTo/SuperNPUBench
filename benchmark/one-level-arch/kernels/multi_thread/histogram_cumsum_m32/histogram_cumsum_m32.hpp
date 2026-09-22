@@ -25,17 +25,22 @@
 //
 // Output cost / future work: step 4 is a stride-8 scatter done as eight
 // [32,1] strided TSTOREs, and it dominates the kernel wall time (per byte a
-// grouped store is several times cheaper). Two ways to collapse it into one
-// large-packet 1KB write:
-//   * TADD + assemble - have the final broadcast TADD write the eight CELLs
-//     into a [32,8] parent via a destination-side B.ASSEMBLE, then issue one
-//     grouped TSTORE. Not available today: the TEPL `_ASS` producer path
-//     crashes the LinxV5 backend, and the working region assemble route only
-//     accepts a RowMajor destination with CUBE subview sources, so a CUBE
-//     parent cannot be built from computed CELLs.
+// grouped store is several times cheaper).  The intended collapse is one
+// grouped 1KB write via a destination-side B.ASSEMBLE: write the eight cells
+// with TEPL _ASS producers and issue one grouped TSTORE.
+//
+// llvm-project#103 (the LinxV5 TEPL assembled-spill / B.DIM-folding crash) is
+// fixed and already in the toolchain, so the _ASS producers work.  What still
+// blocks the rewrite is a TileOP API rule: TEPL _ASS cannot write the INIT
+// slot -- it "must use a plain allocating producer", and the only plain
+// producer is TLOAD (GM->Local).  No plain producer can allocate the INIT slot
+// for computed data, so the eight computed cells cannot be assembled
+// (LinxISA/Linx-TileOP-API#211).  The within-group cell reads also use
+// B.SUBVIEW sources, which TEPL _ASS does not accept.  Until the API exposes
+// an INIT-capable computed producer, the strided stores are kept.
+//
 //   * TSTORE microarchitecture coalescing - merge the eight strided
 //     [32,1] stores into a single large-packet write in the TLSU.
-// Until one of those lands, the strided stores are kept.
 
 namespace histogram_cumsum_m32 {
 
