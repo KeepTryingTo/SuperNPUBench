@@ -299,14 +299,21 @@ inline __attribute__((always_inline)) void stage1_collect(I32Tile &bin,
     mscatter_mask_i32_m32(out, index, goldB, gamask);
 
     // EQ lanes: eq = num[0]++ ; cand[0][eq] = index.
-    PredM32 emask, eamask;
-    I32Tile e01, eact, zeroIdx, eq;
+    // The append is gated by eq < kCandCap so the buffer is never overrun; if
+    // the window produces more candidates than kCandCap, run() flags
+    // errors[bx] = 1 instead of corrupting memory.
+    PredM32 emask, eamask, capmask;
+    I32Tile e01, eact, zeroIdx, eq, cap01, eactcap;
     TCMPS<CmpMode::EQ>(emask, bin, thr);
     TCVT(e01, emask);
     TAND(eact, e01, v01);
     TCVT(eamask, eact);
     TEXPANDS(zeroIdx, 0);
     mgather_add_s32_m32(eq, sc.num, zeroIdx, eact);
+    TCMPS<CmpMode::LT>(capmask, eq, static_cast<int32_t>(kCandCap));
+    TCVT(cap01, capmask);
+    TAND(eactcap, eact, cap01);
+    TCVT(eamask, eactcap);
     I32Tile eqB;
     TMULS(eqB, eq, 4u);
     mscatter_mask_i32_m32(sc.cand[0], index, eqB, eamask);
@@ -474,6 +481,15 @@ inline __attribute__((always_inline)) void run(int32_t *output, int32_t *errors,
             I32Tile index;
             TADDS(index, lane, base);
             stage1_collect(bin, index, vc, thr, out, sc);
+        }
+
+        // Candidate overflow: stage1_collect gated the append so the buffer is
+        // intact, but a window with more than kCandCap ==thr elements cannot be
+        // refined.  Flag it (errors.bin != 0) instead of publishing a bad top-k.
+        if (sc.num[0] > kCandCap) {
+            sc.error = 1;
+            errors[bx] = sc.error;
+            continue;
         }
 
         // tail refinement of the bin16 == thr candidates.

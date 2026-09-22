@@ -96,6 +96,22 @@ range. `--mode` must match the compiled `kFp32Refine`: fp16 mode compares the
 output's FP16 sortable-key multiset against the golden top-K keys (arbitrary
 tie-break), fp32 mode compares the exact index set.
 
+## Runtime limits
+
+- Runtime shape: `batch <= kBatchMax` (4), `total_len <= kColsMax` (131072),
+  `topk <= kTopKMax` (1024). `batch 1 x 131072 -> 1024` (the DeepSeek-v4 style
+  case) is exactly the current maximum; larger shapes need editing the maxima
+  (and `kCandCap`) and rebuilding.
+- The fp32/fp16 precision is a **compile-time** switch (`kFp32Refine`): one
+  build produces one of the two, not a per-call runtime choice.
+- Candidate overflow: candidates are the `bin16 == thr` elements of the window.
+  `stage1_collect` gates the append at `kCandCap`, so the buffer is never
+  overrun; `run()` then reports `errors[bx] = 1` and the host check fails loudly
+  rather than returning a wrong top-k.  With `kCandCap = 65536` a window would
+  need more than 65536 elements in one FP16 high-byte bin to trigger it.  The
+  guard was verified by temporarily setting `kCandCap = 64`
+  (`device error flags set: (1, 0, 0, 1)`).
+
 ## Validation status
 
 gfrun `-s softcore.multiThreadNum=4`, LinxV5 toolchain (TileOP API #209).
