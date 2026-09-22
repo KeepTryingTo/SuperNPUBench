@@ -35,6 +35,24 @@ Why only 131072: it is the first size whose `[127.5, 128)` mass makes FP32
 `byte1 == 0xFF` a GT lane in round 1 (65536 and below pass). Fixed by inserting
 a per-round-cleared `hist_pad[256]` between `hist` and `num`.
 
+## Why the GM atom add is still hand-written
+
+`mgather_add_s32_m32` keeps an explicit `BSTART.TLSU MGATHER.ADD` block with
+literal `1`s for LB0/LB2 instead of the TileOP `MGATHER_ADD` wrapper, even
+though LinxISA/Linx-TileOP-API#185 (PR #209) now emits `B.DATR CUBE_M32`:
+
+- the LinxV5 backend folds any value-1 dimension on a TLSU head
+  (`LinxV5ExpandPseudoInsts.cpp`: `bundleHeadMayOmitLB0` /
+  `omitDefaultInlineAsmDims`), so the wrapper's placeholder LB0 disappears;
+- gfrun's gm-atom-red legality still requires an explicit LB0
+  (`AccumulateBlockInfo.cpp`, `bdimMask & 1`), so the folded bundle is rejected
+  with `illegal MGATHER_ADD operand or descriptor contract`.
+
+That contradicts linx-isa#202 (an omitted LB0 has effective value one; legality
+must not require presence), tracked by LinxISA/SuperScalarModel#816. The
+literal `1`s survive the fold, so this block is retained until #816 lands; it
+can then be replaced by the one-line `MGATHER_ADD` wrapper call.
+
 ## Build / run
 
 ```sh
