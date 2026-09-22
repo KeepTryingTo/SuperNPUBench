@@ -104,14 +104,9 @@ void flash_attention_2d_unroll_shared_impl(
     using tileK = SharedTile<tileKMatrix>;
     using tileV = SharedTile<tileVMatrix>;
 
-    // Change 8: tileW is a CubeTileM32/M16 (Location::Left) instead of
-    // CubeAccumulatorM32/M16 (Location::Acc). The QK TMATMUL writes directly
-    // to a Left tile, and tW is used as the PV TMATMUL left operand without
-    // any TCVT (for FP32). For packed types a Left->Left TCVT remains.
-    using tileQKOutM16 = CubeTileM16<float, kPeTm, kTk>;
-    using tileQKOutM32 = CubeTileM32<float, kPeTm, kTk>;
-    using tileQKOut =
-        std::conditional_t<(kPeTm <= 16), tileQKOutM16, tileQKOutM32>;
+    // tileW is a CubeTileM32/M16 (Location::Left). QK writes it directly:
+    // keep_acc for FP32 vector math, or fixpipe BF16 conversion otherwise.
+    // This avoids the intermediate FP32 QK tile and standalone TCVT.
     using tileWM16 = CubeTileM16<vector_dtype, kPeTm, kTk>;
     using tileWM32 = CubeTileM32<vector_dtype, kPeTm, kTk>;
     using tileW = std::conditional_t<(kPeTm <= 16), tileWM16, tileWM32>;
@@ -182,7 +177,8 @@ void flash_attention_2d_unroll_shared_impl(
     constexpr int Kb = (Skv + kTk - 1) / kTk;
 
     // Loop-invariant fixpipe options — hoisted outside both loops.
-    constexpr auto qkOptions = fixp::keep_acc();
+    constexpr auto qkFp32Options = fixp::keep_acc();
+    constexpr auto qkBf16Options = fixp::bf16();
     constexpr auto pvOptions = fixp::keep_acc().transpose_b();
 
 #pragma clang loop unroll(full)
@@ -208,11 +204,11 @@ void flash_attention_2d_unroll_shared_impl(
             TLOAD<tileKMatrix, 1>(tK, gK);
 
             if constexpr (std::is_same_v<vector_dtype, float>) {
-                TMATMUL(tW, tQ, tK, qkOptions);
+                TMATMUL(tW, tQ, tK, qkFp32Options);
             } else {
-                tileQKOut tWFloat;
-                TMATMUL(tWFloat, tQ, tK, qkOptions);
-                TCVT(tW, tWFloat);
+                static_assert(std::is_same_v<vector_dtype, __bf16>,
+                              "QK fixpipe output supports FP32 or BF16 vector dtype");
+                TMATMUL(tW, tQ, tK, qkBf16Options);
             }
 
             // Scale
