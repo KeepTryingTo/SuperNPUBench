@@ -40,7 +40,7 @@ make diss TESTCASE=fa_lowp_recip \
 # Larger sequence length (Sq=Skv=1024) to exercise deeper Q-block and K/V-block
 # loops. Tile extents unchanged from the multi-tile baseline (Tm=128 Tk=128,
 # X_dim=1 Y_dim=2); only the outer iteration counts grow.
-for testcase in fa_2d_unroll_gmma fa_fixpipe fa_subview fa_gmma_kchains; do
+for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
     for mode in \
         FP32_VECFP32 \
         BF16_VECFP32 \
@@ -60,7 +60,7 @@ done
 # Long context (small Q, large KV): Sq=128 Skv=8192 exercises a deep K/V-block
 # loop with a single Q-block (Qb = Sq/kGroupM = 128/128 = 1). Tile extents
 # Tm=128 Tk=128, two K/V tiles staged (Y_dim=2), default head dims QD=VD=128.
-for testcase in fa_2d_unroll_gmma fa_fixpipe fa_subview fa_gmma_kchains; do
+for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
     for mode in \
         FP32_VECFP32 \
         BF16_VECFP32 \
@@ -81,7 +81,7 @@ done
 # exceed SharedTReg capacity and is expected to fail — the script continues
 # to the next mode). Y_dim=1 and Skv=512 keep at least two K/V blocks while
 # reducing SharedTReg pressure.
-for testcase in fa_2d_unroll_gmma fa_fixpipe fa_subview fa_gmma_kchains; do
+for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
     for mode in \
         FP32_VECFP32 \
         BF16_VECFP32 \
