@@ -55,16 +55,31 @@ can then be replaced by the one-line `MGATHER_ADD` wrapper call.
 
 ## Build / run
 
+The outer shape is runtime (`TopkTilingData`), so different batch/cols/topk
+need **no recompile** as long as they stay within the compile-time maxima
+(`kBatchMax` / `kColsMax` / `kTopKMax`; exceeding them means editing those
+constants and `./compile.all` again).
+
 ```sh
 export COMPILER_DIR=/path/to/linx_blockisa_llvm_musl/bin
 cd test/kernel/multi_thread/topk_tiled && ./compile.all
-python3 src/run_topk_tiled_check.py --gfrun <gfrun> --mode fp32   # kFp32Refine=true
-python3 src/run_topk_tiled_check.py --gfrun <gfrun> --mode fp16   # kFp32Refine=false
+
+# shipped case: 4 x 8192, topk 512, varied per-row ranges
+python3 src/run_topk_tiled_check.py --gfrun <gfrun>
+
+# any runtime shape within the maxima, e.g. 131072 -> 1024
+python3 src/run_topk_tiled_check.py --gfrun <gfrun> \
+    --rows 1 --cols 131072 --topk 1024 --mode fp32
+
+# fp16 build: same flags, --mode fp16
+python3 src/run_topk_tiled_check.py --gfrun <gfrun> \
+    --rows 1 --cols 131072 --topk 1024 --mode fp16
 ```
 
-`--mode` must match the compiled `kFp32Refine`: fp16 mode compares the output's
-FP16 sortable-key multiset against the golden top-K keys (arbitrary tie-break),
-fp32 mode compares the exact index set.
+`--rows/--cols/--topk` override the shipped shape and run each row over the
+full `[0, cols)` range. `--mode` must match the compiled `kFp32Refine`: fp16
+mode compares the output's FP16 sortable-key multiset against the golden top-K
+keys (arbitrary tie-break), fp32 mode compares the exact index set.
 
 ## Validation status
 

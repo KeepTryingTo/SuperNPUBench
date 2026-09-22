@@ -15,6 +15,12 @@ gfrun -s softcore.multiThreadNum=4 -f <elf>, then compare. Guards:
       Ties in the full 16-bit FP16 key are broken arbitrarily, so the check
       compares the FP16 sortable-key multiset of the output against the top-K
       golden keys, and requires the output indices to be distinct and in range.
+
+The outer shape (batch x cols, topk) is runtime.  --rows/--cols/--topk override
+it and run each row over the full [0, cols) range; with no shape flag the
+shipped 4x8192x512 case with varied ranges is used.  No rebuild is needed while
+the shape stays within the kernel's compile-time maxima (kBatchMax / kColsMax /
+kTopKMax); exceeding them means editing those and recompiling.
 """
 
 import argparse
@@ -189,7 +195,24 @@ def main():
     parser.add_argument("--seed", type=int, default=12345)
     parser.add_argument("--mode", choices=("fp32", "fp16"), default="fp32",
                         help="must match the kernel's kFp32Refine build")
+    parser.add_argument("--rows", type=int,
+                        help="override batch (rows); giving any shape flag uses "
+                             "full [0, cols) ranges and no longer the shipped "
+                             "4x8192x512 varied-range case")
+    parser.add_argument("--cols", type=int, help="override outer cols")
+    parser.add_argument("--topk", type=int, help="override topk")
     args = parser.parse_args()
+
+    if args.rows is not None or args.cols is not None or args.topk is not None:
+        global ROWS, COLS, TOPK, STARTS, ENDS
+        if args.rows is not None:
+            ROWS = args.rows
+        if args.cols is not None:
+            COLS = args.cols
+        if args.topk is not None:
+            TOPK = args.topk
+        STARTS = [0] * ROWS
+        ENDS = [COLS] * ROWS
 
     status, detail = run_check(args.gfrun, args.timeout, args.seed, args.mode)
     print(f"{status} topk {detail}")
