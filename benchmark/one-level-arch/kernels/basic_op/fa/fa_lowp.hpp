@@ -172,11 +172,9 @@ void flash_attention_lowp_impl(
 
     using QScaleIter = global_iterator<GmQScale, QScaleMatrix>;
     using KScaleIter = global_iterator<GmKScale, KScaleMatrix>;
-    using VScaleIter = global_iterator<GmVScale, VScaleMatrix>;
     using OIter = global_iterator<GmO, Bf16WeightedValueTile>;
     QScaleIter qScaleIter(const_cast<__fp8_e8m0 *>(qScalePtr));
     KScaleIter kScaleIter(const_cast<__fp8_e8m0 *>(kScalePtr));
-    VScaleIter vScaleIter(const_cast<__fp8_e8m0 *>(vScalePtr));
     OIter outIter(outPtr);
 
     // Shared Q/K and their scales coexist during QK; V and its scale coexist
@@ -358,7 +356,12 @@ void flash_attention_lowp_impl(
             VScaleTile vScale;
             VSlice gV(const_cast<__fp4_e2m1x2 *>(vPtr) +
                       kb * kStoredTk * vD);
-            auto gVS = vScaleIter(kb, 0);
+            // VScaleMatrix is padded from kPScaleCols rows to
+            // kPaddedPScaleCols rows in SharedTReg, while GM V scales are
+            // densely stored as [Skv/32, vD].  A global_iterator would step
+            // by the padded row count and select the wrong KV-block scales.
+            GmVScale gVS(const_cast<__fp8_e8m0 *>(vScalePtr) +
+                         kb * kPScaleCols * vD);
             TLOAD<VMatrix, 1>(v, gV);
             TLOAD<VScaleMatrix, 1>(vScale, gVS);
             Bf16PvTile blockPvBf16;
