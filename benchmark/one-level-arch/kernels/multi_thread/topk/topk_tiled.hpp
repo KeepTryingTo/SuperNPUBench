@@ -34,9 +34,9 @@ using namespace pto;
 // maxima — same pattern as fa_gmma_dynamic's FaGmmaTilingData.
 constexpr int kLane = 32;
 constexpr int kBatchMax = 4;
-constexpr int kColsMax = 8192;
-constexpr int kTopKMax = 512;
-constexpr int kCandCap = 4096;
+constexpr int kColsMax = 131072;
+constexpr int kTopKMax = 1024;
+constexpr int kCandCap = 65536;
 
 struct TopkTilingData {
     int64_t batch;
@@ -57,6 +57,11 @@ using PredM32 = VecTileM32<uint8_t, kLane, 1>;
 
 struct Scratch {
     int32_t hist[256];       // 256 bins, flat in GM; H[bin]
+    // hist_cumsum's grouped load reads hist[256:384] as its zero boundary, and
+    // round_write allocates the top-byte (0xFF) slot through H[256].  Both need
+    // hist[256] to be a real, per-round-cleared word, so it must not overlap
+    // num[0].  hist_clear zeroes this pad together with hist.
+    int32_t hist_pad[256];
     int32_t num[2];          // ping-pong candidate counts, GM
     int32_t error;           // 0 ok, 1 candidate overflow, 2 empty range
     int32_t cand[2][kCandCap];
@@ -115,6 +120,7 @@ inline __attribute__((always_inline)) void hist_clear(Scratch &sc) {
     GroupTileS32 zero;
     group_texpands(zero, 0);
     group_tstore(sc.hist, zero);
+    group_tstore(sc.hist_pad, zero);
 }
 
 // Forward declarations: the histogram helpers use the lane loader and the
