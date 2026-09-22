@@ -51,7 +51,7 @@
 #endif
 
 #ifndef PV_CHAIN_K
-#define PV_CHAIN_K 32
+#define PV_CHAIN_K kTk
 #endif
 
 #define B 1

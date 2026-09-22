@@ -10,7 +10,7 @@ QD ?= 128
 VD ?= 128
 MaxSq ?= 256
 MaxSkv ?= 256
-PVChainK ?= 32
+PVChainK ?= $(Tk)
 X_dim ?= 1
 Y_dim ?= 1
 
@@ -18,6 +18,11 @@ Y_dim ?= 1
 # accumulation and O) are selected independently through FA_MODE. Both
 # TMATMUL destinations remain FP32.
 FA_MODE ?= FP32_VECFP32
+FA_TRACE_ONLY ?= 0
+
+ifeq ($(FA_TRACE_ONLY),1)
+DEFINES += -DFA_TRACE_ONLY=1
+endif
 
 ifeq ($(FA_MODE),FP32_VECFP32)
 MATRIX_DTYPE := float
@@ -63,6 +68,14 @@ else
 $(error Unsupported FA_MODE=$(FA_MODE); expected FP32_VECFP32, BF16_VECFP32, MXFP8_VECFP32, MXFP4_VECBF16, HIF8_VECFP32, FP8_VECFP32, FP8_VECBF16, or HIF4_VECBF16)
 endif
 
+# Spell out both execution data types in artifact names. FA_MODE keeps its
+# compact command-line spelling (for example FP32_VECFP32), while generated
+# ELF/diss/trace names use CubeFP32_VectorFP32 so the two fields are explicit.
+FA_MODE_PARTS := $(subst _, ,$(FA_MODE))
+CUBE_DTYPE_TAG := $(word 1,$(FA_MODE_PARTS))
+VECTOR_DTYPE_TAG := $(patsubst VEC%,%,$(word 2,$(FA_MODE_PARTS)))
+DTYPE_SUFFIX := _Cube$(CUBE_DTYPE_TAG)_Vector$(VECTOR_DTYPE_TAG)
+
 DEFINES += -DMATRIX_DTYPE=$(MATRIX_DTYPE)
 DEFINES += -DVECTOR_DTYPE=$(VECTOR_DTYPE)
 DEFINES += -DPACKED_FACTOR=$(PACKED_FACTOR)
@@ -98,15 +111,16 @@ SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_2d_unroll_gmma_subview.cpp
 else ifeq ($(TESTCASE),fa_lowp)
 SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_lowp.cpp
 else ifeq ($(TESTCASE),fa_lowp_recip)
-SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_lowp.cpp
+SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/fa_lowp_recip.cpp
 DEFINES += -DFA_LOWP_RECIP=1
 else
 $(error Unsupported TESTCASE=$(TESTCASE); expected fa_2d_unroll_gmma, fa_gmma_opt, fa_gmma_dynamic, fa_gmma_kchains, fa_2d_unroll_gmma_no_tstore, fa_fixpipe, fa_subview, fa_2d_unroll_gmma_subview, fa_lowp, or fa_lowp_recip)
 endif
 
 ifeq ($(TESTCASE),fa_gmma_dynamic)
-ifneq ($(FA_MODE),FP32_VECFP32)
-$(error fa_gmma_dynamic test driver currently supports FA_MODE=FP32_VECFP32)
+FA_DYNAMIC_MODES := FP32_VECFP32 BF16_VECFP32 FP8_VECFP32
+ifeq ($(filter $(FA_MODE),$(FA_DYNAMIC_MODES)),)
+$(error fa_gmma_dynamic supports FA_MODE=$(FA_DYNAMIC_MODES))
 endif
 DYNAMIC_SUFFIX = _MaxSq$(MaxSq)_MaxSkv$(MaxSkv)
 endif
@@ -116,9 +130,9 @@ KCHAIN_SUFFIX = _PVChainK$(PVChainK)
 endif
 
 ifeq ($(QD)_$(VD),128_128)
-TARGET = $(ELF_HEAD)_$(TESTCASE)_Sq$(Sq)_Skv$(Skv)$(DYNAMIC_SUFFIX)_Tm$(Tm)_Tk$(Tk)$(KCHAIN_SUFFIX)_X$(X_dim)_Y$(Y_dim)_$(FA_MODE).elf
+TARGET = $(ELF_HEAD)_$(TESTCASE)_Sq$(Sq)_Skv$(Skv)$(DYNAMIC_SUFFIX)_Tm$(Tm)_Tk$(Tk)$(KCHAIN_SUFFIX)_X$(X_dim)_Y$(Y_dim)$(DTYPE_SUFFIX).elf
 else
-TARGET = $(ELF_HEAD)_$(TESTCASE)_Sq$(Sq)_Skv$(Skv)$(DYNAMIC_SUFFIX)_Tm$(Tm)_Tk$(Tk)_qD$(QD)_vD$(VD)$(KCHAIN_SUFFIX)_X$(X_dim)_Y$(Y_dim)_$(FA_MODE).elf
+TARGET = $(ELF_HEAD)_$(TESTCASE)_Sq$(Sq)_Skv$(Skv)$(DYNAMIC_SUFFIX)_Tm$(Tm)_Tk$(Tk)_qD$(QD)_vD$(VD)$(KCHAIN_SUFFIX)_X$(X_dim)_Y$(Y_dim)$(DTYPE_SUFFIX).elf
 endif
 
 include ../../common/Makefile.common

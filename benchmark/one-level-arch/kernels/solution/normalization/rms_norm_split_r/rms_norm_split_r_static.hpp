@@ -12,8 +12,8 @@ namespace rms_split_r_static {
 
 constexpr float kEpsilon = 1e-6f;
 
-// Row-reduction results have physical Columns=1. Workspace cache entries
-// must preserve that layout so TLOAD and TADD match the TROWSUM output.
+// Only one FP32 value is stored per GM cache entry. The local reduction
+// carrier may be wider; padding is not part of the workspace layout.
 constexpr int kWsCols = 1;
 constexpr int kMaxLevels = 6;
 
@@ -115,10 +115,12 @@ void rms_norm_split_r_static(dtype *x, const dtype *gamma, dtype *out,
 
     using gm_t = global_tensor<dtype, RowMajor<-1, -1>>;
     using gm_f = global_tensor<float, RowMajor<-1, -1>>;
-    using tile_h = Tile<Location::Vec, dtype, tA, tR, BLayout::RowMajor, 1, 512>;
-    using tile_f = Tile<Location::Vec, float, tA, tR, BLayout::RowMajor, 1, 512>;
-    using tile_v = Tile<Location::Vec, float, tA, rms_split_r_static::kWsCols,
-                        BLayout::RowMajor, 1, 1>;
+    using tile_h = Tile<Location::Vec, dtype, tA, tR, BLayout::CubeM32, 1, 512>;
+    using tile_f = Tile<Location::Vec, float, tA, tR, BLayout::CubeM32, 1, 512>;
+    using reduce_row = Tile<Location::Vec, float, tA, tR,
+                            BLayout::CubeM32, 1, 1>;
+    using tile_v = Tile<Location::Vec, float, tA, tR,
+                        BLayout::CubeM32, 1, 1>;
 
     for (int64_t ia = 0; ia < gA; ++ia) {
         constexpr size_t active_a = 1;
@@ -173,7 +175,9 @@ void rms_norm_split_r_static(dtype *x, const dtype *gamma, dtype *out,
             TMUL(sq0, src0, src0);
             TMUL(sq1, src1, src1);
             TADD(sq0, sq0, sq1);
-            TROWSUM(cur, sq0);
+            reduce_row row_sum;
+            TROWSUM(row_sum, sq0);
+            TCOLSUM(cur, row_sum);
             RMS_BIN_UPDATE_CACHE();
         }
 
@@ -188,7 +192,9 @@ void rms_norm_split_r_static(dtype *x, const dtype *gamma, dtype *out,
             TLOAD(src_h, gi);
             TCVT(src, src_h);
             TMUL(sq, src, src);
-            TROWSUM(cur, sq);
+            reduce_row row_sum;
+            TROWSUM(row_sum, sq);
+            TCOLSUM(cur, row_sum);
             RMS_BIN_UPDATE_CACHE();
         }
 
