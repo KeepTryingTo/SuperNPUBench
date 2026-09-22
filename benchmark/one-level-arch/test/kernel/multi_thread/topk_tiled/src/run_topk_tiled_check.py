@@ -6,8 +6,15 @@ gfrun -s softcore.multiThreadNum=4 -f <elf>, then compare. Guards:
   1. input_readback.bin must equal input.bin (input reached the device);
   2. errors.bin must be all zero (no candidate overflow / bad range);
   3. the comparison must not be vacuous (golden not all zero);
-  4. per row, the sorted output index set must equal the golden top-K set
-     exactly (input values are distinct, so the set is unique).
+  4. per row, the output must match the mode's golden.
+
+--mode selects the kernel's compile-time dataflow (kFp32Refine):
+  fp32 (default): four FP32 key-byte rounds -> exact FP32 top-k, so the sorted
+      output index set equals the golden set exactly (input values distinct).
+  fp16: one FP16 key low-byte round -> exact top-k of the FP16-rounded values.
+      Ties in the full 16-bit FP16 key are broken arbitrarily, so the check
+      compares the FP16 sortable-key multiset of the output against the top-K
+      golden keys, and requires the output indices to be distinct and in range.
 """
 
 import argparse
@@ -74,7 +81,22 @@ def golden_topk(values, row):
     return sorted(i for _, i in window[:TOPK])
 
 
-def run_check(gfrun, timeout, seed):
+def fp16_key(value):
+    """RNE-round to FP16 and return the 16-bit sortable key (matches load_bin)."""
+    bits = struct.unpack("<H", struct.pack("<e", value))[0]
+    return (bits ^ 0xFFFF) if (bits >> 15) else (bits ^ 0x8000)
+
+
+def golden_topk_fp16_keys(values, row):
+    """Descending FP16 sortable keys of the golden top-K (ties are a multiset)."""
+    lo, hi = STARTS[row], ENDS[row]
+    base = row * COLS
+    keys = [fp16_key(values[base + i]) for i in range(lo, hi)]
+    keys.sort(reverse=True)
+    return keys[:TOPK]
+
+
+def run_check(gfrun, timeout, seed, mode):
     elf = ELF_DIR / ELF_NAME
     if not elf.exists():
         return "SKIP", f"missing {elf}"
@@ -120,24 +142,44 @@ def run_check(gfrun, timeout, seed):
 
     golden_flat = []
     for row in range(ROWS):
-        want = golden_topk(values, row)
-        got = sorted(output[row * TOPK:(row + 1) * TOPK])
-        golden_flat.extend(want)
+        got_idx = list(output[row * TOPK:(row + 1) * TOPK])
+        base = row * COLS
 
-        # Guard 3: the comparison must not be vacuous.
-        if not any(want):
-            return "FAIL", f"row {row}: golden is all zero, comparison is vacuous"
-        if got == [-1] * TOPK:
+        if got_idx == [-1] * TOPK:
             return "FAIL", f"row {row}: output never written (all -1 sentinel)"
 
-        if got != want:
-            first = next(k for k, (a, b) in enumerate(zip(got, want)) if a != b)
-            return "FAIL", (f"row {row}: index set mismatch, first diff at "
-                            f"sorted position {first}: got {got[first]} want {want[first]} "
-                            f"({sum(a != b for a, b in zip(got, want))} of {TOPK} differ)")
+        if mode == "fp32":
+            want = golden_topk(values, row)
+            got = sorted(got_idx)
+            golden_flat.extend(want)
+            # Guard 3: the comparison must not be vacuous.
+            if not any(want):
+                return "FAIL", f"row {row}: golden is all zero, comparison is vacuous"
+            if got != want:
+                first = next(k for k, (a, b) in enumerate(zip(got, want)) if a != b)
+                return "FAIL", (f"row {row}: index set mismatch, first diff at "
+                                f"sorted position {first}: got {got[first]} want {want[first]} "
+                                f"({sum(a != b for a, b in zip(got, want))} of {TOPK} differ)")
+            continue
 
-    (case_dir / "golden.bin").write_bytes(struct.pack(f"<{len(golden_flat)}i", *golden_flat))
-    return "PASS", f"rows={ROWS} cols={COLS} topk={TOPK} output {ROWS * TOPK * 4}/{ROWS * TOPK * 4} bytes exact"
+        # fp16: exact under the 16-bit FP16 key, arbitrary tie-break at the cut.
+        if len(set(got_idx)) != TOPK or any(i < 0 or i >= COLS for i in got_idx):
+            return "FAIL", f"row {row}: output is not {TOPK} distinct in-range indices"
+        want_keys = golden_topk_fp16_keys(values, row)
+        if want_keys[0] == want_keys[-1]:
+            return "FAIL", f"row {row}: golden FP16 keys are constant, comparison is vacuous"
+        got_keys = sorted((fp16_key(values[base + i]) for i in got_idx), reverse=True)
+        if got_keys != want_keys:
+            first = next(k for k, (a, b) in enumerate(zip(got_keys, want_keys)) if a != b)
+            return "FAIL", (f"row {row}: FP16 key multiset mismatch at rank {first}: "
+                            f"got 0x{got_keys[first]:04x} want 0x{want_keys[first]:04x} "
+                            f"({sum(a != b for a, b in zip(got_keys, want_keys))} of {TOPK} differ)")
+        golden_flat.extend(want_keys)
+
+    if mode == "fp32":
+        (case_dir / "golden.bin").write_bytes(struct.pack(f"<{len(golden_flat)}i", *golden_flat))
+    return "PASS", (f"mode={mode} rows={ROWS} cols={COLS} topk={TOPK} "
+                    f"output {ROWS * TOPK * 4}/{ROWS * TOPK * 4} bytes exact")
 
 
 def main():
@@ -145,9 +187,11 @@ def main():
     parser.add_argument("--gfrun", required=True, type=Path, help="path to gfrun")
     parser.add_argument("--timeout", type=int, default=1800)
     parser.add_argument("--seed", type=int, default=12345)
+    parser.add_argument("--mode", choices=("fp32", "fp16"), default="fp32",
+                        help="must match the kernel's kFp32Refine build")
     args = parser.parse_args()
 
-    status, detail = run_check(args.gfrun, args.timeout, args.seed)
+    status, detail = run_check(args.gfrun, args.timeout, args.seed, args.mode)
     print(f"{status} topk {detail}")
     failed = status not in ("PASS", "SKIP")
     print(f"summary: {0 if failed else 1} ok, {1 if failed else 0} failed")

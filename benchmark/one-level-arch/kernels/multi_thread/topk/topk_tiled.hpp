@@ -38,6 +38,12 @@ constexpr int kColsMax = 131072;
 constexpr int kTopKMax = 1024;
 constexpr int kCandCap = 65536;
 
+// Boundary-bucket refinement.  true  -> the four FP32 key bytes give the exact
+// FP32 top-k.  false -> the single FP16 key low byte gives the exact top-k of
+// the FP16-rounded values (no FP32 pass; ties in the full 16-bit FP16 key are
+// broken arbitrarily).  Compile-time so the two dataflows never coexist.
+constexpr bool kFp32Refine = true;
+
 struct TopkTilingData {
     int64_t batch;
     int64_t cols;
@@ -325,6 +331,37 @@ inline __attribute__((always_inline)) I32Tile candidate_byte(const float *row,
     return byte;
 }
 
+// Exact-FP16 tail byte: the FP16 key low byte of each candidate, i.e.
+// key16 & 0xFF with key16 formed exactly as load_bin does (RNE round to FP16,
+// sign-aware sortable key).  The candidate index is gathered as an FP32 value
+// so the round matches stage 1; the FP16 payload is reinterpreted as U16
+// through the same GM round trip load_bin uses.
+inline __attribute__((always_inline)) I32Tile candidate_byte16(const float *row,
+                                                               U32Tile &cand,
+                                                               Scratch &sc) {
+    U32Tile off;
+    TMULS(off, cand, 4u);  // byte displacement
+    global_tensor<float, RowMajor<kColsMax, 1>> gf(row);
+    F32Tile f32;
+    MGATHER(f32, gf, off);
+    F16Tile f16;
+    TCVT(f16, f32);
+    global_tensor<__half, RowMajor<kLane, 1>> gh(
+        reinterpret_cast<__half *>(sc.bin16));
+    TSTORE(gh, f16);
+    global_tensor<uint16_t, RowMajor<kLane, 1>> gu(sc.bin16);
+    U16Tile bits, sign, scaled, mask, key, l8;
+    TLOAD(bits, gu);
+    TSHRS(sign, bits, static_cast<uint16_t>(15));
+    TMULS(scaled, sign, static_cast<uint16_t>(0x7FFF));
+    TADDS(mask, scaled, static_cast<uint16_t>(0x8000));
+    TXOR(key, bits, mask);
+    TANDS(l8, key, static_cast<uint16_t>(0xFF));
+    I32Tile byte;
+    TCVT(byte, l8);
+    return byte;
+}
+
 // tail histogram of one candidate tile: H[byte]++ per valid lane.
 // Tile version of the old scalar workaround (llvm-project#105 is fixed).
 inline __attribute__((always_inline)) void round_hist(I32Tile &byte, int32_t vc,
@@ -472,38 +509,72 @@ inline __attribute__((always_inline)) void run(int32_t *output, int32_t *errors,
             stage1_collect(bin, index, vc, thr, out, sc);
         }
 
-        // tail rounds: ping-pong cand[r]/cand[nr], num[r]/num[nr]
-        for (int round = 0; round < 4 && rem > 0; ++round) {
-            const int r = round & 1;
-            const int32_t prefix = topk - rem;
-            const int32_t count = sc.num[r];
-            hist_clear(sc);
-            for (int32_t t = 0; t * kLane < count; ++t) {
-                const int32_t vc = min_i32(kLane, count - t * kLane);
-                global_tensor<uint32_t, RowMajor<kLane, 1>> gc(
-                    reinterpret_cast<const uint32_t *>(&sc.cand[r][t * kLane]));
-                U32Tile candU;
-                TLOAD(candU, gc);
-                I32Tile byte = candidate_byte(row, candU, round, sc);
-                round_hist(byte, vc, sc);
-            }
-            hist_cumsum(sc);
-            thr = find_threshold(sc, rem);
-            rem -= sc.hist[thr + 1];
+        // tail refinement of the bin16 == thr candidates.
+        if constexpr (kFp32Refine) {
+            // exact FP32: ping-pong cand[r]/cand[nr], four key bytes.
+            for (int round = 0; round < 4 && rem > 0; ++round) {
+                const int r = round & 1;
+                const int32_t prefix = topk - rem;
+                const int32_t count = sc.num[r];
+                hist_clear(sc);
+                for (int32_t t = 0; t * kLane < count; ++t) {
+                    const int32_t vc = min_i32(kLane, count - t * kLane);
+                    global_tensor<uint32_t, RowMajor<kLane, 1>> gc(
+                        reinterpret_cast<const uint32_t *>(&sc.cand[r][t * kLane]));
+                    U32Tile candU;
+                    TLOAD(candU, gc);
+                    I32Tile byte = candidate_byte(row, candU, round, sc);
+                    round_hist(byte, vc, sc);
+                }
+                hist_cumsum(sc);
+                thr = find_threshold(sc, rem);
+                rem -= sc.hist[thr + 1];
 
-            // round_write appends the EQ candidates into the ping-pong buffer
-            // for the next round; its counter starts empty each round.
-            const int32_t nr = (round & 1) ^ 1;
-            sc.num[nr] = 0;
-            const int32_t c2 = sc.num[r];
-            for (int32_t t = 0; t * kLane < c2; ++t) {
-                const int32_t vc = min_i32(kLane, c2 - t * kLane);
-                global_tensor<uint32_t, RowMajor<kLane, 1>> gc(
-                    reinterpret_cast<const uint32_t *>(&sc.cand[r][t * kLane]));
-                U32Tile candU;
-                TLOAD(candU, gc);
-                I32Tile byte = candidate_byte(row, candU, round, sc);
-                round_write(out, round, candU, byte, vc, thr, prefix, topk, sc);
+                // round_write appends the EQ candidates into the ping-pong
+                // buffer for the next round; its counter starts empty each round.
+                const int32_t nr = (round & 1) ^ 1;
+                sc.num[nr] = 0;
+                const int32_t c2 = sc.num[r];
+                for (int32_t t = 0; t * kLane < c2; ++t) {
+                    const int32_t vc = min_i32(kLane, c2 - t * kLane);
+                    global_tensor<uint32_t, RowMajor<kLane, 1>> gc(
+                        reinterpret_cast<const uint32_t *>(&sc.cand[r][t * kLane]));
+                    U32Tile candU;
+                    TLOAD(candU, gc);
+                    I32Tile byte = candidate_byte(row, candU, round, sc);
+                    round_write(out, round, candU, byte, vc, thr, prefix, topk, sc);
+                }
+            }
+        } else {
+            // exact FP16: one low-byte round.  Its EQ lanes share the full
+            // 16-bit FP16 key, so round_write's final pass (round == 3) writes
+            // them straight into the remaining slots, breaking the tie in
+            // candidate order.
+            if (rem > 0) {
+                const int32_t prefix = topk - rem;
+                const int32_t count = sc.num[0];
+                hist_clear(sc);
+                for (int32_t t = 0; t * kLane < count; ++t) {
+                    const int32_t vc = min_i32(kLane, count - t * kLane);
+                    global_tensor<uint32_t, RowMajor<kLane, 1>> gc(
+                        reinterpret_cast<const uint32_t *>(&sc.cand[0][t * kLane]));
+                    U32Tile candU;
+                    TLOAD(candU, gc);
+                    I32Tile byte = candidate_byte16(row, candU, sc);
+                    round_hist(byte, vc, sc);
+                }
+                hist_cumsum(sc);
+                thr = find_threshold(sc, rem);
+                rem -= sc.hist[thr + 1];
+                for (int32_t t = 0; t * kLane < count; ++t) {
+                    const int32_t vc = min_i32(kLane, count - t * kLane);
+                    global_tensor<uint32_t, RowMajor<kLane, 1>> gc(
+                        reinterpret_cast<const uint32_t *>(&sc.cand[0][t * kLane]));
+                    U32Tile candU;
+                    TLOAD(candU, gc);
+                    I32Tile byte = candidate_byte16(row, candU, sc);
+                    round_write(out, 3, candU, byte, vc, thr, prefix, topk, sc);
+                }
             }
         }
         errors[bx] = sc.error;
