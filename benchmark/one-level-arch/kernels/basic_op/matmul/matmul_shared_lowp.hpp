@@ -95,8 +95,6 @@ void matmul_shared_lowp(float *c_ptr, dtype *a_ptr, dtype *b_ptr,
                           tN, kScaleK>;
     using tileAScale = SharedTile<tileAScaleMatrix>;
     using tileBScale = SharedTile<tileBScaleMatrix>;
-    using itAScale = global_iterator<gmAScale, tileAScaleMatrix>;
-    using itBScale = global_iterator<gmBScale, tileBScaleMatrix>;
 
     // SharedTile operands share one 256 KiB SharedTReg pool.  Check the
     // rounded Tile capacities used by B.IOS, including both MX scale tiles,
@@ -110,9 +108,6 @@ void matmul_shared_lowp(float *c_ptr, dtype *a_ptr, dtype *b_ptr,
                : 0);
     static_assert(kSharedOperandBytes <= kSharedTRegBytes,
                   "A/B and MX scale tiles exceed the 256 KiB SharedTReg pool");
-
-    itAScale gIterAScale(a_scale_ptr);
-    itBScale gIterBScale(b_scale_ptr);
 
     constexpr int Mb = (gM + kGroupM - 1) / kGroupM;
     constexpr int Nb = gN / tN;
@@ -139,8 +134,17 @@ void matmul_shared_lowp(float *c_ptr, dtype *a_ptr, dtype *b_ptr,
                 if constexpr (UseMx) {
                     tileAScale tAScale;
                     tileBScale tBScale;
-                    auto gAScale = gIterAScale(i, k);
-                    auto gBScale = gIterBScale(j, k);
+                    // The Shared scale tiles are physically padded to
+                    // kPaddedScaleK columns, while GM is densely packed by
+                    // kScaleK.  Construct each GM view from its logical
+                    // offset; global_iterator would advance K by the padded
+                    // Tile::Cols and select the wrong scale block for k > 0.
+                    gmAScale gAScale(
+                        a_scale_ptr + i * kGroupM * (gK / ScaleGroup) +
+                        k * kScaleK);
+                    gmBScale gBScale(
+                        b_scale_ptr + j * tN * (gK / ScaleGroup) +
+                        k * kScaleK);
                     TLOAD<tileAScaleMatrix, 1>(tAScale, gAScale);
                     TLOAD<tileBScaleMatrix, 1>(tBScale, gBScale);
 

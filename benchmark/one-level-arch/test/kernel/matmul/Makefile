@@ -118,11 +118,9 @@ golden-check:
 	python3 $(TEST_ROOT)/$(CASE_SRC_DIR)/gfrun_matmul.py -d $(TARGET)
 endif
 
-# Compact numerical portfolio. FP32/FP16/BF16 use K/tK=2 to exercise the
-# internal-accumulator chain. MX/HiF4 use one K tile, keeping this target
-# focused on payload/scale/matmul numerics (the MX accumulator-chain path is a
-# separate execution-path concern). All six cases use the same host checker
-# and PyTorch FP32 matmul oracle.
+# Compact numerical portfolio. FP32/FP16/BF16 use K/tK=2 and MXFP4 uses
+# K/tK=4 to exercise their accumulator chains. MXFP8/HiF4 retain one K tile.
+# All six cases use the same host checker and PyTorch FP32 matmul oracle.
 precision-check:
 	@status=0; pass=0; fail=0; \
 	for config in \
@@ -130,7 +128,7 @@ precision-check:
 		"TESTCASE=matmul_shared DTYPE=__half K=128" \
 		"TESTCASE=matmul_shared DTYPE=__bf16 K=128" \
 		"TESTCASE=matmul_lowp LP_MODE=MXFP8 K=64" \
-		"TESTCASE=matmul_lowp LP_MODE=MXFP4 K=64" \
+		"TESTCASE=matmul_lowp LP_MODE=MXFP4 K=256" \
 		"TESTCASE=matmul_lowp LP_MODE=HIF4X2 K=64"; do \
 		if $(MAKE) golden-check $$config \
 			B=1 M=64 N=64 tM=64 tN=64 tK=64; then \
