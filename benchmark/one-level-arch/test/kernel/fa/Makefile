@@ -43,6 +43,11 @@ MATRIX_DTYPE := __bf16
 VECTOR_DTYPE := __bf16
 PACKED_FACTOR := 1
 USE_MX := 0
+else ifeq ($(FA_MODE),FP16_VECFP32)
+MATRIX_DTYPE := __half
+VECTOR_DTYPE := float
+PACKED_FACTOR := 1
+USE_MX := 0
 else ifeq ($(FA_MODE),MXFP8_VECFP32)
 MATRIX_DTYPE := __fp8_e4m3
 VECTOR_DTYPE := float
@@ -74,7 +79,7 @@ VECTOR_DTYPE := __bf16
 PACKED_FACTOR := 2
 USE_MX := 0
 else
-$(error Unsupported FA_MODE=$(FA_MODE); expected FP32_VECFP32, FP32_VECBF16, BF16_VECFP32, BF16_VECBF16, MXFP8_VECFP32, MXFP4_VECBF16, HIF8_VECFP32, FP8_VECFP32, FP8_VECBF16, or HIF4_VECBF16)
+$(error Unsupported FA_MODE=$(FA_MODE); expected FP32_VECFP32, FP32_VECBF16, BF16_VECFP32, BF16_VECBF16, FP16_VECFP32, MXFP8_VECFP32, MXFP4_VECBF16, HIF8_VECFP32, FP8_VECFP32, FP8_VECBF16, or HIF4_VECBF16)
 endif
 
 # Spell out both execution data types in artifact names. FA_MODE keeps its
@@ -136,3 +141,30 @@ TARGET = $(ELF_HEAD)_$(TESTCASE)_Sq$(Sq)_Skv$(Skv)$(DYNAMIC_SUFFIX)_Tm$(Tm)_Tk$(
 endif
 
 include ../../common/Makefile.common
+
+.PHONY: golden-check precision-check
+
+golden-check:
+	$(MAKE) -B TESTCASE=$(TESTCASE) FA_MODE=$(FA_MODE) \
+		Sq=$(Sq) Skv=$(Skv) QD=$(QD) VD=$(VD) Tm=$(Tm) Tk=$(Tk) \
+		X_dim=$(X_dim) Y_dim=$(Y_dim) \
+		COMPILER_DIR=$(COMPILER_DIR) OBJ_ROOT=$(OBJ_ROOT) \
+		res_check=on all
+	python3 $(TEST_ROOT)/$(CASE_SRC_DIR)/gfrun_fa.py --elf $(TARGET)
+
+precision-check:
+	@status=0; pass=0; fail=0; \
+	for mode in \
+		FP32_VECFP32 BF16_VECFP32 FP16_VECFP32 \
+		FP8_VECFP32 MXFP8_VECFP32; do \
+		if $(MAKE) golden-check TESTCASE=fa_2d_unroll_gmma FA_MODE=$$mode \
+			Sq=128 Skv=1024 QD=128 VD=128 Tm=128 Tk=128 \
+			X_dim=1 Y_dim=1 COMPILER_DIR=$(COMPILER_DIR) \
+			OBJ_ROOT=$(OBJ_ROOT); then \
+			pass=$$((pass + 1)); \
+		else \
+			fail=$$((fail + 1)); status=1; \
+		fi; \
+	done; \
+	echo "FA GMMA precision summary: PASS=$$pass FAIL=$$fail"; \
+	exit $$status
