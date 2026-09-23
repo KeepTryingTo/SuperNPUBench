@@ -7,16 +7,17 @@
 : "${COMPILER_DIR:?Set COMPILER_DIR to the Linx compiler bin directory}"
 
 # === SharedTile capacity gate (issue #192) ===
-# gfsim runs a 256 KiB shareTReg pool. Full-pool footprints deadlock with the
-# software pipeline's generational overlap (next-generation TLOAD issued
-# before the previous generation's last consumer). Gate every testcase at
-# Q+K+V data-tile bytes <= 128 KiB (half pool, overlap headroom):
+# gfsim runs a 256 KiB shareTReg pool. Gate every testcase at
+#   2*Q + K + V <= 256 KiB
+# i.e. the unrolled group's resident set (two Q tiles plus the K/V pair)
+# must fit the pool; larger sets deadlock with the pipeline's generational
+# overlap (issue #192). Tile byte formulas:
 #   Q = 128 x (QD/packed) x elem   (SharedMatrixLeft, kTileRows=128)
 #   K = Tk  x (QD/packed) x elem   (SharedMatrixRight)
 #   V = (Tk/packed) x VD x elem    (SharedMatrixRight)
 # MX E8M0 scale tiles are excluded from the criterion (small, and the issue's
 # failing cases are FP32). MXFP4/HIF4 pack two elements per stored byte.
-GATE_KIB=128
+GATE_KIB=256
 
 fa_mode_bytes() {
     # $1 = FA_MODE, $2 = Tk, $3 = QD, $4 = VD
@@ -33,14 +34,14 @@ fa_mode_bytes() {
     local q=$(( 128 * (qd / packed) * elem ))
     local k=$(( tk * (qd / packed) * elem ))
     local v=$(( (tk / packed) * vd * elem ))
-    echo $(( q + k + v ))
+    echo $(( 2 * q + k + v ))
 }
 
 fa_gate_ok() {
     # $1 = FA_MODE, $2 = Tk, $3 = QD, $4 = VD -> exit 0 = build allowed
     local bytes; bytes=$(fa_mode_bytes "$1" "$2" "${3:-128}" "${4:-128}")
     if (( bytes > GATE_KIB * 1024 )); then
-        echo "SKIP capacity: $1 Tk=$2 Q+K+V=$((bytes / 1024))KiB > ${GATE_KIB}KiB"
+        echo "SKIP capacity: $1 Tk=$2 2Q+K+V=$((bytes / 1024))KiB > ${GATE_KIB}KiB"
         return 1
     fi
     return 0
@@ -125,7 +126,7 @@ done
 
 # Variable Tk (tile-K): Tk=256 halves the K/V-block loop. Y_dim=1 and Skv=512
 # keep at least two K/V blocks. The capacity gate drops the modes whose
-# Q+K+V exceeds 128 KiB at Tk=256 (FP32/BF16 — issue #192's deadlock class).
+# 2Q+K+V exceeds 256 KiB at Tk=256 (FP32 — issue #192's deadlock class).
 for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
     for mode in \
         FP32_VECFP32 \
