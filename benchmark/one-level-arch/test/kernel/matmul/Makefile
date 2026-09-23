@@ -31,8 +31,8 @@ DEFINES += -DtilK=$(tK)
 
 ifeq ($(TESTCASE),matmul_shared)
 SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/matmul_shared.cpp
-else ifeq ($(TESTCASE),matmul_reuseB)
-SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/matmul_reuseB.cpp
+else ifeq ($(TESTCASE),matmul_reuseA)
+SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/matmul_reuseA.cpp
 else ifeq ($(TESTCASE),matmul_lowp)
 SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/matmul_lowp.cpp
 ifeq ($(LP_MODE),FP8)
@@ -84,7 +84,7 @@ else ifeq ($(TESTCASE),matmul_hif4_l1_quantize)
 # HiF4X2; scale is one raw E6M2 byte per row and 64-column group.
 SRC_FILE += $(TEST_ROOT)/$(CASE_SRC_DIR)/matmul_hif4_l1_quantize.cpp
 else
-$(error Unsupported TESTCASE=$(TESTCASE); expected matmul_shared, matmul_reuseB, matmul_lowp, or matmul_hif4_l1_quantize)
+$(error Unsupported TESTCASE=$(TESTCASE); expected matmul_shared, matmul_reuseA, matmul_lowp, or matmul_hif4_l1_quantize)
 endif
 
 # Keep the default (FP32) ELF name unchanged for backward compatibility;

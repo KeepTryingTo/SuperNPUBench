@@ -12,40 +12,24 @@ set -u
 
 : "${COMPILER_DIR:?Set COMPILER_DIR to the Linx compiler bin directory}"
 
-# === SharedTile capacity gate (issue #192) ===
-# gfsim runs a 256 KiB shareTReg pool; footprints that fill the pool deadlock
-# with the software pipeline's generational overlap. Gate every testcase at
-# Shared A + B bytes <= 128 KiB (half pool, overlap headroom):
-#   A = [128, tK], B = [tN, tK]  ->  (128 + tN) * tK * elem_bytes
-# MX lowp modes add their E8M0 scale tiles to the gate (same formula as the
-# S1-S6 matrix below).
-GATE_KIB=128
-
-mm_gate_bytes() {
-    # $1 = dtype (float|__bf16|__half) or lowp mode, $2 = tN, $3 = tK
-    local elem data_bytes=0 scale_bytes=0
+mm_reusea_gate_ok() {
+    # $1 = dtype, $2 = tN, $3 = tK.  matmul_reuseA uses tM=128, hence a
+    # 32-row Local A shard and a 32-row FP32 accumulator on every PE.
+    local elem shared_b_bytes local_a_bytes local_c_bytes
     case "$1" in
         float) elem=4 ;;
         __bf16|__half) elem=2 ;;
-        FP8|HIFP8|HIF4X2) elem=1 ;;
-        MXFP8|MXFP4)
-            elem=1
-            local scale_groups padded_scale_cols
-            scale_groups=$(( ($3 + 31) / 32 ))
-            padded_scale_cols=$(( ((scale_groups + 31) / 32) * 32 ))
-            scale_bytes=$(( (128 + $2) * padded_scale_cols ))
-            ;;
-        *) echo "unsupported gate dtype: $1" >&2; echo 0; return ;;
+        *) echo "unsupported reuseA gate dtype: $1" >&2; return 1 ;;
     esac
-    data_bytes=$(( (128 + $2) * $3 * elem ))
-    echo $(( data_bytes + scale_bytes ))
-}
-
-mm_gate_ok() {
-    # $1 = dtype/mode, $2 = tN, $3 = tK -> exit 0 = build allowed
-    local bytes; bytes=$(mm_gate_bytes "$1" "$2" "$3")
-    if (( bytes > GATE_KIB * 1024 )); then
-        echo "SKIP capacity: $1 tN=$2 tK=$3 A+B=$((bytes / 1024))KiB > ${GATE_KIB}KiB"
+    shared_b_bytes=$(( $2 * $3 * elem ))
+    local_a_bytes=$(( 32 * $3 * elem ))
+    local_c_bytes=$(( 32 * $2 * 4 ))
+    if (( shared_b_bytes > 256 * 1024 )); then
+        echo "SKIP reuseA SharedTReg capacity: $1 tN=$2 tK=$3 B=$((shared_b_bytes / 1024))KiB"
+        return 1
+    fi
+    if (( local_a_bytes + local_c_bytes > 256 * 1024 )); then
+        echo "SKIP reuseA CellReg capacity: $1 tN=$2 tK=$3 A+C=$(((local_a_bytes + local_c_bytes) / 1024))KiB"
         return 1
     fi
     return 0
@@ -55,41 +39,34 @@ mm_gate_ok() {
 # so these variants retain the same A/B tile byte capacity as FP32. FP4 keeps
 # tM=128 but uses tN=64 below to stay within the aggregate SharedTReg limit.
 # FP32: tK=128; BF16/FP16: 2x; FP8: 4x; FP4: 8x.
-# Build the SharedTile kernel and the variant that reuses Shared B across all
-# M blocks in the same N block.  The reuseB FP32 configuration uses
-# tM=tN=tK=128, so A and B are both 64 KiB and the remaining 128 KiB of the
-# 256 KiB SharedTReg can keep two B tiles resident. FP32 has no ELF suffix.
-if mm_gate_ok float 256 128; then
+# Build the SharedTile kernel and the variant that keeps each PE's local A
+# shards in its 256 KiB CellReg across N blocks.  For the reuseA configuration,
+# each A shard is 32x128 FP32 = 16 KiB; both K tiles plus the 32 KiB C tile fit
+# comfortably, while the 128 KiB B tile is the only SharedTReg operand.
 make diss TESTCASE=matmul_shared \
+    COMPILER_DIR="$COMPILER_DIR" \
+    DTYPE=float B=1 M=256 N=256 K=256 \
+    tM=128 tN=256 tK=128
+
+if mm_reusea_gate_ok float 256 128; then
+make diss TESTCASE=matmul_reuseA \
     COMPILER_DIR="$COMPILER_DIR" \
     DTYPE=float B=1 M=256 N=256 K=256 \
     tM=128 tN=256 tK=128
 fi
 
-if mm_gate_ok float 128 128; then
-make diss TESTCASE=matmul_reuseB \
-    COMPILER_DIR="$COMPILER_DIR" \
-    DTYPE=float B=1 M=256 N=256 K=256 \
-    tM=128 tN=128 tK=128
-fi
-
 # BF16/FP16 inputs use twice the FP32 K tile extent.
-if mm_gate_ok __bf16 256 256; then
 make diss TESTCASE=matmul_shared COMPILER_DIR="$COMPILER_DIR" \
     DTYPE=__bf16 B=1 M=256 N=256 K=256 tM=128 tN=256 tK=256
-fi
 
-if mm_gate_ok __half 256 256; then
 make diss TESTCASE=matmul_shared COMPILER_DIR="$COMPILER_DIR" \
     DTYPE=__half B=1 M=256 N=256 K=256 tM=128 tN=256 tK=256
-fi
 
 # Low-precision SharedTile matmul. MXFP8/MXFP4 load group-32 Shared E8M0
 # scales; HIF4X2 uses Matrix-MX with one raw U32 scale word per 64 logical K
 # values. HIFP8 uses the normal TMATMUL input path.
 # FP8-family inputs use four times the FP32 K tile extent.
 for mode in FP8 HIFP8 MXFP8; do
-    mm_gate_ok "$mode" 256 512 || continue
     make diss TESTCASE=matmul_lowp LP_MODE="$mode" \
         COMPILER_DIR="$COMPILER_DIR" \
         B=1 M=256 N=256 K=512 tM=128 tN=256 tK=512
@@ -99,7 +76,6 @@ done
 # reduce tN to 64 so A, B and both scale tiles fit in the SharedTReg pool;
 # N=256 is covered by four N tiles.
 for mode in HIF4X2 MXFP4; do
-    mm_gate_ok "$mode" 64 1024 || continue
     make diss TESTCASE=matmul_lowp LP_MODE="$mode" \
         COMPILER_DIR="$COMPILER_DIR" \
         B=1 M=256 N=256 K=1024 tM=128 tN=64 tK=1024
@@ -108,14 +84,12 @@ done
 # Larger FP32 problem size (M=N=K=1024) to exercise deeper K reduction and
 # more M/N output tiles. Tile extents unchanged from the 256 baseline
 # (tM=128 tN=256 tK=128); only the outer loop counts grow.
-if mm_gate_ok float 256 128; then
 make diss TESTCASE=matmul_shared COMPILER_DIR="$COMPILER_DIR" \
     DTYPE=float B=1 M=1024 N=1024 K=1024 tM=128 tN=256 tK=128
-fi
 
-if mm_gate_ok float 128 128; then
-make diss TESTCASE=matmul_reuseB COMPILER_DIR="$COMPILER_DIR" \
-    DTYPE=float B=1 M=1024 N=1024 K=1024 tM=128 tN=128 tK=128
+if mm_reusea_gate_ok float 256 128; then
+make diss TESTCASE=matmul_reuseA COMPILER_DIR="$COMPILER_DIR" \
+    DTYPE=float B=1 M=1024 N=1024 K=1024 tM=128 tN=256 tK=128
 fi
 
 # === S1-S6 matmul_shared performance matrix ===
@@ -125,30 +99,12 @@ fi
 #   S3: 256x128x7168    S4: 64x128x7168
 #   S5: 64x64x7168      S6: 128x256x32768
 #
-# Every configuration is represented by the grids below.  Capacity is checked
-# before make: configurations whose complete SharedTile footprint is greater
-# than 128 KiB (issue #192 half-pool gate, A+B <= 128 KiB) are reported as
-# SKIP and are not compiled.
+# Every configuration in the table is represented by the grids below; no
+# capacity gate (issue #192 only excludes the two FA Tk256 FP32 cases).
 matrix_built=0
-matrix_skipped_capacity=0
 
 compile_shared_matrix_case() {
     local suite=$1 dtype=$2 m=$3 n=$4 k=$5 tn=$6 tk=$7
-    local element_bytes shared_bytes
-    case "$dtype" in
-        float) element_bytes=4 ;;
-        __bf16|__half) element_bytes=2 ;;
-        *) echo "unsupported shared dtype: $dtype" >&2; return 2 ;;
-    esac
-
-    # Shared A is [128,tK], Shared B is [tN,tK].
-    shared_bytes=$(( (128 + tn) * tk * element_bytes ))
-    if (( shared_bytes > GATE_KIB * 1024 )); then
-        echo "SKIP capacity: $suite $dtype M$m N$n K$k tM128 tN$tn tK$tk Shared=$((shared_bytes / 1024))KiB"
-        matrix_skipped_capacity=$((matrix_skipped_capacity + 1))
-        return
-    fi
-
     make diss TESTCASE=matmul_shared COMPILER_DIR="$COMPILER_DIR" \
         DTYPE="$dtype" B=1 M="$m" N="$n" K="$k" \
         tM=128 tN="$tn" tK="$tk"
@@ -157,26 +113,6 @@ compile_shared_matrix_case() {
 
 compile_lowp_matrix_case() {
     local suite=$1 mode=$2 m=$3 n=$4 k=$5 tn=$6 tk=$7
-    local data_bytes=0 scale_bytes=0 shared_bytes
-    local scale_groups padded_scale_cols
-
-    # FP8 and MX shared matrix layouts reserve one byte per logical element.
-    data_bytes=$(( (128 + tn) * tk ))
-    if [[ "$mode" == MXFP8 || "$mode" == MXFP4 ]]; then
-        # MX uses one E8M0 scale per 32 K values. Shared scale rows are padded
-        # to a 32-column carrier boundary for both A and B.
-        scale_groups=$(( (tk + 31) / 32 ))
-        padded_scale_cols=$(( ((scale_groups + 31) / 32) * 32 ))
-        scale_bytes=$(( (128 + tn) * padded_scale_cols ))
-    fi
-    shared_bytes=$((data_bytes + scale_bytes))
-
-    if (( shared_bytes > GATE_KIB * 1024 )); then
-        echo "SKIP capacity: $suite $mode M$m N$n K$k tM128 tN$tn tK$tk Shared=$((shared_bytes / 1024))KiB"
-        matrix_skipped_capacity=$((matrix_skipped_capacity + 1))
-        return
-    fi
-
     make diss TESTCASE=matmul_lowp LP_MODE="$mode" \
         COMPILER_DIR="$COMPILER_DIR" \
         B=1 M="$m" N="$n" K="$k" tM=128 tN="$tn" tK="$tk"
@@ -221,8 +157,7 @@ for dtype in __bf16 __half; do
     compile_shared_grid S6 "$dtype" 128  256 32768 "64 128 256" "64 128 256"
 done
 
-# FP8/MXFP8/MXFP4 table grids. The raw grids contain every spreadsheet row;
-# compile_lowp_matrix_case removes only the configurations over 256 KiB.
+# FP8/MXFP8/MXFP4 table grids. The raw grids contain every spreadsheet row.
 for mode in FP8 MXFP8 MXFP4; do
     compile_lowp_grid S1 "$mode" 2048 256 2048  "64 128 256" "256 512 1024"
     compile_lowp_grid S2 "$mode" 128  256 7168  "64 128 256" "256 512 1024"
@@ -232,7 +167,7 @@ for mode in FP8 MXFP8 MXFP4; do
     compile_lowp_grid S6 "$mode" 128  256 32768 "64 128 256" "256 512 1024"
 done
 
-echo "S1-S6 matmul matrix: BUILT=$matrix_built SKIPPED_CAPACITY=$matrix_skipped_capacity"
+echo "S1-S6 matmul matrix: BUILT=$matrix_built"
 
 # === Fused matmul -> level-1 HiF4 (S1P2 data + E6M2 scale) ===
 # Per row, every 64 C columns share one E6M2 scale. The two scaled 32-column

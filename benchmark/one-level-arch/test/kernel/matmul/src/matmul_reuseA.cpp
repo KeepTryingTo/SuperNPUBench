@@ -1,4 +1,4 @@
-#include "basic_op/matmul/matmul_shared_reuseB.hpp"
+#include "basic_op/matmul/matmul_reuseA.hpp"
 
 #include <cstdint>
 #include <unistd.h>
@@ -10,37 +10,27 @@
 #include <common/linx_group_runtime.h>
 #endif
 
-// Element data type for the A/B input tiles. Set via -DDTYPE=<token> from the
-// Makefile (float / __bf16 / __half). The output C tile stays FP32 inside the
-// kernel template (see matmul_shared.hpp).
 #ifndef DTYPE
 #define DTYPE float
 #endif
-
 #ifndef globM
 #define globM 256
 #endif
-
 #ifndef globN
 #define globN 256
 #endif
-
 #ifndef globK
 #define globK 256
 #endif
-
 #ifndef tilM
-#define tilM 32
+#define tilM 128
 #endif
-
 #ifndef tilN
-#define tilN 32
+#define tilN 256
 #endif
-
 #ifndef tilK
-#define tilK 32
+#define tilK 128
 #endif
-
 #ifndef Batch
 #define Batch 1
 #endif
@@ -50,7 +40,7 @@
 
 using dtype = DTYPE;
 
-struct MatmulReuseContext {
+struct MatmulReuseAContext {
     dtype *src0;
     dtype *src1;
     float *dst;
@@ -58,13 +48,12 @@ struct MatmulReuseContext {
 
 extern "C" int __linx_group_worker_main(uint32_t peId, void *opaque) {
     (void)peId;
-    MatmulReuseContext *context =
-        static_cast<MatmulReuseContext *>(opaque);
+    MatmulReuseAContext *context =
+        static_cast<MatmulReuseAContext *>(opaque);
 
     BENCHSTART;
     for (int b = 0; b < Batch; ++b) {
-        matmul_shared_reuseB<dtype, globM, globN, globK,
-                             tilM, tilN, tilK>(
+        matmul_reuseA<dtype, globM, globN, globK, tilM, tilN, tilK>(
             context->dst + b * globM * globN,
             context->src0 + b * globM * globK,
             context->src1 + b * globN * globK);
@@ -82,7 +71,6 @@ int main() {
                   "global M must be divisible by the PE count");
 
     static dtype src0p[Batch * globM * globK + 2 * ALIGN];
-    // B is stored B-major as [Batch, N, K].
     static dtype src1p[Batch * globN * globK + 2 * ALIGN];
     static float dstp[Batch * globM * globN + 2 * ALIGN];
 
@@ -105,7 +93,7 @@ int main() {
 #endif
 #endif
 
-    MatmulReuseContext context{src0, src1, dst};
+    MatmulReuseAContext context{src0, src1, dst};
 #ifdef LINX_GROUP_RUNTIME
     const int status = linx_group_run(&context);
 #else
