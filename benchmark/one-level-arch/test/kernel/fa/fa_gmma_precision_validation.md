@@ -1,8 +1,8 @@
-# FA GMMA 数值精度验证报告
+# FA 数值精度验证报告
 
-> 验证日期：2026-09-23
+> 验证日期：2026-09-24
 >
-> 算子：`fa_2d_unroll_gmma`
+> 算子：`fa_2d_unroll_gmma` / `fa_lowp`
 >
 > 功能模型：`SuperScalarModel-asl/bin/gfrun`
 
@@ -21,6 +21,17 @@
 四个用例均正常到达 benchmark 终点、报告 `R2 = 0`，输出全部为有限值且不是
 全零。`Skv/Tk = 8`，因此测试覆盖 online-softmax 跨 KV block 的 running max、
 旧输出重缩放、running sum 和 `TMATMUL_ACC` 累加。
+
+MXFP4 路径的当前结果与 shape 相关：
+
+| 算子 | Sq / Skv | KV blocks | atol / rtol | 判定 | max_abs | MSE | mismatch |
+| --- | ---: | ---: | ---: | --- | ---: | ---: | ---: |
+| `fa_lowp` MXFP4/BF16 | 128 / 8192 | 64 | 5e-2 / 5e-2 | **PASS** | 2.0297861e-02 | 2.7189796e-05 | 0/16384 |
+| `fa_lowp` MXFP4/BF16 | 128 / 128 | 1 | 5e-2 / 5e-2 | **FAIL** | 1.4453448e-01 | 1.2440805e-03 | 2115/16384 |
+
+`Skv=8192` 用例正常到达终点，输出全部有限且非全零；`Skv=128`
+也能完整执行，但不满足相同的 `allclose` 阈值。因此当前结论是“长序列
+配置已通过”，不是 MXFP4 全 shape 通过。
 
 ## 2. 校验脚本
 
@@ -135,6 +146,18 @@ FP16:  8d68ee4f23873f40cd424ad0e9c6ea1f84d6e9102b1746b1689d6c575cb6b92e
 FP8:   4de126bd5f7f3642244e2abc893383ca2436b460e85b8c4bff1e1557d4a9dcb4
 ```
 
+2026-09-24 MXFP4 复测环境：
+
+```text
+SuperNPUBench baseline: 78efdfd1310d + fa_lowp.hpp working-tree change
+linx-toolchain-build:   e6a31efb4cfb
+Linx-TileOP-API:        0c02666c8350
+SuperScalarModel:       94e3a4e6cbb0 + SuperScalarModel #848 local fix
+
+MXFP4 Skv=128 ELF:  c3e4b1187b028d9e0cdd853c60c06d638bf3569a07b85d201df1902ae3da3a86
+MXFP4 Skv=8192 ELF: d47cb280fd0c3c3a6af2710f0a5c9416bea2473f8139992876d61a33434921f1
+```
+
 每次运行的输入、golden、结果和日志写入：
 
 ```text
@@ -199,18 +222,47 @@ python3 benchmark/one-level-arch/test/kernel/fa/src/gfrun_fa_mxfp4.py \
   --prepare-only
 ```
 
-截至本报告更新时，MXFP4 **尚无数值 PASS 结论**：
+当前 `fa_lowp.hpp` 已完成以下修正：
 
-- 脚本自身的 `--prepare-only` 检查已通过：E2M1x2 nibble round-trip、E8M0
-  `0x7b..0x7e` 解码、8 个文件的 byte size、`[128,128]` golden shape 与有限值均正确；
+1. V ScaleB 使用 `[VD,Skv/32]` GM 布局，Shared 有效 shape 为
+   `[N,K/group]=[128,4]`；
+2. P 的四个 group-32 E8M0 scale code 通过 `TCVT + TPACK` 紧凑打包为
+   `[32,4]`，避免将四个 128 B padding fragment 拼成非紧凑矩阵；
+3. `TROWEXPANDMUL` 直接消费 `TPARTVIEW` 的 `[32,32]` subview，删除冗余
+   `TMULS(...,1.0)` 物化；
+4. gfrun 按 [SuperScalarModel #848](https://github.com/LinxISA/SuperScalarModel/issues/848)
+   将 row-expand 的最终 shape 检查延迟到
+   `B.SUBVIEW` 生效后，不再用 `[32,128]` parent 提前拒绝合法 `[32,32]` view。
 
-1. 当前 `fa_lowp.hpp` 的 PV `VScaleMatrix` 有效 shape 为 `[4,128]`，主工具链要求
-   `ScaleB=[N,K/group]=[128,4]`，所以标准源码在 `TMATMUL_MX` 契约检查阶段编译失败；
-2. 在 `/tmp` 实验副本中只把 V ScaleB 修正为 `[128,4]` 并同步使用
-   `[VD,Skv/32]` GM 布局后，`Sq=128, Skv=1024, Tm=Tk=128` 可以编译；
-3. 该临时 ELF 在 ASL gfrun 中读取完六个输入文件后报
-   `illegal instruction at 0x0: reserved/deleted tile selector`，没有写出结果。
+`Sq=128, Skv=8192, QD=VD=128, Tm=Tk=128, X=Y=1` 的实测结果：
 
-因此脚本和输入/golden 语义已经就绪，但必须先解决算子 ScaleB 声明和后续模型执行
-问题，才能给出 MXFP4 数值误差与 PASS/FAIL。临时实验没有修改工具链或模型源码，也
-没有覆盖工作区中的 `fa_lowp.hpp` 修改。
+```text
+PASS
+elements:   16384
+mismatches: 0
+max_abs:    0.020297860726714134
+mse:        2.7189795928304276e-05
+all_finite: true
+all_zero:   false
+```
+
+复现命令：
+
+```bash
+export COMPILER_DIR=/Users/blacktraker/Programming/gitproj/DV4/linx-toolchain-build/output/linx_blockisa_llvm_musl/bin
+
+make -B -C benchmark/one-level-arch/test/kernel/fa \
+  TESTCASE=fa_lowp FA_MODE=MXFP4_VECBF16 \
+  Sq=128 Skv=8192 QD=128 VD=128 Tm=128 Tk=128 X_dim=1 Y_dim=1 \
+  res_check=on COMPILER_DIR="$COMPILER_DIR" \
+  OBJ_ROOT=/tmp/fa_mxfp4_sq128_skv8192 -j4 diss
+
+python3 benchmark/one-level-arch/test/kernel/fa/src/gfrun_fa_mxfp4.py \
+  -d /tmp/fa_mxfp4_sq128_skv8192/kernel/fa/elf/\
+kernel_fa_fa_lowp_Sq128_Skv8192_Tm128_Tk128_X1_Y1_CubeMXFP4_VectorBF16.elf \
+  --gfrun-root /Users/blacktraker/Programming/gitproj/DV4/SuperScalarModel-asl
+```
+
+`Skv=128` 在同一 seed 和阈值下仍为 FAIL，最大绝对误差 `0.1445345`，
+`2115/16384` 个元素超出 `atol=rtol=0.05`。后续需单独分析这一短序列
+精度问题；它不影响本次 `Skv=8192` 的 PASS 结论。

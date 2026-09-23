@@ -56,15 +56,6 @@ constexpr int kPeNum = 4;       // One cooperative QK/PV matmul uses four PEs.
 constexpr int kMxGroup = 32;    // OCP MX scale granularity along matrix K.
 constexpr int kPackedFactor = 2;  // E2M1x2 packs two logical FP4 values/byte.
 
-// TPARTVIEW is a borrowed range into the parent tile. Materialize the
-// selected range for TROWEXPANDMUL, which currently requires a tile source.
-template <typename Out, typename Parent, typename Sub>
-inline void materialize_subview(Out &dst,
-                                region::SubTileView<Parent, Sub> &src,
-                                typename Sub::DType scalar) {
-    TMULS(dst, src, scalar);
-}
-
 template <int Sq, int Skv, int qD, int vD, int kTm, int kTk,
           int scaleD = qD, bool kBf16RecipFromE8M0 = false>
 void flash_attention_lowp_impl(
@@ -91,7 +82,7 @@ void flash_attention_lowp_impl(
     static_assert(Sq % kGroupM == 0 && Skv % kTk == 0);
     static_assert(qD % kMxGroup == 0 && kTk % kMxGroup == 0);
     static_assert((kPScaleCols & (kPScaleCols - 1)) == 0,
-                  "P scale assembly requires a power-of-two block count");
+                  "P scale packing requires a power-of-two block count");
 
     // Packed GM data layouts.  The stored K dimension is divided by two
     // because every E2M1x2 byte contains two adjacent logical K values.
@@ -103,13 +94,13 @@ void flash_attention_lowp_impl(
     using VSlice = global_tensor<__fp4_e2m1x2,
                                  RowMajor<kStoredTk, vD>>;
     // MX scale layouts follow the logical matrix-multiply K dimension:
-    // Q scale [Sq,qD/32], K scale [Skv,qD/32], V scale [Skv/32,vD].
+    // Q scale [Sq,qD/32], K scale [Skv,qD/32], V scale [vD,Skv/32].
     using GmQScale = global_tensor<__fp8_e8m0,
                                    RowMajor<Sq, kQScaleCols>>;
     using GmKScale = global_tensor<__fp8_e8m0,
                                    RowMajor<Skv, kQScaleCols>>;
     using GmVScale = global_tensor<__fp8_e8m0,
-                                   RowMajor<Skv / kMxGroup, vD>>;
+                                   RowMajor<vD, Skv / kMxGroup>>;
     using GmO = global_tensor<__bf16, RowMajor<Sq, vD>>;
 
     // Shared matrix extents use logical element counts even for packed FP4;
@@ -133,7 +124,7 @@ void flash_attention_lowp_impl(
     using KScaleMatrix = SharedMatrixRight<
         __fp8_e8m0, kTk, kPaddedQScaleCols, kTk, kQScaleCols>;
     using VScaleMatrix = SharedMatrixRight<
-        __fp8_e8m0, kPaddedPScaleCols, vD, kPScaleCols, vD>;
+        __fp8_e8m0, vD, kPaddedPScaleCols, vD, kPScaleCols>;
     using QScaleTile = SharedTile<QScaleMatrix>;
     using KScaleTile = SharedTile<KScaleMatrix>;
     using VScaleTile = SharedTile<VScaleMatrix>;
@@ -150,23 +141,28 @@ void flash_attention_lowp_impl(
     using WideBf16GroupReductionTile =
         VecTileM32<__bf16, kPeM, kMxGroup, kPeM, 1>;
     // P is quantized group-by-group.  PBlock contains kMxGroup logical E2M1
-    // values per row; PScaleFragmentFp8E8M0 contains one valid E8M0 scale.
+    // values per row; each group produces one E8M0 scale code per row.
     // __fp4_e2m1x2 already packs two logical 4-bit values in one byte, so the
     // Tile column count remains the logical column count and must not be
     // doubled to account for the carrier representation.
     //
-    // The scale uses the same M32 layout as its BF16 source.  It is physically
-    // padded to four columns (the 128 B minimum), while only the first column
-    // is valid.  TASSEMBLY concatenates these physical fragments;
-    // PScale exposes exactly kTk/32 valid scale columns to TMATMUL_MX.
+    // Four 32x1 raw scale-code columns are packed byte-wise into one 32x1 U32
+    // CUBE_M32 cell.  The same 128 B payload is then consumed as a compact
+    // 32x4 E8M0 scale tile by TMATMUL_MX.  TASSEMBLY cannot be used here: it
+    // would concatenate four padded 128 B fragments and place their live
+    // columns at physical offsets 0/4/8/12 instead of compact columns 0..3.
     using PBlock = CubeTileM32<__fp4_e2m1x2, kPeM, kMxGroup>;
     using P = CubeTileM32<__fp4_e2m1x2, kPeM, kTk>;
-    using PScaleFragmentFp8E8M0 = Tile<Location::Scaling, __fp8_e8m0,
-        kPeM, 4, BLayout::CubeM32, kPeM, 1>;
     using PScaleExponentU8 = Tile<Location::Scaling, uint8_t,
         kPeM, 4, BLayout::CubeM32, kPeM, 1>;
+    using PScaleWordU32 = Tile<Location::Scaling, uint32_t,
+        kPeM, 1, BLayout::CubeM32, kPeM, 1>;
     using PScale = Tile<Location::Scaling, __fp8_e8m0,
-        kPeM, 4 * kPScaleCols, BLayout::CubeM32, kPeM, kPScaleCols>;
+        kPeM, 4, BLayout::CubeM32, kPeM, kPScaleCols>;
+    using GmPackedPScaleWords =
+        global_tensor<uint32_t, RowMajor<kPeM, 1>>;
+    using GmPackedPScaleE8M0 =
+        global_tensor<__fp8_e8m0, RowMajor<kPeM, kPScaleCols>>;
     using Bf16WeightedValueTile = CubeAccumulatorM32<__bf16, kPeM, vD>;
     using Bf16PvTile = Bf16WeightedValueTile;
 
@@ -186,8 +182,18 @@ void flash_attention_lowp_impl(
                       VScaleMatrix::LogicalTileBytes <= 256 * 1024);
     static_assert(P::LogicalTileBytes ==
                   PBlock::LogicalTileBytes * kPScaleCols);
-    static_assert(PScale::LogicalTileBytes ==
-                  PScaleFragmentFp8E8M0::LogicalTileBytes * kPScaleCols);
+    static_assert(kPScaleCols == 4,
+                  "fa_lowp currently packs exactly four group-32 scales");
+    static_assert(PScale::LogicalTileBytes == PScaleWordU32::LogicalTileBytes,
+                  "packed U32 words and E8M0 scale tile must share one cell");
+
+    // TPACK is specified to produce a U32 Tile.  A C++ bit_cast/reinterpret
+    // changes only the source-level type and does not retag the architectural
+    // Tile-register descriptor, so TMATMUL_MX cannot consume that register as
+    // E8M0 directly.  Use one private 128 B stack slot as a storage-preserving
+    // U32 -> E8M0 retag bridge until TileOP provides a cross-element-width
+    // storage reinterpret operation.
+    alignas(128) uint32_t packedPScaleScratch[kPeM];
 
     // E2M1 has maximum exponent emax=2.  MX scaling is based on the exponent
     // bound 2^emax=4, not on the maximum finite E2M1 value 6:
@@ -274,17 +280,12 @@ void flash_attention_lowp_impl(
             }
 
             // Partition the BF16 exp result along K into independent 32-value
-            // MX groups.  Data fragments and scale fragments are collected in
-            // separate assembly sessions so PV receives two complete tiles.
+            // MX groups.  E2M1 data fragments use TASSEMBLY; the four E8M0
+            // scale-code columns are compacted separately with TPACK.
             auto blocks = TPARTVIEW<Bf16ScoreGroupTile, 1, kPScaleCols>(probability);
             TileArray<PBlock, 1, kPScaleCols> pFragments;
-            TileArray<PScaleFragmentFp8E8M0, 1, kPScaleCols> pScaleFragments;
-#pragma clang loop unroll(full)
-            // online quantization
-            for (int block = 0; block < kPScaleCols; ++block) {
-                auto view = blocks[0][block];
-                Bf16ScoreGroupTile pBlock;
-                materialize_subview(pBlock, view, static_cast<__bf16>(1.0f));
+            auto quantizeGroup = [&]<int Block>(PScaleExponentU8 &scaleCode) {
+                auto pBlockView = blocks[0][Block];
 
                 // Quantize one [32,32] BF16 probability block:
                 //   amax  = rowmax(pBlock)             (no TABS: pBlock >= 0)
@@ -296,7 +297,7 @@ void flash_attention_lowp_impl(
                 // view. TMULS consumes the prefix directly, so no compact
                 // copy or zero tile is needed to form the BF16 scale.
                 WideBf16GroupReductionTile amaxWide;
-                TROWMAX(amaxWide, pBlock);
+                TROWMAX(amaxWide, pBlockView);
                 auto amaxView = TREDUCEPREFIXVIEW<Bf16RowValueTile>(amaxWide);
                 // E2M1 emax=2: scale=floor_pow2(amax)/4.
                 Bf16RowValueTile scaleBf16;
@@ -305,19 +306,15 @@ void flash_attention_lowp_impl(
                 // MX requires floor(log2), not nearest-exponent rounding.
                 // The E8M0 scale retains the M32 layout of scaleBf16.
                 Bf16RowValueTile reciprocal;
+                auto scaleAsE8M0 = reinterpret_tile<__fp8_e8m0>(scaleCode);
+                TCVT<LINX_RDN>(scaleAsE8M0, scaleBf16);
                 if constexpr (kBf16RecipFromE8M0) {
                     // Experimental lowp_recip path: round the scale to E8M0,
                     // decode it to BF16, then use the supported BF16 TRECIP.
-                    PScaleFragmentFp8E8M0 scaleE8M0;
                     Bf16RowValueTile roundedScaleBf16;
-                    TCVT<LINX_RDN>(scaleE8M0, scaleBf16);
-                    TCVT<LINX_RNONE>(roundedScaleBf16, scaleE8M0);
+                    TCVT<LINX_RNONE>(roundedScaleBf16, scaleAsE8M0);
                     TRECIP(reciprocal, roundedScaleBf16);
                 } else {
-                    PScaleExponentU8 scaleCode;
-                    auto scaleAsE8M0 = reinterpret_tile<__fp8_e8m0>(scaleCode);
-                    TCVT<LINX_RDN>(scaleAsE8M0, scaleBf16);
-
                     // E8M0 code e represents 2^(e-127), so its reciprocal
                     // code is 254-e for finite e (0..254).
                     PScaleExponentU8 exponent254;
@@ -329,25 +326,45 @@ void flash_attention_lowp_impl(
                     TCVT<LINX_RNONE>(reciprocal, reciprocalAsE8M0);
                 }
                 Bf16ScoreGroupTile normalized;
-                TROWEXPANDMUL(normalized, pBlock, reciprocal);
+                TROWEXPANDMUL(normalized, pBlockView, reciprocal);
                 // Convert the BF16 probabilities directly into the E2M1x2
                 // assembly slot.  Avoid an intermediate PBlock and an
                 // unnecessary second E2M1x2 -> E2M1x2 TCVT.
-                auto pSlot = pFragments[0][block];
-                auto sSlot = pScaleFragments[0][block];
+                auto pSlot = pFragments[0][Block];
                 TCVT(pSlot, normalized);
-                // E8M0 cannot be a TCVT source under the ISA hardware profile.
-                // Re-encode the BF16 scale directly into its assembly slot
-                // with RTM, matching the standalone scale used above.
+            };
 
-                // 增加tpack hif4
-                TCVT<LINX_RDN>(sSlot, scaleBf16);
-            }
+            // One group-32 scale column is produced by each unrolled call.
+            // Keep the raw E8M0 exponent bytes in U8 carriers so TCVT can
+            // widen them value-preservingly before TPACK.
+            PScaleExponentU8 scaleCode0, scaleCode1, scaleCode2, scaleCode3;
+            quantizeGroup.template operator()<0>(scaleCode0);
+            quantizeGroup.template operator()<1>(scaleCode1);
+            quantizeGroup.template operator()<2>(scaleCode2);
+            quantizeGroup.template operator()<3>(scaleCode3);
 
-            // Finish both assembly sessions.  p has logical shape [32,kTk];
-            // pScale has logical valid shape [32,kTk/32].
+            PScaleWordU32 scaleWord0, scaleWord1, scaleWord2, scaleWord3;
+            TCVT(scaleWord0, scaleCode0);
+            TCVT(scaleWord1, scaleCode1);
+            TCVT(scaleWord2, scaleCode2);
+            TCVT(scaleWord3, scaleCode3);
+
+            PScaleWordU32 scalePair01, scalePair23, packedScaleWords;
+            TPACK(scalePair01, scaleWord0, scaleWord1, 0x00000101);
+            TPACK(scalePair23, scaleWord2, scaleWord3, 0x00000101);
+            TPACK(packedScaleWords, scalePair01, scalePair23, 0x00000202);
+
+            // Finish the E2M1 payload assembly.  The packed scale word has the
+            // desired byte order [group0, group1, group2, group3], but TPACK
+            // leaves a U32 architectural descriptor.  Store/reload the same
+            // 128 bytes to obtain the E8M0 [32,4] descriptor required by PV.
             P p = TASSEMBLY<P>(std::move(pFragments));
-            PScale pScale = TASSEMBLY<PScale>(std::move(pScaleFragments));
+            GmPackedPScaleWords packedWordsGm(packedPScaleScratch);
+            TSTORE_CUBE(packedWordsGm, packedScaleWords);
+            PScale pScale;
+            GmPackedPScaleE8M0 packedScaleGm(
+                reinterpret_cast<__fp8_e8m0 *>(packedPScaleScratch));
+            TLOAD_CUBE(pScale, packedScaleGm);
 
             // PV matrix stage.  V is an external MXFP4 tensor with its own
             // E8M0 scales.  P uses the just-generated dynamic scales.  V is
@@ -356,12 +373,12 @@ void flash_attention_lowp_impl(
             VScaleTile vScale;
             VSlice gV(const_cast<__fp4_e2m1x2 *>(vPtr) +
                       kb * kStoredTk * vD);
-            // VScaleMatrix is padded from kPScaleCols rows to
-            // kPaddedPScaleCols rows in SharedTReg, while GM V scales are
-            // densely stored as [Skv/32, vD].  A global_iterator would step
-            // by the padded row count and select the wrong KV-block scales.
+            // VScaleMatrix is padded from kPScaleCols columns to
+            // kPaddedPScaleCols columns in SharedTReg, while GM V scales are
+            // densely stored as [vD, Skv/32].  Select this KV block's first
+            // group column and preserve the full-GM row pitch.
             GmVScale gVS(const_cast<__fp8_e8m0 *>(vScalePtr) +
-                         kb * kPScaleCols * vD);
+                         kb * kPScaleCols);
             TLOAD<VMatrix, 1>(v, gV);
             TLOAD<VScaleMatrix, 1>(vScale, gVS);
             Bf16PvTile blockPvBf16;
