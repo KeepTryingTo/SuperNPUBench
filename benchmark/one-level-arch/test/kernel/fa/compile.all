@@ -6,47 +6,6 @@
 # subsequent shape groups (fixpipe, long-context).
 : "${COMPILER_DIR:?Set COMPILER_DIR to the Linx compiler bin directory}"
 
-# === SharedTile capacity gate (issue #192) ===
-# gfsim runs a 256 KiB shareTReg pool. Gate every testcase at
-#   2*Q + K + V <= 256 KiB
-# i.e. the unrolled group's resident set (two Q tiles plus the K/V pair)
-# must fit the pool; larger sets deadlock with the pipeline's generational
-# overlap (issue #192). Tile byte formulas:
-#   Q = 128 x (QD/packed) x elem   (SharedMatrixLeft, kTileRows=128)
-#   K = Tk  x (QD/packed) x elem   (SharedMatrixRight)
-#   V = (Tk/packed) x VD x elem    (SharedMatrixRight)
-# MX E8M0 scale tiles are excluded from the criterion (small, and the issue's
-# failing cases are FP32). MXFP4/HIF4 pack two elements per stored byte.
-GATE_KIB=256
-
-fa_mode_bytes() {
-    # $1 = FA_MODE, $2 = Tk, $3 = QD, $4 = VD
-    # -> prints Q+K+V bytes
-    local elem packed
-    case "$1" in
-        FP32_*)   elem=4; packed=1 ;;
-        BF16_*)   elem=2; packed=1 ;;
-        MXFP8_*|FP8_*|HIF8_*) elem=1; packed=1 ;;
-        MXFP4_*|HIF4_*) elem=1; packed=2 ;;
-        *) echo "unsupported mode: $1" >&2; echo 0; return ;;
-    esac
-    local tk=$2 qd=$3 vd=$4
-    local q=$(( 128 * (qd / packed) * elem ))
-    local k=$(( tk * (qd / packed) * elem ))
-    local v=$(( (tk / packed) * vd * elem ))
-    echo $(( 2 * q + k + v ))
-}
-
-fa_gate_ok() {
-    # $1 = FA_MODE, $2 = Tk, $3 = QD, $4 = VD -> exit 0 = build allowed
-    local bytes; bytes=$(fa_mode_bytes "$1" "$2" "${3:-128}" "${4:-128}")
-    if (( bytes > GATE_KIB * 1024 )); then
-        echo "SKIP capacity: $1 Tk=$2 2Q+K+V=$((bytes / 1024))KiB > ${GATE_KIB}KiB"
-        return 1
-    fi
-    return 0
-}
-
 # fa_gmma_dynamic uses runtime Q/KV loop bounds with single-pass online
 # softmax; Q, score, row state, and PV accumulation remain in tile registers.
 
@@ -57,30 +16,31 @@ fa_gate_ok() {
 
 # fa_lowp: MXFP4 Q/K/V, BF16 QK+softmax, then MXFP4 P/V matmul.
 # (Also Sq256/Skv256 — kept as the sole config of its kernel.)
-if fa_gate_ok MXFP4_VECBF16 128; then
 make diss TESTCASE=fa_lowp \
     COMPILER_DIR="$COMPILER_DIR" \
     FA_MODE=MXFP4_VECBF16 Sq=256 Skv=256 Tm=128 Tk=128 \
     X_dim=1 Y_dim=2
-fi
+
+# PMU-optimized long-context MXFP4 path. Keep the reference fa_lowp target
+# above as the functional/performance A/B baseline.
+make diss TESTCASE=fa_mxfp4_opt \
+    COMPILER_DIR="$COMPILER_DIR" \
+    FA_MODE=MXFP4_VECBF16 Sq=128 Skv=8192 Tm=128 Tk=128 \
+    X_dim=1 Y_dim=1
 
 # fa_lowp_recip: TRECIP-based reciprocal path (FA_LOWP_RECIP=1), two shapes
 # (baseline + long context). Built from its own TU (src/fa_lowp_recip.cpp)
 # so it never reuses a fa_lowp.o compiled without the define (make ignores
 # -D flag changes).
-if fa_gate_ok MXFP4_VECBF16 128; then
 make diss TESTCASE=fa_lowp_recip \
     COMPILER_DIR="$COMPILER_DIR" \
     FA_MODE=MXFP4_VECBF16 Sq=256 Skv=256 Tm=128 Tk=128 \
     X_dim=1 Y_dim=2
-fi
 
-if fa_gate_ok MXFP4_VECBF16 128; then
 make diss TESTCASE=fa_lowp_recip \
     COMPILER_DIR="$COMPILER_DIR" \
     FA_MODE=MXFP4_VECBF16 Sq=128 Skv=8192 Tm=128 Tk=128 \
     X_dim=1 Y_dim=2
-fi
 
 # Larger sequence length (Sq=Skv=1024) to exercise deeper Q-block and K/V-block
 # loops. Tile extents unchanged from the multi-tile baseline (Tm=128 Tk=128,
@@ -95,7 +55,6 @@ for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
         FP8_VECBF16 \
         MXFP4_VECBF16 \
         HIF4_VECBF16; do
-        fa_gate_ok "$mode" 128 || continue
         make diss TESTCASE="$testcase" \
             COMPILER_DIR="$COMPILER_DIR" \
             FA_MODE="$mode" Sq=1024 Skv=1024 Tm=128 Tk=128 \
@@ -116,7 +75,6 @@ for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
         FP8_VECBF16 \
         MXFP4_VECBF16 \
         HIF4_VECBF16; do
-        fa_gate_ok "$mode" 128 || continue
         make diss TESTCASE="$testcase" \
             COMPILER_DIR="$COMPILER_DIR" \
             FA_MODE="$mode" Sq=128 Skv=8192 Tm=128 Tk=128 \
@@ -125,8 +83,7 @@ for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
 done
 
 # Variable Tk (tile-K): Tk=256 halves the K/V-block loop. Y_dim=1 and Skv=512
-# keep at least two K/V blocks. The capacity gate drops the modes whose
-# 2Q+K+V exceeds 256 KiB at Tk=256 (FP32 — issue #192's deadlock class).
+# keep at least two K/V blocks.
 for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
     for mode in \
         FP32_VECFP32 \
@@ -137,7 +94,14 @@ for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
         FP8_VECBF16 \
         MXFP4_VECBF16 \
         HIF4_VECBF16; do
-        fa_gate_ok "$mode" 256 || continue
+        # issue #192: the Sq256/Skv512/Tk256 CubeFP32 variants of 2d_unroll
+        # and kchains deadlock on the 256 KiB shareTReg pool (full-pool
+        # footprint + generational overlap) and are excluded; fixpipe's
+        # Tk256 FP32 variant is unaffected and stays.
+        if [ "$mode" = "FP32_VECFP32" ] && [ "$testcase" != "fa_fixpipe" ]; then
+            echo "SKIP (issue #192): $testcase Tk=256 FP32"
+            continue
+        fi
         make diss TESTCASE="$testcase" \
             COMPILER_DIR="$COMPILER_DIR" \
             FA_MODE="$mode" Sq=256 Skv=512 Tm=128 Tk=256 \
