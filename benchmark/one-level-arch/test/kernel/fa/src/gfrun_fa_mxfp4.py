@@ -59,7 +59,7 @@ INPUT_CODES = np.array([1, 2, 3, 9, 10, 11], dtype=np.uint8)
 
 def extract_case(elf: Path) -> dict:
     match = re.search(
-        r"fa_lowp(?:_recip)?_Sq(?P<Sq>\d+)_Skv(?P<Skv>\d+)"
+        r"(?:fa_lowp(?:_recip)?|fa_mxfp4_opt)_Sq(?P<Sq>\d+)_Skv(?P<Skv>\d+)"
         r"_Tm(?P<Tm>\d+)_Tk(?P<Tk>\d+)"
         r"(?:_qD(?P<QD>\d+)_vD(?P<VD>\d+))?"
         r"_X(?P<X>\d+)_Y(?P<Y>\d+)_CubeMXFP4_VectorBF16$",
@@ -67,7 +67,8 @@ def extract_case(elf: Path) -> dict:
     )
     if not match:
         raise ValueError(
-            "expected an fa_lowp/fa_lowp_recip CubeMXFP4_VectorBF16 ELF; "
+            "expected an fa_lowp/fa_lowp_recip/fa_mxfp4_opt "
+            "CubeMXFP4_VectorBF16 ELF; "
             f"got {elf.name}"
         )
     case = {
@@ -163,7 +164,9 @@ def prepare_case(case: dict, args) -> tuple[Path, np.ndarray]:
 
     pack_e2m1x2(q_codes, axis=1).tofile(case_dir / "srcq.bin")
     pack_e2m1x2(k_codes, axis=1).tofile(case_dir / "srck.bin")
-    pack_e2m1x2(v_codes, axis=0).tofile(case_dir / "srcv.bin")
+    # PV uses physical Shared-B [K,N] with TransB. Packed-X2 RowMajor
+    # carriers pair adjacent physical columns, hence V is stored as [K,N/2].
+    pack_e2m1x2(v_codes, axis=1).tofile(case_dir / "srcv.bin")
     q_scale.tofile(case_dir / "srcq_scale.bin")
     k_scale.tofile(case_dir / "srck_scale.bin")
     v_scale.tofile(case_dir / "srcv_scale.bin")

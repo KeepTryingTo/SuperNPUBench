@@ -67,6 +67,7 @@ void flash_attention_lowp_impl(
     constexpr int kPeM = 32;
     constexpr int kStoredQD = qD / kPackedFactor;
     constexpr int kStoredTk = kTk / kPackedFactor;
+    constexpr int kStoredVD = vD / kPackedFactor;
     constexpr int kQScaleCols = qD / kMxGroup;
     constexpr int kPScaleCols = kTk / kMxGroup;
     constexpr int kPaddedQScaleCols = ((kQScaleCols + 31) / 32) * 32;
@@ -86,13 +87,15 @@ void flash_attention_lowp_impl(
 
     // Packed GM data layouts.  The stored K dimension is divided by two
     // because every E2M1x2 byte contains two adjacent logical K values.
-    // V is packed along its reduction/K dimension as [Skv/2, vD].
+    // V is the physically transposed Shared-B operand [K,N].  Packed-X2
+    // ordinary RowMajor storage pairs adjacent columns within each row, so
+    // its GM carrier shape is [K,N/2].
     using QSlice = global_tensor<__fp4_e2m1x2,
                                  RowMajor<kGroupM, kStoredQD>>;
     using KSlice = global_tensor<__fp4_e2m1x2,
                                  RowMajor<kTk, kStoredQD>>;
     using VSlice = global_tensor<__fp4_e2m1x2,
-                                 RowMajor<kStoredTk, vD>>;
+                                 RowMajor<kTk, kStoredVD>>;
     // MX scale layouts follow the logical matrix-multiply K dimension:
     // Q scale [Sq,qD/32], K scale [Skv,qD/32], V scale [vD,Skv/32].
     using GmQScale = global_tensor<__fp8_e8m0,
