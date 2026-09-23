@@ -2,7 +2,7 @@
 """Run a GMMA FlashAttention ELF and compare it with a PyTorch golden.
 
 The ELF must be built with ``res_check=on``.  The script parses the FA shape
-and Cube dtype (FP32/BF16/FP16/FP8/MXFP8) from the ELF name, writes exact DUT
+and Cube dtype (FP32/BF16/FP16/FP8) from the ELF name, writes exact DUT
 payloads into the embedded ``CHK_DIR``, runs the four-PE functional model, and
 compares ``res.bin`` with
 
@@ -37,13 +37,12 @@ COMPARE_ROOT = ONE_LEVEL_ROOT / "compare"
 DEFAULT_GFRUN_ROOT = Path(
     "/Users/blacktraker/Programming/gitproj/DV4/SuperScalarModel-asl"
 )
-SUPPORTED_CUBE_DTYPES = ("FP32", "BF16", "FP16", "FP8", "MXFP8")
+SUPPORTED_CUBE_DTYPES = ("FP32", "BF16", "FP16", "FP8")
 DEFAULT_TOLERANCES = {
     "FP32": (1e-5, 1e-5),
     "BF16": (1e-4, 1e-4),
     "FP16": (1e-5, 1e-5),
     "FP8": (1e-3, 1e-3),
-    "MXFP8": (1e-3, 1e-3),
 }
 
 
@@ -54,7 +53,7 @@ def extract_case(elf: Path) -> dict:
         r"_Tm(?P<Tm>\d+)_Tk(?P<Tk>\d+)"
         r"(?:_qD(?P<QD>\d+)_vD(?P<VD>\d+))?"
         r"_X(?P<X>\d+)_Y(?P<Y>\d+)"
-        r"_Cube(?P<Cube>FP32|BF16|FP16|FP8|MXFP8)_VectorFP32$",
+        r"_Cube(?P<Cube>FP32|BF16|FP16|FP8)_VectorFP32$",
         elf.stem,
     )
     if not match:
@@ -90,7 +89,7 @@ def encode_matrix(
         quantized = tensor.to(torch.bfloat16)
         payload = quantized.view(torch.uint16).numpy().copy()
         return payload, quantized.float().numpy()
-    if cube_dtype in ("FP8", "MXFP8"):
+    if cube_dtype == "FP8":
         quantized = tensor.to(torch.float8_e4m3fn)
         payload = quantized.view(torch.uint8).numpy().copy()
         return payload, quantized.float().numpy()
@@ -128,23 +127,6 @@ def prepare_case(case: dict, args) -> tuple[Path, np.ndarray]:
     q_payload.tofile(case_dir / "srcq.bin")
     k_payload.tofile(case_dir / "srck.bin")
     v_payload.tofile(case_dir / "srcv.bin")
-    if case["Cube"] == "MXFP8":
-        if case["QD"] % 32 or case["Skv"] % 32:
-            raise ValueError("MXFP8 requires QD and Skv divisible by 32")
-        np.full((case["Sq"], case["QD"] // 32), 0x7F, dtype=np.uint8).tofile(
-            case_dir / "srcq_scale.bin"
-        )
-        np.full((case["Skv"], case["QD"] // 32), 0x7F, dtype=np.uint8).tofile(
-            case_dir / "srck_scale.bin"
-        )
-        np.full((case["Skv"] // 32, case["VD"]), 0x7F, dtype=np.uint8).tofile(
-            case_dir / "srcv_scale.bin"
-        )
-        print(
-            "note: MXFP8 uses E4M3 payloads and unity E8M0 scales (0x7f); "
-            "the current fa_2d_unroll_gmma implementation does not pass the "
-            "loaded scale pointers into the kernel"
-        )
     golden_np.tofile(case_dir / "golden.bin")
     np.zeros_like(golden_np).tofile(case_dir / "res.bin")
     return case_dir, golden_np

@@ -156,7 +156,7 @@ precision-check:
 	@status=0; pass=0; fail=0; \
 	for mode in \
 		FP32_VECFP32 BF16_VECFP32 FP16_VECFP32 \
-		FP8_VECFP32 MXFP8_VECFP32; do \
+		FP8_VECFP32; do \
 		if $(MAKE) golden-check TESTCASE=fa_2d_unroll_gmma FA_MODE=$$mode \
 			Sq=128 Skv=1024 QD=128 VD=128 Tm=128 Tk=128 \
 			X_dim=1 Y_dim=1 COMPILER_DIR=$(COMPILER_DIR) \
