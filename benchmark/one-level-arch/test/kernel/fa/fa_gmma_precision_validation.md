@@ -157,3 +157,75 @@ benchmark/one-level-arch/compare/<ELF basename>/
 主要文件为 `srcq.bin`、`srck.bin`、`srcv.bin`、`golden.bin`、`res.bin`、
 `gfrun.log` 和 `golden_compare.log`；MXFP8 还包含三个 `*_scale.bin`。这些运行产物
 不提交到仓库。
+
+## 7. 各精度数值校验思路
+
+所有类型遵循同一个原则：**Golden 必须从实际写给 DUT 的 bytes 解码，而不是直接
+使用量化前的 FP32 源数据**。否则输入舍入误差会被错误归因到 kernel。
+
+| 类型 | 输入构造 | Host golden | 输出读取 | 校验重点 |
+| --- | --- | --- | --- | --- |
+| FP32 | 随机 FP32 bytes | 标准 FP32 attention | FP32 | 布局、online-softmax、跨块累加 |
+| BF16 | FP32→BF16，保存原始 U16 bits | BF16 payload 解码后做 FP32 attention | FP32 | BF16 输入舍入和 BF16 PV probability |
+| FP16 | FP32→FP16 bytes | FP16 payload 解码后做 FP32 attention | FP32 | FP16 输入舍入和 FP16 PV probability |
+| FP8 | FP32→E4M3FN，保存原始 U8 bits | E4M3 payload 解码后做 FP32 attention | FP32 | E4M3 编码、符号、PV probability 量化 |
+| MXFP8 | E4M3 payload + E8M0 scale | payload×scale 解码后做 FP32 attention | FP32 | group-32 scale 寻址和 `TMATMUL_MX` |
+| MXFP4 | E2M1x2 payload + E8M0 scale | payload×scale 解码后做 FP32 attention | BF16 bits→FP32 | nibble 顺序、group-32 scale、动态 P 量化、BF16 输出 |
+
+判定分成两层：
+
+1. 功能层要求 gfrun 退出码为 0、到达 `Reach the End of Benchmark` 且 `R2=0`；
+2. 数值层再检查输出元素数量、有限值、非全零，并按类型容差执行 `allclose`，同时记录
+   `max_abs`、MSE 和 mismatch 数量。
+
+低精度误差不只来自 Q/K/V 输入。`fa_2d_unroll_gmma` 的 BF16、FP16、FP8 路径还会
+在 PV 边界把 softmax probability 转成 Cube 输入类型；`fa_lowp` 则会把每个 32 列
+probability group 动态量化成 MXFP4。因此 host 侧使用标准 FP32 attention 作为算法
+oracle，再用分类型阈值评价最终误差，而不是要求 bit-exact。
+
+## 8. MXFP4 校验脚本与当前状态
+
+独立脚本为 [`src/gfrun_fa_mxfp4.py`](src/gfrun_fa_mxfp4.py)，目标是实际使用
+`TMATMUL_MX` 的 `fa_lowp`/`fa_lowp_recip`，不是通用 GMMA 路径中的名称 smoke test。
+
+脚本会：
+
+- 从 `{±0.5, ±1.0, ±1.5}` 直接抽取 E2M1 code；
+- Q/K 沿 QD 轴、V 沿 Skv/reduction 轴把相邻 code 打包进 E2M1x2 的低/高 nibble；
+- 生成 `0x7b..0x7e` 的非均匀 E8M0 scale，即 `2^-4..2^-1`；
+- 使用 Q scale `[Sq,QD/32]`、K scale `[Skv,QD/32]`、V ScaleB
+  `[VD,Skv/32]`；
+- 从这些确切 bytes 解码 Q/K/V，计算 PyTorch FP32 attention golden；
+- 将 DUT 的 BF16 `res.bin` 解码为 FP32后比较，默认暂定
+  `atol=rtol=5e-2`。
+
+调用方式：
+
+```bash
+python3 benchmark/one-level-arch/test/kernel/fa/src/gfrun_fa_mxfp4.py \
+  --elf /absolute/path/to/kernel_fa_fa_lowp_..._CubeMXFP4_VectorBF16.elf
+```
+
+只检查 payload、scale、golden 的生成和文件尺寸，不启动 gfrun：
+
+```bash
+python3 benchmark/one-level-arch/test/kernel/fa/src/gfrun_fa_mxfp4.py \
+  --elf /absolute/path/to/kernel_fa_fa_lowp_..._CubeMXFP4_VectorBF16.elf \
+  --prepare-only
+```
+
+截至本报告更新时，MXFP4 **尚无数值 PASS 结论**：
+
+- 脚本自身的 `--prepare-only` 检查已通过：E2M1x2 nibble round-trip、E8M0
+  `0x7b..0x7e` 解码、8 个文件的 byte size、`[128,128]` golden shape 与有限值均正确；
+
+1. 当前 `fa_lowp.hpp` 的 PV `VScaleMatrix` 有效 shape 为 `[4,128]`，主工具链要求
+   `ScaleB=[N,K/group]=[128,4]`，所以标准源码在 `TMATMUL_MX` 契约检查阶段编译失败；
+2. 在 `/tmp` 实验副本中只把 V ScaleB 修正为 `[128,4]` 并同步使用
+   `[VD,Skv/32]` GM 布局后，`Sq=128, Skv=1024, Tm=Tk=128` 可以编译；
+3. 该临时 ELF 在 ASL gfrun 中读取完六个输入文件后报
+   `illegal instruction at 0x0: reserved/deleted tile selector`，没有写出结果。
+
+因此脚本和输入/golden 语义已经就绪，但必须先解决算子 ScaleB 声明和后续模型执行
+问题，才能给出 MXFP4 数值误差与 PASS/FAIL。临时实验没有修改工具链或模型源码，也
+没有覆盖工作区中的 `fa_lowp.hpp` 修改。
