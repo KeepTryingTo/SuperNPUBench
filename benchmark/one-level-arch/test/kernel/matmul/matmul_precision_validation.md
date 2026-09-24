@@ -18,15 +18,16 @@ matmul precision summary: PASS=6 FAIL=0
 | FP16 | M64 N64 K128, tK64 | 随机 FP32 转 FP16 后解码为 FP32；PyTorch MatMul | PASS | 0 | 0/4096 |
 | BF16 | M64 N64 K128, tK64 | 随机 FP32 转 BF16 后解码为 FP32；PyTorch MatMul | PASS | 0 | 0/4096 |
 | MXFP8 | M64 N64 K64, tK64 | 直接构造 E4M3 payload 和 E8M0 scale；解码实际 bytes 后做 PyTorch MatMul | PASS | 0 | 0/4096 |
-| MXFP4 | M64 N64 K64, tK64 | 直接构造 E2M1x2 payload 和 E8M0 scale；解码实际 bytes 后做 PyTorch MatMul | PASS | 0 | 0/4096 |
+| MXFP4 | M64 N64 K256, tK64 | 直接构造 E2M1x2 payload 和 E8M0 scale；解码实际 bytes 后做 PyTorch MatMul | PASS | 0 | 0/4096 |
 | HiF4X2 | M64 N64 K64, tK64 | 直接构造 E1M2 payload 和 group-64 U32 scale；解码实际 bytes 后做 PyTorch MatMul | PASS | 0 | 0/4096 |
 
 所有 cooperative basic-op MatMul 的输入布局已统一为 `A:[B,M,K]`、
 `B:[B,N,K]`（FP4 carrier 为 `[B,N,K/2]`），Golden 计算 `A @ B.transpose(-1,-2)`。
 
-FP32/FP16/BF16 使用两个 K tile，覆盖普通 `TMATMUL + TMATMUL_ACC` 链。MXFP8/MXFP4/HiF4X2
-当前使用单个 K tile，重点验证 payload 解码、group-32 scale 寻址、B 布局和单次
-`TMATMUL_MX` 数值；MX 的多 K-tile accumulator chain 应作为独立回归项继续验证。
+FP32/FP16/BF16 使用两个 K tile，覆盖普通 `TMATMUL + TMATMUL_ACC` 链。MXFP4
+使用四个 K tile，覆盖各 K block 的 group-32 scale 寻址以及
+`TMATMUL_MX + TMATMUL_MX_ACC` 累加链。MXFP8/HiF4X2 当前使用单个 K tile，重点验证
+payload 解码、scale 寻址、B 布局和单次 `TMATMUL_MX` 数值。
 
 ## 2. Golden 语义
 
@@ -168,7 +169,7 @@ FP32   M64 N64 K128 tM64 tN64 tK64
 FP16   M64 N64 K128 tM64 tN64 tK64
 BF16   M64 N64 K128 tM64 tN64 tK64
 MXFP8  M64 N64 K64  tM64 tN64 tK64
-MXFP4  M64 N64 K64  tM64 tN64 tK64
+MXFP4  M64 N64 K256 tM64 tN64 tK64
 HIF4X2 M64 N64 K64  tM64 tN64 tK64
 ```
 
@@ -196,7 +197,7 @@ export COMPILER_DIR=/Users/blacktraker/Programming/gitproj/DV4/linx-toolchain-bu
 
 make -C benchmark/one-level-arch/test/kernel/matmul golden-check \
   TESTCASE=matmul_lowp LP_MODE=MXFP4 \
-  B=1 M=64 N=64 K=64 tM=64 tN=64 tK=64 \
+  B=1 M=64 N=64 K=256 tM=64 tN=64 tK=64 \
   COMPILER_DIR="$COMPILER_DIR" \
   OBJ_ROOT=/tmp/matmul_mxfp4_precision
 ```
@@ -267,11 +268,10 @@ benchmark/one-level-arch/compare/matmul_result_check.log
 
 ## 7. 当前边界与后续项
 
-1. 当前 MXFP8/MXFP4/HiF4X2 精度用例只覆盖单个 K tile 的 `TMATMUL_MX`。多 K-tile
-   `TMATMUL_MX_ACC` 用例会触发编译器生成的合法 `c.movr t#3, ->zero`，但当前 gfrun
-   和 gfsim 尚未实现 `C.MOVR RegDst=0` 的 discard 语义，因此在进入 MatMul 前终止；
-   已由 `LinxISA/SuperScalarModel#796` 跟踪。该问题修复后应将多 K-tile MX 累加链加入
-   主精度回归。
+1. MXFP4 已覆盖四个 K tile 的 `TMATMUL_MX + TMATMUL_MX_ACC`，当前编译结果不再在
+   MatMul 路径生成 `c.movr t#3, ->zero`。MXFP8/HiF4X2 仍只覆盖单个 K tile；其多
+   K-tile 累加链应继续补充。历史 `C.MOVR RegDst=0` 模型问题由
+   `LinxISA/SuperScalarModel#796` 跟踪。
 2. 本报告验证的是 MatMul consumer，不验证从任意 FP32 输入选择 MX/HiF4 scale 和 payload
    的量化算法。
 3. `kernels/basic_op/matmul/gfrun_mx_scale_issues.md` 是旧模型版本的历史记录；当前

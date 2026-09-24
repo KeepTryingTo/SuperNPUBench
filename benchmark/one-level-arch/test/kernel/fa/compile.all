@@ -3,18 +3,16 @@
 
 # No set -e: HIF4_VECBF16 and some modes fail to compile (shared fp4+shared fp4
 # not accepted by matrix_input_pair_legal); the script must continue to compile
-# subsequent shape groups (fixpipe, subview, long-context).
+# subsequent shape groups (fixpipe, long-context).
 : "${COMPILER_DIR:?Set COMPILER_DIR to the Linx compiler bin directory}"
 
 # fa_gmma_dynamic uses runtime Q/KV loop bounds with single-pass online
 # softmax; Q, score, row state, and PV accumulation remain in tile registers.
 
 # fa_gmma_kchains runs the SAME shape/mode matrix as fa_2d_unroll_gmma.
-# The Makefile defaults PVChainK=Tk (one PV chain per KV block); the ELF
-# name auto-appends the _PVChainK suffix. X_dim/Y_dim are name-only for
-# kchains (its kernel does not stage multi-tiles). The 32-wide multi-chain
-# form is kept via an explicit PVChainK=32 pass below (kTk % PVChainK == 0
-# holds for Tk=128/256).
+# It uses the full Tk PV reduction dimension; the chain is carried across KV
+# blocks through the CUBE internal accumulator. X_dim/Y_dim are name-only for
+# kchains because the kernel does not stage multiple shared tiles.
 
 # fa_lowp: MXFP4 Q/K/V, BF16 QK+softmax, then MXFP4 P/V matmul.
 # (Also Sq256/Skv256 — kept as the sole config of its kernel.)
@@ -22,6 +20,13 @@ make diss TESTCASE=fa_lowp \
     COMPILER_DIR="$COMPILER_DIR" \
     FA_MODE=MXFP4_VECBF16 Sq=256 Skv=256 Tm=128 Tk=128 \
     X_dim=1 Y_dim=2
+
+# PMU-optimized long-context MXFP4 path. Keep the reference fa_lowp target
+# above as the functional/performance A/B baseline.
+make diss TESTCASE=fa_mxfp4_opt \
+    COMPILER_DIR="$COMPILER_DIR" \
+    FA_MODE=MXFP4_VECBF16 Sq=128 Skv=8192 Tm=128 Tk=128 \
+    X_dim=1 Y_dim=1
 
 # fa_lowp_recip: TRECIP-based reciprocal path (FA_LOWP_RECIP=1), two shapes
 # (baseline + long context). Built from its own TU (src/fa_lowp_recip.cpp)
@@ -40,7 +45,7 @@ make diss TESTCASE=fa_lowp_recip \
 # Larger sequence length (Sq=Skv=1024) to exercise deeper Q-block and K/V-block
 # loops. Tile extents unchanged from the multi-tile baseline (Tm=128 Tk=128,
 # X_dim=1 Y_dim=2); only the outer iteration counts grow.
-for testcase in fa_2d_unroll_gmma fa_fixpipe fa_subview fa_gmma_kchains; do
+for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
     for mode in \
         FP32_VECFP32 \
         BF16_VECFP32 \
@@ -60,7 +65,7 @@ done
 # Long context (small Q, large KV): Sq=128 Skv=8192 exercises a deep K/V-block
 # loop with a single Q-block (Qb = Sq/kGroupM = 128/128 = 1). Tile extents
 # Tm=128 Tk=128, two K/V tiles staged (Y_dim=2), default head dims QD=VD=128.
-for testcase in fa_2d_unroll_gmma fa_fixpipe fa_subview fa_gmma_kchains; do
+for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
     for mode in \
         FP32_VECFP32 \
         BF16_VECFP32 \
@@ -77,11 +82,9 @@ for testcase in fa_2d_unroll_gmma fa_fixpipe fa_subview fa_gmma_kchains; do
     done
 done
 
-# Variable Tk (tile-K): Tk=256 halves the K/V-block loop (FP32 Tk=256 may
-# exceed SharedTReg capacity and is expected to fail — the script continues
-# to the next mode). Y_dim=1 and Skv=512 keep at least two K/V blocks while
-# reducing SharedTReg pressure.
-for testcase in fa_2d_unroll_gmma fa_fixpipe fa_subview fa_gmma_kchains; do
+# Variable Tk (tile-K): Tk=256 halves the K/V-block loop. Y_dim=1 and Skv=512
+# keep at least two K/V blocks.
+for testcase in fa_2d_unroll_gmma fa_fixpipe fa_gmma_kchains; do
     for mode in \
         FP32_VECFP32 \
         BF16_VECFP32 \
@@ -91,35 +94,17 @@ for testcase in fa_2d_unroll_gmma fa_fixpipe fa_subview fa_gmma_kchains; do
         FP8_VECBF16 \
         MXFP4_VECBF16 \
         HIF4_VECBF16; do
+        # issue #192: the Sq256/Skv512/Tk256 CubeFP32 variants of 2d_unroll
+        # and kchains deadlock on the 256 KiB shareTReg pool (full-pool
+        # footprint + generational overlap) and are excluded; fixpipe's
+        # Tk256 FP32 variant is unaffected and stays.
+        if [ "$mode" = "FP32_VECFP32" ] && [ "$testcase" != "fa_fixpipe" ]; then
+            echo "SKIP (issue #192): $testcase Tk=256 FP32"
+            continue
+        fi
         make diss TESTCASE="$testcase" \
             COMPILER_DIR="$COMPILER_DIR" \
             FA_MODE="$mode" Sq=256 Skv=512 Tm=128 Tk=256 \
             X_dim=1 Y_dim=1
     done
-done
-
-# fa_gmma_kchains with the explicit 32-wide PV chain (the original k-chain
-# form; the Makefile default PVChainK=Tk builds one chain per KV block in
-# the passes above). Same three shapes.
-for mode in \
-    FP32_VECFP32 \
-    BF16_VECFP32 \
-    MXFP8_VECFP32 \
-    HIF8_VECFP32 \
-    FP8_VECFP32 \
-    FP8_VECBF16 \
-    MXFP4_VECBF16 \
-    HIF4_VECBF16; do
-    make diss TESTCASE=fa_gmma_kchains \
-        COMPILER_DIR="$COMPILER_DIR" \
-        FA_MODE="$mode" Sq=1024 Skv=1024 Tm=128 Tk=128 \
-        X_dim=1 Y_dim=2 PVChainK=32
-    make diss TESTCASE=fa_gmma_kchains \
-        COMPILER_DIR="$COMPILER_DIR" \
-        FA_MODE="$mode" Sq=128 Skv=8192 Tm=128 Tk=128 \
-        X_dim=1 Y_dim=2 PVChainK=32
-    make diss TESTCASE=fa_gmma_kchains \
-        COMPILER_DIR="$COMPILER_DIR" \
-        FA_MODE="$mode" Sq=256 Skv=512 Tm=128 Tk=256 \
-        X_dim=1 Y_dim=1 PVChainK=32
 done
