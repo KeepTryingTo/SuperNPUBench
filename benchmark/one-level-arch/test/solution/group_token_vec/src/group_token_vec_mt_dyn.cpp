@@ -290,7 +290,10 @@ int main()
             const uint32_t warmElems = static_cast<uint32_t>(cfgs[c][0]) *
                                        static_cast<uint32_t>(cfgs[c][1]);
             for (uint32_t i = 0; i < warmElems; ++i) {
-                warmAcc += topkAligned()[i];
+                // 修复 -Wdeprecated-volatile: C++20 起对 volatile 对象的复合
+                // 赋值 (+=) 已废弃, 改为普通赋值展开; volatile 语义不变, 仍
+                // 阻止编译器将 warmAcc 求和折叠/删除, 保证 L1D 预热读不被优化掉。
+                warmAcc = warmAcc + topkAligned()[i];
             }
             (void)warmAcc;
         }
