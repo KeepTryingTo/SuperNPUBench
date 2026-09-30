@@ -38,9 +38,11 @@ namespace supernpu::tile_isa {
 
 constexpr int kCombineMtThreads = 4;
 
-// Multi-PE barrier: volatile per-PE phase flags + compiler memory barrier,
-// same convention as kernels/solution/group_token_vec/group_token_vec_mt.hpp.
-static volatile uint32_t sCombineMtPhaseDone[kCombineMtThreads];
+// Multi-PE barrier: per-PE phase flags + 定向集驱逐自旋 (时序模型跨 PE 无
+// snoop, flag 行须周期驱逐迫使 L1D miss 才见新值; 纯热自旋在部分布局下
+// 活锁)。写方到达即驱逐自身脏 flag 行, 等待方每 32 轮驱逐一次。
+alignas(16384) static volatile uint32_t sCombineMtEvictSpan[6 * 4096];
+alignas(64) static volatile uint32_t sCombineMtPhaseDone[kCombineMtThreads];
 
 static inline void combineMtCompilerBarrier()
 {
@@ -50,10 +52,23 @@ static inline void combineMtCompilerBarrier()
 static inline void combineMtBarrier(uint32_t phase)
 {
     combineMtCompilerBarrier();
-    sCombineMtPhaseDone[get_thread_idx()] = phase;
+    const uint32_t tid = get_thread_idx();
+    sCombineMtPhaseDone[tid] = phase;
     combineMtCompilerBarrier();
+    const uint32_t wordOff =
+        (static_cast<uint32_t>(
+             reinterpret_cast<uint64_t>(&sCombineMtPhaseDone[0]) >> 2)) & 4095u;
+    for (uint32_t k = 1; k <= 5; ++k) {
+        (void)sCombineMtEvictSpan[k * 4096u + wordOff];   // 写方到达驱逐
+    }
     for (int t = 0; t < kCombineMtThreads; ++t) {
+        uint32_t spins = 0;
         while (sCombineMtPhaseDone[t] < phase) {
+            if ((++spins & 31u) == 0u) {
+                for (uint32_t k = 1; k <= 5; ++k) {
+                    (void)sCombineMtEvictSpan[k * 4096u + wordOff];
+                }
+            }
         }
     }
     combineMtCompilerBarrier();
@@ -113,11 +128,10 @@ void combine_pack_mt_dyn(DType* expandX, int32_t* expandIdx,
     }
 }
 
-// ====== #4 Flag check (tile pass-through; TCMP's 0.58.4 B.DATR syntax is
-// rejected by the 0828 toolchain asm matcher, so the EQ predicate collapses
-// to a flag->predBuf copy. predBuf consumers treat non-1.0f as "not ready";
-// the flag is 1.0f after pack, so pass-through preserves the wait semantics.
-// TSUB stands in for the removed TMOV sync, see combine_pack_mt_dyn note) ======
+// ====== #4 Flag check — 真 EQ 谓词 tile 链 (与 moe_combine_v2.hpp 同款:
+// fp32 TCMPS<EQ> 0923 基线探针实证可用, 旧 "0828 matcher 拒绝 TCMP" 的
+// pass-through 退化删除; TSEL payload 须整数 → int32 物化 + TCVT fp32;
+// 消费端 `predBuf < 0.5f` 判定对合法 flag 值等价) ======
 template <int TileW>
 void combine_check_flag_mt_dyn(float* windowFlag, float* predBuf,
                                int64_t slot, int64_t t, int64_t numExpanded)
@@ -125,20 +139,27 @@ void combine_check_flag_mt_dyn(float* windowFlag, float* predBuf,
     using namespace pto;
     using gm_flag = global_tensor<float, RowMajor<-1, -1>>;
     using gm_pred = global_tensor<float, RowMajor<-1, -1>>;
-    using tile_f  = Tile<Location::Vec, float, 1, TileW, BLayout::RowMajor>;
+    using tile_f  = Tile<Location::Vec, float,  1, TileW, BLayout::RowMajor>;
+    using tile_i  = Tile<Location::Vec, int32_t, 1, TileW, BLayout::RowMajor>;
 
     tile_f flagTile;
     gm_flag gf(windowFlag + slot * TileW,
                static_cast<int>(numExpanded), TileW);
     TLOAD(flagTile, gf);
 
-    // #3 Pipeline sync (SyncFunc<MTE2_V> aligned)
-    tile_f sync_f1;
-    TSUB(sync_f1, flagTile, flagTile);
+    tile_f pred;
+    TCMPS<CmpMode::EQ>(pred, flagTile, 1.0f);
+    tile_i oneI;
+    TEXPANDS(oneI, static_cast<int32_t>(1));
+    tile_i selI;
+    TEXPANDS(selI, static_cast<int32_t>(0));
+    TSEL(selI, pred, oneI);
+    tile_f norm;
+    TCVT(norm, selI);
 
     gm_pred gp(predBuf + slot * TileW,
                static_cast<int>(numExpanded), TileW);
-    TSTORE(gp, flagTile);
+    TSTORE(gp, norm);
 }
 
 // ====== #1 Clear flag ======
@@ -263,6 +284,13 @@ void moe_combine_mt_dyn(DTypeIn* expandX, float* expertScales,
     if (bs <= 0 || h <= 0 || k <= 0 || numExpanded <= 0) return;
     if (h % TileW != 0) return;   // 列维 tile 宽度 (列 valid 必须编译期)
 
+    // 单调相位: per-PE 调用计数 (免 driver 跨 PE 复位 —— 复位晚于置位会
+    // 抹掉 flag 造成互等自旋)。kernel 相位 = inv*4+1/+2, driver 汇合 = inv*4+3。
+    static uint32_t sCombineMtInvCnt[kCombineMtThreads];
+    const uint32_t inv = sCombineMtInvCnt[tid];
+    sCombineMtInvCnt[tid] = inv + 1u;
+    const uint32_t ph = inv * 4u;
+
     // #5 Window State Init (InitWinState aligned) — PE0 only
     if (tid == 0) {
         uint32_t dataState = windowState[0];
@@ -274,13 +302,13 @@ void moe_combine_mt_dyn(DTypeIn* expandX, float* expertScales,
     // ====== Phase 1: Pack (expandX → window + flag) ======
     combine_pack_mt_dyn<DTypeIn, TileW>(
         expandX, expandIdx, windowData, windowFlag, h, k, numExpanded);
-    combineMtBarrier(1);
+    combineMtBarrier(ph + 1u);
 
     // ====== Phase 2: Reduce (window → weighted sum → out) ======
     combine_reduce_mt_dyn<DTypeIn, DTypeOut, TileW>(
         expertScales, windowData, windowFlag, predBuf, out,
         bs, h, k, numExpanded);
-    combineMtBarrier(2);
+    combineMtBarrier(ph + 2u);
 
     // Window state writeback — PE0 only
     if (tid == 0) {

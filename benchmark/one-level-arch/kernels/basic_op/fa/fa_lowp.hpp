@@ -95,7 +95,7 @@ void flash_attention_lowp_impl(
     using KSlice = global_tensor<__fp4_e2m1x2,
                                  RowMajor<kTk, kStoredQD>>;
     using VSlice = global_tensor<__fp4_e2m1x2,
-                                 RowMajor<kTk, kStoredVD>>;
+                                 RowMajor<kTk, kStoredVD>>;// [kTk, vd/2]
     // MX scale layouts follow the logical matrix-multiply K dimension:
     // Q scale [Sq,qD/32], K scale [Skv,qD/32], V scale [vD,Skv/32].
     using GmQScale = global_tensor<__fp8_e8m0,

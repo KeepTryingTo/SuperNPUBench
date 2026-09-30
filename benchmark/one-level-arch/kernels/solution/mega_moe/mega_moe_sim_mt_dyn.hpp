@@ -60,7 +60,13 @@ namespace mega_moe {
 // ============================================================================
 constexpr uint32_t kMtThreadsPerBlockDyn = 4U;
 
-static volatile uint32_t sMtPhaseDoneDyn[kMtThreadsPerBlockDyn];
+// 屏障 = 单行 flag 自旋, 跳过自己的槽 (自己刚写过, 程序序保证 >= phase):
+// 消除自旋窗口内 "同地址 store→load" 对 (nuke/存储序重放的主要触发源 ——
+// mega 含 CUBE ACC 链, 重放会二次 SetACC 撞 BROB.cpp:1154 断言, gfsim
+// 实测; gtv 无 CUBE 故其定向集驱逐版安全, mega 不用驱逐读)。
+// 跨 PE 可见性: mega 各相位偏斜中等 (mt 静态版同型 plain 自旋 gfsim
+// PASS 2,010,999 佐证), 若后续实测活锁再引入驱逐读。
+alignas(64) static volatile uint32_t sMtPhaseDoneDyn[kMtThreadsPerBlockDyn];
 
 static inline void mtCompilerBarrierDyn()
 {
@@ -70,9 +76,13 @@ static inline void mtCompilerBarrierDyn()
 static inline void mtBarrierDyn(uint32_t phase)
 {
     mtCompilerBarrierDyn();
-    sMtPhaseDoneDyn[get_thread_idx()] = phase;
+    const uint32_t tid = get_thread_idx();
+    sMtPhaseDoneDyn[tid] = phase;
     mtCompilerBarrierDyn();
     for (uint32_t t = 0U; t < kMtThreadsPerBlockDyn; ++t) {
+        if (t == tid) {
+            continue;   // 自己的槽: 本函数刚写入 phase, 无需轮询
+        }
         while (sMtPhaseDoneDyn[t] < phase) {
         }
     }
@@ -103,6 +113,18 @@ static inline void mega_moe_sim_mt_dyn_kernel(float* yOut, float* xIn,
         expertPerRank_r == 0U || topK_r == 0U) return;
     if ((h_r % 32U) != 0U) return;          // TGEMV K-tile / MX scale 组宽
     if ((hiddenDim_r % 64U) != 0U) return;  // GMM2 K=hd/2 须整除 32
+
+    // 单调相位编号 (gtv/moe_dispatch mt_dyn 同款修复): 原 driver 在两次 cfg
+    // 之间清零 sMtPhaseDoneDyn —— 无同步跨 PE 写, 时序模型下清零晚于他 PE
+    // 置位则抹 flag → 互等活锁; 且固定相位跨调用陈旧直通。改为 per-PE 私用
+    // 调用计数 sInvCntDyn (零跨 PE 写), 相位 = inv*8 + k 单调递增, driver
+    // 复位删除。相位分配 (每轮 inv=c 占 8 个): driver gen 汇合 = 8c+1
+    // (genInputs 分片写后), kernel 末端汇合 = 8c+4, cfgA 验证汇合 = 5。
+    // 契约同值判定保证各 PE 的 inv 序列一致。
+    alignas(64) static uint32_t sInvCntDyn[kMtThreadsPerBlockDyn];  // bss 零初始化
+    const uint32_t inv = sInvCntDyn[tid];
+    sInvCntDyn[tid] = inv + 1U;
+    const uint32_t ph = inv * 8U;
 
     // TilingData 填充 (源 main 逐字段初始化, 字段全保留; 各 PE 幂等冗余写同值)
     static_assert(kBlockAivNum % kMtThreadsPerBlockDyn == 0U,
@@ -166,11 +188,17 @@ static inline void mega_moe_sim_mt_dyn_kernel(float* yOut, float* xIn,
     const uint32_t yScratchOffset = statsOffset + kBlockAivNum * tilingData.moeExpertPerRank * 4U;
     uint8_t* const yScratchBase = g_mmWorkspace + yScratchOffset
                                 + tid * perPeBytes;
-    __half* const w1F16 = reinterpret_cast<__half*>(yScratchBase);
+    // M2: 解码按 tile 扁平索引分片 (每 tile 仅 1 PE 读写), 目标缓冲改共享
+    // (PE0 区); per-PE scratch 偏移不变, GMM 读共享副本 (decode 栅栏后可见)。
+    __half* const w1F16 = reinterpret_cast<__half*>(
+        g_mmWorkspace + yScratchOffset);
     __half* const w2F16 = w1F16
         + tilingData.moeExpertPerRank * tilingData.h * tilingData.hiddenDim;
-    __half* const xf16Scratch = w2F16
-        + tilingData.moeExpertPerRank * (tilingData.hiddenDim / 2U) * tilingData.h;
+    __half* const xf16Scratch = reinterpret_cast<__half*>(
+        yScratchBase
+        + (tilingData.moeExpertPerRank * tilingData.h * tilingData.hiddenDim
+         + tilingData.moeExpertPerRank * (tilingData.hiddenDim / 2U)
+               * tilingData.h) * 2U);
     float* const y1Scratch = reinterpret_cast<float*>(
         reinterpret_cast<uint8_t*>(xf16Scratch) + tilingData.h * 2U);
     __half* const y2f16Scratch = reinterpret_cast<__half*>(
@@ -219,66 +247,68 @@ static inline void mega_moe_sim_mt_dyn_kernel(float* yOut, float* xIn,
         tokV[1] = static_cast<int64_t>(tilingData.bs) / 2;
     }
     // 末端汇合: yOut 全量 (含其他 PE 分片) 就绪后才允许 PE0 验证
-    mtBarrierDyn(1U);
+    mtBarrierDyn(ph + 4U);
 #else
     // ============ 完整真机流水 — 真 4PE 分片执行 (运行期 dims) ============
     // ---- 阶段 1: 输入准备 (各 PE 写域不相交) ----
-    // SendAndQuantBuffInit (9731): 统计槽清零 — 每 PE 只清自己 4 个伪核
+    // SendAndQuantBuffInit: 统计槽清零。volatile 标量逐元素 ([C9]: 常量
+    // TEXPANDS+TSTORE 被折叠为零寄存器别名绑定, cfgB 重复调用永不完成)。
     {
-        // 注: volatile 清零 —— 连续 i32 零 store 会被 linxv5 continuous-mem-opt
-        //     合并为 32B tile store (v4i64 BUILD_VECTOR, Cannot select 崩溃)
-        volatile int32_t* stats = reinterpret_cast<volatile int32_t*>(g_mmWorkspace + statsOffset);
-        for (uint32_t lc = 0U; lc < kCoresPerPE; ++lc) {
-            const uint32_t core = tid * kCoresPerPE + lc;
-            for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
-                stats[core * tilingData.moeExpertPerRank + e] = 0;
-            }
+        int32_t* stats = reinterpret_cast<int32_t*>(g_mmWorkspace + statsOffset);
+        volatile int32_t* vs = stats + tid * kCoresPerPE * tilingData.moeExpertPerRank;
+        const uint32_t nStats = kCoresPerPE * tilingData.moeExpertPerRank;
+        for (uint32_t i = 0; i < nStats; ++i) {
+            vs[i] = 0;
         }
     }
     // QuantizeLocalTokens (3754): MX 路径原地消费 E4M3+E8M0 权重 —— 不再有
     // fp32 解码 workspace 与对应的跨 PE 栅栏 (issue #180: 解码阶段整体删除)
-    // GatherAndSendExpertMasks (3934): 自回环本地 mask 表 — 按伪核归属 token 分片
+    // GatherAndSendExpertMasks: 自回环本地 mask 表, PE0 独占全量构建
+    // (单写者; bs ≤ 36, tile 链无收益, 且该 TLOAD 为模型首 tile 派发缺陷
+    // 的受害者, 见 TILE_GFSIM_COMPLETION_REPORT.md rev4)。可见性由 ph+2
+    // 屏障保证 (topK!=1 时 helper 标量兜底不变)。
     {
         uint8_t* mask = g_mmWorkspace + maskOffset;
-        for (uint32_t lc = 0U; lc < kCoresPerPE; ++lc) {
-            const uint32_t coreIdx = tid * kCoresPerPE + lc;
-            for (uint32_t i = 0U; i < perCore; ++i) {
-                const uint32_t token = coreIdx * perCore + i;
-                if (token >= tilingData.bs) break;
-                for (uint32_t kk = 0U; kk < tilingData.topK; ++kk) {
-                    const uint32_t slot = token * tilingData.topK + kk;
-                    const int32_t expert = g_mmTopkIds[slot];
-                    mask[static_cast<uint32_t>(expert) * tilingData.bs + slot / tilingData.topK] = 1U;
-                }
+        if (tid == 0U) {
+            for (uint32_t s = 0; s < tilingData.bs; ++s) {
+                const int32_t expert = g_mmTopkIds[s];
+                mask[static_cast<uint32_t>(expert) * tilingData.bs + s] = 1U;
             }
         }
+        mtBarrierDyn(ph + 2U);
     }
-    // ResetDispatchWorkspace (4051) = DispatchBuffInit: dispatch 表清零 — token 分片
+    // ResetDispatchWorkspace = DispatchBuffInit: dispatch 表填 -1。
+    // volatile 标量逐元素填充 ([C9] 同族: 常量 TSTORE cfgB 冻结)。nTok ≤ 8。
     {
         float* dispatch = reinterpret_cast<float*>(g_mmWorkspace + dispatchOffset);
-        for (uint32_t lc = 0U; lc < kCoresPerPE; ++lc) {
-            const uint32_t coreIdx = tid * kCoresPerPE + lc;
-            for (uint32_t i = 0U; i < perCore; ++i) {
-                const uint32_t token = coreIdx * perCore + i;
-                if (token >= tilingData.bs) break;
-                for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
-                    dispatch[e * tilingData.bs + token] = -1.0f;
-                }
+        const uint32_t tokBegin = tid * kCoresPerPE * perCore;
+        const uint32_t nTok = (tokBegin < tilingData.bs)
+                            ? ((tilingData.bs - tokBegin < kCoresPerPE * perCore)
+                               ? (tilingData.bs - tokBegin)
+                               : (kCoresPerPE * perCore))
+                            : 0U;
+        for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
+            volatile float* v = dispatch + e * tilingData.bs + tokBegin;
+            for (uint32_t i = 0; i < nTok; ++i) {
+                v[i] = -1.0f;
             }
         }
     }
 
-    // ---- 阶段 1.5 (issue #180): FP8 权重 tile 化解码 (每 PE 私有, 免栅栏) ----
+    // ---- 阶段 1.5 (issue #180): FP8 权重 tile 化解码 (M2: 分片 + 共享) ----
     // w1F16[e][k][n] = fp16(E4M3) * 2^(w1Scale[e][k/32]-127), 逐 [32,32] tile:
     // TLOAD(E4M3) → TCVT(fp16) → TMULS(组 scale) → TSTORE
     {
         using DecSrc = Tile<Location::Vec, __fp8_e4m3, 32, 32>;
         using DecDst = Tile<Location::Vec, __half, 32, 32>;
+        uint32_t flatTile = 0U;
         for (uint32_t e = 0U; e < tilingData.moeExpertPerRank; ++e) {
             for (uint32_t k0 = 0U; k0 < tilingData.h; k0 += 32U) {
                 const float s1 = fp8_e8m0_scale(
                     g_mmWeightScales1[e * (tilingData.h / 32U) + k0 / 32U]);
-                for (uint32_t n0 = 0U; n0 < tilingData.hiddenDim; n0 += 32U) {
+                for (uint32_t n0 = 0U; n0 < tilingData.hiddenDim;
+                     n0 += 32U, ++flatTile) {
+                    if ((flatTile % kMtThreadsPerBlockDyn) != tid) continue;
                     DecSrc ws;
                     global_tensor<__fp8_e4m3, RowMajor<-1, -1>> gWS(
                         reinterpret_cast<__fp8_e4m3*>(
@@ -302,7 +332,9 @@ static inline void mega_moe_sim_mt_dyn_kernel(float* yOut, float* xIn,
                 const float s2 = fp8_e8m0_scale(
                     g_mmWeightScales2[e * ((tilingData.hiddenDim / 2U) / 32U)
                                      + k0 / 32U]);
-                for (uint32_t n0 = 0U; n0 < tilingData.h; n0 += 32U) {
+                for (uint32_t n0 = 0U; n0 < tilingData.h;
+                     n0 += 32U, ++flatTile) {
+                    if ((flatTile % kMtThreadsPerBlockDyn) != tid) continue;
                     DecSrc ws;
                     global_tensor<__fp8_e4m3, RowMajor<-1, -1>> gWS(
                         reinterpret_cast<__fp8_e4m3*>(
@@ -324,6 +356,10 @@ static inline void mega_moe_sim_mt_dyn_kernel(float* yOut, float* xIn,
             }
         }
     }
+
+    // M2: 分片解码的共享权重缓冲须在 GMM 读取前对全 PE 可见
+    // (相位改 3: routing 屏障占用 ph+2, 保持 per-PE 单调)
+    mtBarrierDyn(ph + 3U);
 
     // ---- 阶段 2: 共享专家输入准备 (源 PrepareSharedExpertInput, sharedExpertNum==0 跳过) ----
 
@@ -543,19 +579,15 @@ static inline void mega_moe_sim_mt_dyn_kernel(float* yOut, float* xIn,
                 stats[core * tilingData.moeExpertPerRank + e] = static_cast<int32_t>(cnt);
             }
         }
-        // tokOut: PE0 独占导出 (寄存器计数 + 一次性 volatile 写,
-        // 规避相邻 i64 store 合并为 16B tile store 的 v2i64 崩溃)
+        // tokOut: PE0 独占导出 — 全域等值计数 tile 化 (mm_count_eq_i32:
+        // TCMPS<EQ>+TSEL+TROWSUM+TSTORE → 标量读回; 原 t×kk 双循环即全域
+        // [0, bs*topK) 计数, 直接等价)。volatile 规避相邻 i64 store 合并
         if (tid == 0U) {
             volatile int64_t* tokExport = tokOut;
             for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
-                uint32_t cnt = 0U;
-                for (uint32_t t = 0; t < tilingData.bs; ++t) {
-                    for (uint32_t kk = 0U; kk < tilingData.topK; ++kk) {
-                        if (static_cast<uint32_t>(g_mmTopkIds[t * tilingData.topK + kk]) == e) {
-                            ++cnt;
-                        }
-                    }
-                }
+                const uint32_t cnt = mm_count_eq_i32(
+                    g_mmTopkIds, tilingData.bs * tilingData.topK,
+                    static_cast<int32_t>(e));
                 tokExport[e] = static_cast<int64_t>(cnt);
             }
         }
@@ -563,7 +595,7 @@ static inline void mega_moe_sim_mt_dyn_kernel(float* yOut, float* xIn,
 
     // ---- 跨 PE 交接点: 末端汇合栅栏 (fp32 解码栅栏已随 MX 原地消费删除) ----
     // 所有 PE 的 yOut / tokOut 写入完成后才返回 (PE0 随后的验证依赖全量输出)
-    mtBarrierDyn(1U);
+    mtBarrierDyn(ph + 4U);
 #endif
 }
 

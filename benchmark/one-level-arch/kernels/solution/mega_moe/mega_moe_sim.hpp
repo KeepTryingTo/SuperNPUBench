@@ -461,6 +461,172 @@ MM_INLINE void mx_copy_row_tile(const float* src, float* dst, uint32_t h)
 }
 
 // ============================================================================
+// 四b、控制表 tile 化工具 (sim / sim_mt / sim_mt_dyn 三入口共用)
+//
+// 契约 (tile_probe 探针 gfrun 实证, 详注见 group_token_vec/gt_tile_common.hpp):
+//   [C2] MSCATTER_ADD 须数字编码 BSTART.TLSU 21; index = 字节位移;
+//        tile 内重复下标 row-major 顺序 RMW (确定序)。
+//   [C4] 原子族/标量 TEPL 一律 [1×N] 行 tile (物理 Cols>=2 → lb0/lb2 存在);
+//        归约输出 [32×1,vN×1] 只可 TSTORE。
+//   [C6] 动态 ValidRow 链泄漏 lane → 运行时段长一律 32/16/8/4 静态块二元
+//        分解 + <4 元素标量尾 (低于 128B tile 粒度)。
+//   [C9] 小数组标量初始化 volatile 逐元素 (16B 合并 store 写丢失规避)。
+// ============================================================================
+
+// int32 段填充 (stats 清零等): 32/8/4 静态块 + <4 volatile 标量尾
+MM_INLINE void mm_fill_i32(int32_t* dst, uint32_t len, int32_t value)
+{
+    using T32 = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor>;
+    using T8  = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor, 1, 8>;
+    using T4  = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor, 1, 4>;
+    uint32_t done = 0U;
+    for (; done + 32U <= len; done += 32U) {
+        T32 z; TEXPANDS(z, value);
+        global_tensor<int32_t, RowMajor<1, 32>> g(dst + done);
+        TSTORE(g, z);
+    }
+    for (; done + 8U <= len; done += 8U) {
+        T8 z; TEXPANDS(z, value);
+        global_tensor<int32_t, RowMajor<1, 8>> g(dst + done);
+        TSTORE(g, z);
+    }
+    for (; done + 4U <= len; done += 4U) {
+        T4 z; TEXPANDS(z, value);
+        global_tensor<int32_t, RowMajor<1, 4>> g(dst + done);
+        TSTORE(g, z);
+    }
+    volatile int32_t* v = dst;
+    for (; done < len; ++done) v[done] = value;   // <4 元素, 低于 tile 粒度
+}
+
+// fp32 段填充 (dispatch 表 -1.0f 等): 同款分解
+MM_INLINE void mm_fill_f32(float* dst, uint32_t len, float value)
+{
+    using T32 = Tile<Location::Vec, float, 1, 32, BLayout::RowMajor>;
+    using T8  = Tile<Location::Vec, float, 1, 32, BLayout::RowMajor, 1, 8>;
+    using T4  = Tile<Location::Vec, float, 1, 32, BLayout::RowMajor, 1, 4>;
+    uint32_t done = 0U;
+    for (; done + 32U <= len; done += 32U) {
+        T32 z; TEXPANDS(z, value);
+        global_tensor<float, RowMajor<1, 32>> g(dst + done);
+        TSTORE(g, z);
+    }
+    for (; done + 8U <= len; done += 8U) {
+        T8 z; TEXPANDS(z, value);
+        global_tensor<float, RowMajor<1, 8>> g(dst + done);
+        TSTORE(g, z);
+    }
+    for (; done + 4U <= len; done += 4U) {
+        T4 z; TEXPANDS(z, value);
+        global_tensor<float, RowMajor<1, 4>> g(dst + done);
+        TSTORE(g, z);
+    }
+    volatile float* v = dst;
+    for (; done < len; ++done) v[done] = value;   // <4 元素, 低于 tile 粒度
+}
+
+// mask 表散射: mask[topkIds[slot]*bs + slot/topK] = 1, slot ∈ [begin, begin+n)
+// 链: TLOAD(ids) + TMULS(×bs) + TCI(slot ramp) + TADD → idx (u8 元素下标 =
+// 字节位移, ×1) → MSCATTER(val=1 u8)。32/16/8/4 静态块 + <4 标量尾。
+// 契约: topK == 1 (kTopK 常量; token = slot), 违例整体标量兜底。
+MM_INLINE void mm_mask_scatter(const int32_t* topkIds, uint8_t* mask,
+                                       uint32_t slotBegin, uint32_t nSlots,
+                                       uint32_t bs, uint32_t topK)
+{
+    if (topK != 1U) {   // 通用 topK: slot/topK 需 TDIVS(int32 未探针) → 标量
+        for (uint32_t s = slotBegin; s < slotBegin + nSlots; ++s) {
+            const int32_t expert = topkIds[s];
+            mask[static_cast<uint32_t>(expert) * bs + s / topK] = 1U;
+        }
+        return;
+    }
+    using TI32 = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor>;
+    using TI16 = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor, 1, 16>;
+    using TI8  = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor, 1, 8>;
+    using TI4  = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor, 1, 4>;
+    using TU32 = Tile<Location::Vec, uint8_t, 1, 128, BLayout::RowMajor, 1, 32>;
+    using TU16 = Tile<Location::Vec, uint8_t, 1, 128, BLayout::RowMajor, 1, 16>;
+    using TU8  = Tile<Location::Vec, uint8_t, 1, 128, BLayout::RowMajor, 1, 8>;
+    using TU4  = Tile<Location::Vec, uint8_t, 1, 128, BLayout::RowMajor, 1, 4>;
+    global_tensor<uint8_t, RowMajor<-1, -1>> gMask(
+        mask, static_cast<int>(nSlots), 1);
+
+    uint32_t done = 0U;
+    // 二元分解宏 (C = 块宽): idx = ids*bs + slotRamp → MSCATTER(1u8)
+#define MM_MASK_CHUNK(C, TIdx, TVal)                                          \
+    for (; done + (C) <= nSlots; done += (C)) {                               \
+        TIdx ids;                                                             \
+        global_tensor<int32_t, RowMajor<-1, -1>> gIds(                        \
+            const_cast<int32_t*>(topkIds) + slotBegin + done,                 \
+            1, static_cast<int>(C));                                          \
+        TLOAD(ids, gIds);                                                     \
+        TIdx eb;                                                              \
+        TMULS(eb, ids, static_cast<int32_t>(bs));                             \
+        TIdx ramp;                                                            \
+        TCI(ramp, static_cast<int32_t>(slotBegin + done));                    \
+        TIdx idx;                                                             \
+        TADD(idx, eb, ramp);                                                  \
+        TVal val;                                                             \
+        TEXPANDS(val, static_cast<uint8_t>(1));                               \
+        MSCATTER(gMask, val, idx);                                            \
+    }
+    MM_MASK_CHUNK(32U, TI32, TU32)
+    MM_MASK_CHUNK(16U, TI16, TU16)
+    MM_MASK_CHUNK(8U,  TI8,  TU8)
+    MM_MASK_CHUNK(4U,  TI4,  TU4)
+#undef MM_MASK_CHUNK
+    for (; done < nSlots; ++done) {   // <4 slot, 低于 tile 粒度
+        const uint32_t s = slotBegin + done;
+        const int32_t expert = topkIds[s];
+        mask[static_cast<uint32_t>(expert) * bs + s] = 1U;
+    }
+}
+
+// 等值计数: #{src[i] == target, i ∈ [0, len)} (tokOut 统计导出用)
+// 链: TLOAD + TCMPS<EQ> + TSEL(物化 0/1) + TROWSUM([32×1,v1×1] 单行和,
+// qli CountChunk 同款) + TSTORE → scratch 标量读回累加。32/16/8/4 块 + <4 尾。
+MM_INLINE uint32_t mm_count_eq_i32(const int32_t* src, uint32_t len,
+                                           int32_t target)
+{
+    using TI32 = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor>;
+    using TI16 = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor, 1, 16>;
+    using TI8  = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor, 1, 8>;
+    using TI4  = Tile<Location::Vec, int32_t, 1, 32, BLayout::RowMajor, 1, 4>;
+    using TSum = Tile<Location::Vec, int32_t, 32, 1, BLayout::RowMajor, 1, 1>;
+    static int32_t sumScratch[1];
+    uint32_t cnt = 0U;
+    uint32_t done = 0U;
+#define MM_COUNT_CHUNK(C, TIdx)                                               \
+    for (; done + (C) <= len; done += (C)) {                                  \
+        TIdx ids;                                                             \
+        global_tensor<int32_t, RowMajor<-1, -1>> gIds(                        \
+            const_cast<int32_t*>(src) + done, 1, static_cast<int>(C));        \
+        TLOAD(ids, gIds);                                                     \
+        TIdx pred;                                                            \
+        TCMPS<CmpMode::EQ>(pred, ids, target);                                \
+        TIdx one;                                                             \
+        TEXPANDS(one, static_cast<int32_t>(1));                               \
+        TIdx sel;                                                             \
+        TEXPANDS(sel, static_cast<int32_t>(0));                               \
+        TSEL(sel, pred, one);                                                 \
+        TSum s;                                                               \
+        TROWSUM(s, sel);                                                      \
+        global_tensor<int32_t, RowMajor<1, 1>> gS(sumScratch);                \
+        TSTORE(gS, s);                                                        \
+        cnt += static_cast<uint32_t>(sumScratch[0]);                          \
+    }
+    MM_COUNT_CHUNK(32U, TI32)
+    MM_COUNT_CHUNK(16U, TI16)
+    MM_COUNT_CHUNK(8U,  TI8)
+    MM_COUNT_CHUNK(4U,  TI4)
+#undef MM_COUNT_CHUNK
+    for (; done < len; ++done) {          // <4 元素, 低于 tile 粒度
+        if (src[done] == target) ++cnt;
+    }
+    return cnt;
+}
+
+// ============================================================================
 // 五、MegaMoeWave — 源类 (9240 行起) 全阶段迁移
 // ============================================================================
 // 模板参数与源实例化 MegaMoeWave<bfloat16_t, bfloat16_t, float, fp8_e4m3fn_t, 4, 0, false, false>
@@ -922,14 +1088,11 @@ void mega_moe_sim_kernel(float* yOut, float* xIn, int64_t* tokOut)
 #else
     // ============ 完整真机流水 (各阶段与 MegaMoeWave 阶段函数一一对应) ============
     // ---- 阶段 1: 输入准备 ----
-    // SendAndQuantBuffInit (9731): 统计槽清零
+    // SendAndQuantBuffInit (9731): 统计槽清零 — 32 i32 = 一个 [1×32] tile
+    // (mm_fill_i32: TEXPANDS+TSTORE, 替代标量循环及其 volatile 规避)
     {
         int32_t* stats = reinterpret_cast<int32_t*>(g_mmWorkspace + statsOffset);
-        for (uint32_t core = 0; core < kBlockAivNum; ++core) {
-            for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
-                stats[core * tilingData.moeExpertPerRank + e] = 0;
-            }
-        }
+        mm_fill_i32(stats, kBlockAivNum * tilingData.moeExpertPerRank, 0);
     }
     // QuantizeLocalTokens (3754) — MX 路径: 每 PE 私有 tile 化解码
     // (TLOAD(E4M3[32,32]) → TCVT(fp16) → TMULS(k 组 scale 折叠) → TSTORE);
@@ -943,22 +1106,21 @@ void mega_moe_sim_kernel(float* yOut, float* xIn, int64_t* tokOut)
         tilingData.moeExpertPerRank, tilingData.h, tilingData.hiddenDim);
     mx_decode_weights_tile(mx, tilingData.moeExpertPerRank,
                            tilingData.h, tilingData.hiddenDim);
-    // GatherAndSendExpertMasks (3934): 自回环本地 mask 表
+    // GatherAndSendExpertMasks (3934): 自回环本地 mask 表 — tile 散射
+    // (mm_mask_scatter: TLOAD ids + TMULS(×bs) + TCI ramp + TADD → MSCATTER
+    // u8; topK==1 契约 (kTopK 常量), 违例 helper 内标量兜底)
     {
         uint8_t* mask = g_mmWorkspace + maskOffset;
-        for (uint32_t t = 0; t < tilingData.bs * tilingData.topK; ++t) {
-            const int32_t expert = g_mmTopkIds[t];
-            mask[static_cast<uint32_t>(expert) * tilingData.bs + t / tilingData.topK] = 1U;
-        }
+        mm_mask_scatter(g_mmTopkIds, mask, 0U,
+                        tilingData.bs * tilingData.topK,
+                        tilingData.bs, tilingData.topK);
     }
-    // ResetDispatchWorkspace (4051) = DispatchBuffInit: dispatch 表清零
+    // ResetDispatchWorkspace (4051) = DispatchBuffInit: dispatch 表填 -1 —
+    // epr*bs 连续 fp32 = tile 填充 (mm_fill_f32)
     {
         float* dispatch = reinterpret_cast<float*>(g_mmWorkspace + dispatchOffset);
-        for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
-            for (uint32_t t = 0; t < tilingData.bs; ++t) {
-                dispatch[e * tilingData.bs + t] = -1.0f;
-            }
-        }
+        mm_fill_f32(dispatch,
+                    tilingData.moeExpertPerRank * tilingData.bs, -1.0f);
     }
 
     // ---- 阶段 2: 共享专家输入准备 (源 PrepareSharedExpertInput, sharedExpertNum==0 跳过) ----
@@ -1007,6 +1169,8 @@ void mega_moe_sim_kernel(float* yOut, float* xIn, int64_t* tokOut)
     // 统计导出 (幂等): gfrun 多 PE 共享栈/GM, 任何 RMW 累加 (栈槽/数组 "+=")
     // 会被 N 个 PE 重复执行 ×N; 改为逐槽寄存器计数 + 一次性赋值
     {
+        // per-core stats: 每 (core, e) 为单 token 单比较 (perCore=1, 低于
+        // tile 粒度) → 保留标量
         int32_t* stats = reinterpret_cast<int32_t*>(g_mmWorkspace + statsOffset);
         for (uint32_t core = 0; core < kBlockAivNum; ++core) {
             for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
@@ -1019,12 +1183,21 @@ void mega_moe_sim_kernel(float* yOut, float* xIn, int64_t* tokOut)
                 stats[core * tilingData.moeExpertPerRank + e] = static_cast<int32_t>(cnt);
             }
         }
+        // tokOut 导出: 全域等值计数 tile 化 (mm_count_eq_i32: TCMPS<EQ>+
+        // TSEL+TROWSUM+TSTORE → 标量读回; topK==1 时原 stride 循环与全域
+        // 计数等价, 违例走原标量循环)
         // 注: volatile 阻止相邻 i64 写入被合并为 16B tile store (BLK_TSTORE v2i64)
         volatile int64_t* tokExport = tokOut;
         for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
             uint32_t cnt = 0U;
-            for (uint32_t t = 0; t < tilingData.bs; ++t) {
-                if (static_cast<uint32_t>(g_mmTopkIds[t * tilingData.topK]) == e) ++cnt;
+            if (tilingData.topK == 1U) {
+                cnt = mm_count_eq_i32(g_mmTopkIds,
+                                      tilingData.bs * tilingData.topK,
+                                      static_cast<int32_t>(e));
+            } else {
+                for (uint32_t t = 0; t < tilingData.bs; ++t) {
+                    if (static_cast<uint32_t>(g_mmTopkIds[t * tilingData.topK]) == e) ++cnt;
+                }
             }
             tokExport[e] = static_cast<int64_t>(cnt);
         }

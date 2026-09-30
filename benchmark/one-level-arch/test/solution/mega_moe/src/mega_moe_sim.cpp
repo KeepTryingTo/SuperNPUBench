@@ -66,6 +66,26 @@ __attribute__((aligned(4096))) int64 g_mmExpertTokenNums[2];
 __attribute__((aligned(4096))) uint8_t g_mmWorkspace[kWorkspaceBytes];
 
 // ==== 参考实现 (gen_data.compute_golden 同语义) ====
+// [perf] PR #194 同款 golden 侧优化: 2^k 的 O(|k|) 连乘循环 → 位级 O(1) 构造。
+// 2.0/0.5 连乘在 IEEE double 下精确, 位级构造在全部定义域逐位一致 (含上溢
+// 2^1024→+inf、次正规域至 2^-1074、完全下溢→0 的阈值行为), golden 数值不变
+// (gfrun R2=0 佐证)。连乘循环为 gfsim 周期绝对主体 (每 FP8 权重元素调用
+// ref_wscale/exp2_approx, E8M0 偏置大时单次上百次迭代)。
+static double ref_exp2i(int64_t k)
+{
+    union { uint64_t u; double d; } cvt;
+    if (k >= 1024) {
+        cvt.u = 0x7FF0000000000000ULL;                  // +inf (连乘同上溢)
+    } else if (k >= -1022) {
+        cvt.u = static_cast<uint64_t>(k + 1023) << 52;   // 规格数域
+    } else if (k >= -1074) {
+        cvt.u = 1ULL << (k + 1074);                      // 次正规域 (至 2^-1074)
+    } else {
+        cvt.u = 0ULL;                                    // 完全下溢 (连乘同得 0)
+    }
+    return cvt.d;
+}
+
 static double ref_exp(double z)
 {
     const double kLn2 = 0.69314718055994530941723212145818;
@@ -73,39 +93,20 @@ static double ref_exp(double z)
     long k = (long)(z * kInvLn2 + (z < 0 ? -0.5 : 0.5));
     const double r = z - (double)k * kLn2;
     double e = 1.0 + r * (1.0 + r * (0.5 + r * (1.0 / 6.0 + r * (1.0 / 24.0 + r * (1.0 / 120.0)))));
-    double twoK = 1.0;
-    if (k >= 0) {
-        for (long j = 0; j < k; ++j) twoK *= 2.0;
-    } else {
-        for (long j = 0; j < -k; ++j) twoK *= 0.5;
-    }
-    return twoK * e;
+    return ref_exp2i(static_cast<int64_t>(k)) * e;
 }
 
 static double exp2_approx(double p)
 {
-    double r = 1.0;
-    int32_t ip = (int32_t)p;
-    if (ip > 0) {
-        for (int32_t i = 0; i < ip; ++i) r *= 2.0;
-    } else if (ip < 0) {
-        for (int32_t i = 0; i < -ip; ++i) r *= 0.5;   // [fix] e4m3 指数域 e<7 时 p<0, 原实现缺失负分支恒返回 1.0
-    }
-    return r;
+    // [fix] 语义保留: ip = (int32_t)p, 返回 2^ip (含 e<7 负分支修复)
+    return ref_exp2i(static_cast<int64_t>(static_cast<int32_t>(p)));
 }
 
 static double ref_wscale(uint8_t raw)
 {
     // E8M0: scale = 2^(raw-127) — issue #180 修正 (原 (int8_t)raw 偏置解码
     // 语义错误; tile 路径 kernel/golden 统一为正确 E8M0)
-    const int32_t e = (int32_t)raw - 127;
-    double s = 1.0;
-    if (e >= 0) {
-        for (int32_t i = 0; i < e; ++i) s *= 2.0;
-    } else {
-        for (int32_t i = 0; i < -e; ++i) s *= 0.5;
-    }
-    return s;
+    return ref_exp2i(static_cast<int64_t>(raw) - 127);
 }
 
 // host 侧 FP8 解码 (与 kernel fp8_e4m3_to_f32 / fp8_e8m0_scale 数学一致, double 精度)

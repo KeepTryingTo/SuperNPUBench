@@ -7,8 +7,10 @@
  *       cfgB: {BS=7, H=128, K=3, MoeExpertNum=5}   — slotCount=21%4≠0、
  *             MoeExpertNum=5%4≠0, 覆盖运行时 ceil 分片路径
  *   - GM 缓冲按两组 shape 的最大值定长分配, 运行时只使用有效段;
- *   - 两次 kernel 调用之间把 header 内 sMtPhaseDone barrier 数组清零
- *     (静态相位编号在第二次调用会因陈旧 flag 立即通过而失去同步);
+ *   - barrier 相位由 kernel 内 per-PE 调用计数 (sInvCnt) 单调编号,
+ *     跨调用陈旧 flag 天然失效 —— 不做任何跨 PE 的 flag 复位写
+ *     (无同步跨 PE 写在时序模型下会抹掉他 PE 已置位的 flag → 活锁,
+ *     gtv mt_dyn ROOTCAUSE 同款修复);
  *   - 验证 PE0 独占, 逐组比对 (逻辑与静态版一致, 循环边界运行时化):
  *     cfgA 失败返回静态版同款诊断码 1..7, cfgB 失败返回 +10 偏移码。
  *
@@ -117,10 +119,6 @@ int main() {
 
     int failA = 0;
     for (int c = 0; c < 2; ++c) {
-        // Barrier reset: 静态相位编号跨次调用会因陈旧 flag 立即通过而
-        // 失去同步, 每次调用前清零 (各 PE 冗余同值写, 无需栅栏)。
-        for (int t = 0; t < kMtThreadsPerBlock; ++t) sMtPhaseDone[t] = 0;
-
         genInputs(cfgs[c][0], cfgs[c][1], cfgs[c][2], cfgs[c][3]);
 
         BENCHSTART;
@@ -135,12 +133,14 @@ int main() {
         BENCHEND;
 
         // cfgA 验证须在其输入被 cfgB 数据生成覆盖之前完成: PE0 立即验证,
-        // 其余 PE 在 mtBarrier(4) 汇合等待 (kernel 内部相位为 1/2/3)。
+        // 其余 PE 在 mtBarrier(5) 汇合等待 (kernel 单调相位 = inv*8 + 1..4,
+        // driver 汇合点取 8*c+5 ——  strictly between cfgA 的 4 与 cfgB 的 9,
+        // 无陈旧 flag 直通; 见 kernel sInvCnt 注)。
         if (c == 0) {
             if (tid == 0) {
                 failA = verify(cfgs[0][0], cfgs[0][1], cfgs[0][2], cfgs[0][3]);
             }
-            mtBarrier(4);
+            mtBarrier(5);
         }
     }
 

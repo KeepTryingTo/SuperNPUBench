@@ -12,8 +12,9 @@
  *   - GM 缓冲按两组 shape 的最大值定长分配, 运行时只使用有效段;
  *     workspace 布局与 MegaMoeWave::Init 一致 + 尾部每 PE GMM scratch
  *     (kernel 头文件注释有完整契约);
- *   - 两次 kernel 调用之间把 sMtPhaseDoneDyn barrier 数组清零 (静态相位编号
- *     在第二次调用会因陈旧 flag 立即通过而失去同步);
+ *   - barrier 相位由 kernel 内 per-PE 调用计数 (sInvCntDyn) 单调编号
+ *     (inv*8+1), 跨调用陈旧 flag 天然失效 —— 不做任何跨 PE 的 flag 复位写;
+ *     driver 的 cfg 间汇合点取相位 5 (严格落在 cfgA=1 与 cfgB=9 之间);
  *   - 验证 PE0 独占, 逐组比对 (golden/精度/token 与静态版一致, 边界运行时化):
  *     cfgA 失败返回静态版同款诊断码, cfgB 失败返回 +10 偏移码。
  *
@@ -70,6 +71,26 @@ __attribute__((aligned(4096))) int64 g_mmExpertTokenNums[kEprMax];
 __attribute__((aligned(4096))) uint8_t g_mmWorkspace[kWorkspaceBytes];
 
 // ==== 参考实现 (运行时 shape; gen_data.compute_golden 同语义) ====
+// [perf] PR #194 同款 golden 侧优化: 2^k 的 O(|k|) 连乘循环 → 位级 O(1) 构造。
+// 2.0/0.5 连乘在 IEEE double 下精确, 位级构造在全部定义域逐位一致 (含上溢
+// 2^1024→+inf、次正规域至 2^-1074、完全下溢→0 的阈值行为), golden 数值不变
+// (gfrun R2=0 佐证)。连乘循环为 gfsim 周期绝对主体 (每 FP8 权重元素调用
+// ref_wscale/exp2_approx, E8M0 偏置大时单次上百次迭代)。
+static double ref_exp2i(int64_t k)
+{
+    union { uint64_t u; double d; } cvt;
+    if (k >= 1024) {
+        cvt.u = 0x7FF0000000000000ULL;                  // +inf (连乘同上溢)
+    } else if (k >= -1022) {
+        cvt.u = static_cast<uint64_t>(k + 1023) << 52;   // 规格数域
+    } else if (k >= -1074) {
+        cvt.u = 1ULL << (k + 1074);                      // 次正规域 (至 2^-1074)
+    } else {
+        cvt.u = 0ULL;                                    // 完全下溢 (连乘同得 0)
+    }
+    return cvt.d;
+}
+
 static double ref_exp(double z)
 {
     const double kLn2 = 0.69314718055994530941723212145818;
@@ -77,39 +98,20 @@ static double ref_exp(double z)
     long k = (long)(z * kInvLn2 + (z < 0 ? -0.5 : 0.5));
     const double r = z - (double)k * kLn2;
     double e = 1.0 + r * (1.0 + r * (0.5 + r * (1.0 / 6.0 + r * (1.0 / 24.0 + r * (1.0 / 120.0)))));
-    double twoK = 1.0;
-    if (k >= 0) {
-        for (long j = 0; j < k; ++j) twoK *= 2.0;
-    } else {
-        for (long j = 0; j < -k; ++j) twoK *= 0.5;
-    }
-    return twoK * e;
+    return ref_exp2i(static_cast<int64_t>(k)) * e;
 }
 
 static double exp2_approx(double p)
 {
-    double r = 1.0;
-    int32_t ip = (int32_t)p;
-    if (ip > 0) {
-        for (int32_t i = 0; i < ip; ++i) r *= 2.0;
-    } else if (ip < 0) {
-        for (int32_t i = 0; i < -ip; ++i) r *= 0.5;   // [fix] e4m3 指数域 e<7 时 p<0
-    }
-    return r;
+    // 语义保留: ip = (int32_t)p, 返回 2^ip (含 e<7 负分支修复)
+    return ref_exp2i(static_cast<int64_t>(static_cast<int32_t>(p)));
 }
 
 static double ref_wscale(uint8_t raw)
 {
     // E8M0: scale = 2^(raw-127) (issue #180: 原 (int8_t)raw 偏置解码语义错误,
     // kernel 与 golden 一致地错所以能通过; MX 硬件路径为真 E8M0, golden 同步修正)
-    const int32_t e = (int32_t)raw - 127;
-    double s = 1.0;
-    if (e >= 0) {
-        for (int32_t i = 0; i < e; ++i) s *= 2.0;
-    } else {
-        for (int32_t i = 0; i < -e; ++i) s *= 0.5;
-    }
-    return s;
+    return ref_exp2i(static_cast<int64_t>(raw) - 127);
 }
 
 // host 侧 FP8 解码 (与 kernel fp8_e4m3_to_f32 / fp8_e8m0_scale 数学一致, double 精度)
@@ -199,14 +201,30 @@ static void compute_golden(double* yRef, int64* tokRef, uint32 bs, uint32 h, uin
 }
 
 // ---- 确定性数据生成 (各 PE 冗余执行, 同值写无需栅栏; 运行时 shape) ----
+// genInputs —— 按 PE 连续分片写 (单写者/缓存行; 4 PE 冗余同值全量写会在
+// cfgB 与 tile 读叠加时触发 SL2 硬停摆)。调用方在 kernel 前
+// mtBarrierDyn(8c+1) 汇合。
 static void genInputs(uint32 bs, uint32 h, uint32 hd)
 {
+    const uint32 tid = get_thread_idx();
+    // 连续 ceil 分片 [begin, end)
+    auto slice = [](uint32 n, uint32 me, uint32 &begin, uint32 &end) {
+        const uint32 seg = n / 4U;
+        const uint32 rem = n % 4U;
+        begin = me * seg + (me < rem ? me : rem);
+        end = begin + seg + (me < rem ? 1U : 0U);
+    };
     float* x = g_mmX;
     const uint32 kTotalElems = bs * h;
     {
+        uint32 b, e;
+        slice(kTotalElems, tid, b, e);
         uint32 seed = 42U;
-        for (uint32 i = 0; i < kTotalElems; ++i) {
+        for (uint32 i = 0; i < e; ++i) {   // LCG 链推进到切片尾 (值与全量版逐位一致)
             seed = seed * 1664525U + 1013904223U;
+            if (i < b) {
+                continue;                  // 他人切片: 只推进链, 不写
+            }
             const float u = (float)((seed >> 8) & 0xFFFFu) / 65536.0f;
             const float v = (u - 0.5f) * 2.0f;
             x[i] = (i % 5u == 0u) ? v * 0.5f : v;
@@ -216,27 +234,33 @@ static void genInputs(uint32 bs, uint32 h, uint32 hd)
     // 注: ids 经 volatile 写 —— 小规格下循环全展开, 前 bs/2 个 i32 零 store
     //     会被后端合并为 16B 零 tile store (v2i64 Cannot select 崩溃)
     {
+        uint32 b, e;
+        slice(bs, tid, b, e);
         volatile int32_t* ids = g_mmTopkIds;
-        for (uint32 t = 0; t < bs; ++t) {
+        for (uint32 t = b; t < e; ++t) {
             ids[t] = (int32_t)((t / (bs / 2u)) % 2u);   // 与 gen_data 同规则
             g_mmTopkWeights[t] = 1.0f;
         }
     }
     // FP8 权重: 确定性细化, 值域 [-2,2] 内的 E4M3 可表示值; scale = 1.0 (E8M0 0x00)
     {
-        for (uint32 i = 0; i < 2U * hd * h; ++i) {
-            const uint32 e = 4U + ((i * 7U) % 5U);            // 4..8
+        uint32 b, e;
+        slice(2U * hd * h, tid, b, e);
+        for (uint32 i = b; i < e; ++i) {
+            const uint32 e4 = 4U + ((i * 7U) % 5U);            // 4..8
             const uint32 m = ((i * 3U + 1U) & 0x7U);
             const uint32 s = (i / 7U) & 1U;
-            g_mmWeight1[i] = (uint8_t)((s << 7U) | (e << 3U) | m);
+            g_mmWeight1[i] = (uint8_t)((s << 7U) | (e4 << 3U) | m);
         }
-        for (uint32 i = 0; i < 2U * (hd / 2U) * h; ++i) {
-            const uint32 e = 4U + ((i * 11U + 2U) % 5U);
+        slice(2U * (hd / 2U) * h, tid, b, e);
+        for (uint32 i = b; i < e; ++i) {
+            const uint32 e4 = 4U + ((i * 11U + 2U) % 5U);
             const uint32 m = ((i * 5U + 3U) & 0x7U);
             const uint32 s = (i / 13U) & 1U;
-            g_mmWeight2[i] = (uint8_t)((s << 7U) | (e << 3U) | m);
+            g_mmWeight2[i] = (uint8_t)((s << 7U) | (e4 << 3U) | m);
         }
-        for (uint32 i = 0; i < 2U * (h * hd / 32U + 4U); ++i) {
+        slice(2U * (h * hd / 32U + 4U), tid, b, e);
+        for (uint32 i = b; i < e; ++i) {
             g_mmWeightScales1[i] = 0x00;   // scale = 1.0
             g_mmWeightScales2[i] = 0x00;
         }
@@ -311,34 +335,41 @@ int main()
     const int64_t cfgB[5] = {18, 32, 128, 2, 1};
     const int64_t* cfgs[2] = {cfgA, cfgB};
 
+    // 注: 不采用 gtv 的视图惰性初始化预热 —— mega 含 CUBE ACC 链, 预热段
+    // 的守卫 store→默认值 load 同址对是 nuke/重放触发源, 重放二次 SetACC
+    // 撞 BROB.cpp:1154 distBid<distLast 断言 (两构建实测); 且 mega 屏障为
+    // plain 自旋跳自槽 + 延迟验证 (无长自旋), 守卫运行期初始化的暴露窗口
+    // 与静态 mt 版 (gfsim PASS 2,010,999) 相同。
     int failA = 0;
     for (int c = 0; c < 2; ++c) {
-        // Barrier reset: 静态相位编号跨次调用会因陈旧 flag 立即通过而
-        // 失去同步, 每次调用前清零 (各 PE 冗余同值写, 无需栅栏)。
-        for (uint32_t t = 0; t < mega_moe::kMtThreadsPerBlockDyn; ++t) {
-            mega_moe::sMtPhaseDoneDyn[t] = 0;
-        }
-        // tokOut 监控槽重置 (kernel PE0 独占导出; 各 PE 冗余同值写)
-        {
+        // Barrier 相位由 kernel 内 per-PE 调用计数 (sInvCntDyn) 单调编号
+        // (inv*8+4), 跨调用陈旧 flag 天然失效 —— 不做任何跨 PE 的 flag
+        // 复位写。相位分配 (每轮 inv=c 占 8 个): gen 汇合 = 8c+1 (driver),
+        // routing 汇合 = 8c+2 (kernel, PE0 独占 mask 构建后), 解码汇合 =
+        // 8c+3 (kernel, M2 分片解码后), kernel 末端 = 8c+4, 验证汇合 =
+        // 8c+5 (driver, PE0 验证前)。
+        // tokOut 监控槽重置 (kernel PE0 独占导出; 单写者 = PE0)
+        if (tid == 0U) {
             volatile int64* tokInit = tokenNumsOut;
             tokInit[0] = -1;
             tokInit[1] = -1;
         }
 
         genInputs((uint32)cfgs[c][0], (uint32)cfgs[c][1], (uint32)cfgs[c][2]);
+        // genInputs 按 PE 分片写 (单写者/行) → kernel 读他 PE 切片前须汇合
+        mega_moe::mtBarrierDyn((uint32)c * 8U + 1U);
 
         BENCHSTART;
         mega_moe::mega_moe_sim_mt_dyn_kernel(y, x, tokenNumsOut, cfgs[c]);
         BENCHEND;
 
-        // cfgA 验证须在其输入被 cfgB 数据生成覆盖之前完成: PE0 立即验证,
-        // 其余 PE 在 mtBarrierDyn(4) 汇合等待 (kernel 内部相位为 1/2)。
-        if (c == 0) {
-            if (tid == 0U) {
-                failA = verify(cfgs[0][0], cfgs[0][1], cfgs[0][2]);
-            }
-            mega_moe::mtBarrierDyn(4U);
+        // 即时验证: kernel 末端屏障 (8c+4) 保证全 PE 输出就绪; PE0 独占
+        // 验证本轮 (仅 c==0), 其余 PE 在 8c+5 汇合点自旋; 验证完成后才
+        // 进入下一轮 genInputs (避免覆写竞争)。
+        if (c == 0 && tid == 0U) {
+            failA = verify(cfgs[0][0], cfgs[0][1], cfgs[0][2]);
         }
+        mega_moe::mtBarrierDyn((uint32)c * 8U + 5U);
     }
 
     // 非 leader PE 直接返回：09-01 版功能模型起 direct-boot 下各 PE 退出
@@ -347,13 +378,16 @@ int main()
         return 0;
     }
 
+    // cfgB 验证 (PE0 独占, worker 已退出零等待; live 缓冲即 cfgB 数据)。
+    // 诊断码优先级保持原语义 (failA 优先)。
+    int rcB = verify(cfgs[1][0], cfgs[1][1], cfgs[1][2]);
+
     // gfsim 判读通道: test-finisher (0x10009000, 低 16 位 0x5555 = PASS)
     volatile uint32_t* finisher = reinterpret_cast<volatile uint32_t*>(0x10009000ULL);
     if (failA != 0) {                              // cfgA: 静态版同款诊断码
         *finisher = 0x0001;
         return failA;
     }
-    int rcB = verify(cfgs[1][0], cfgs[1][1], cfgs[1][2]);
     if (rcB == 0) {
         *finisher = 0x5555;
         return 0;  // R2=0: PASS

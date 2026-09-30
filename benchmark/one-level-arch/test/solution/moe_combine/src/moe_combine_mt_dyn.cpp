@@ -135,9 +135,6 @@ int main() {
 
     int failA = 0;
     for (int c = 0; c < 2; ++c) {
-        // Barrier reset: 静态相位编号跨次调用会因陈旧 flag 立即通过而
-        // 失去同步, 每次调用前清零 (各 PE 冗余同值写, 无需栅栏)。
-        for (int t = 0; t < kCombineMtThreads; ++t) sCombineMtPhaseDone[t] = 0;
         // Window state 头清零: 两次运行各完成一次 0→1 toggle, 保证逐组
         // 验证时 state[0]==1 成立 (各 PE 冗余同值写)。
         window_state[0] = 0;
@@ -155,12 +152,12 @@ int main() {
         BENCHEND;
 
         // cfgA 验证须在其输入被 cfgB 数据生成覆盖之前完成: PE0 立即验证,
-        // 其余 PE 在 combineMtBarrier(4) 汇合等待 (kernel 内部相位为 1/2)。
+        // 其余 PE 在 combineMtBarrier(inv*4+3) 汇合等待 (kernel 相位 = inv*4+1/+2)。
         if (c == 0) {
             if (tid == 0) {
                 failA = verify(cfgs[0][0], cfgs[0][1], cfgs[0][2], cfgs[0][3]);
             }
-            combineMtBarrier(4);
+            combineMtBarrier(3u);
         }
     }
 
