@@ -1,0 +1,25 @@
+./bin/gfrun -f /mnt/workspace/projects/0931_SuperNPUBench/SuperNPUBench/benchmark/one-level-arch/output/solution/moe_combine/elf/solution_moe_combine_moe_combine_v2.elf 
+Memory: 0x10200 - 0x10250 (Size=0KB) [.rodata]
+Memory: 0x10254 - 0x10277 (Size=0KB) [.eh_frame_hdr]
+Memory: 0x10278 - 0x102e3 (Size=0KB) [.eh_frame]
+Memory: 0x112e4 - 0x117e9 (Size=1KB) [.text]
+Memory: 0x127f0 - 0x1280f (Size=0KB) [.init_array]
+Memory: 0x12810 - 0x12827 (Size=0KB) [.data.rel.ro]
+Memory: 0x14000 - 0x2685b (Size=74KB) [.bss]
+Memory: 0x26860 - 0x2687f (Size=0KB) [.sbss]
+Memory: 0x26880 - 0x8036880 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+Starting PE0 from 0x112e4
+
+Thread:0Total Block number = 1233
+Thread:0Total Inst number = 6342
+Thread:1Total Block number = 1233
+Thread:1Total Inst number = 6342
+Thread:2Total Block number = 1233
+Thread:2Total Inst number = 6342
+Thread:3Total Block number = 1233
+Thread:3Total Inst number = 6342
+
+Total Block number = 4932
+Total Inst number = 25368
+Suaccelss to Reach the End of Benchmark! R2 = 0

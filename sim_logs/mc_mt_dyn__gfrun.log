@@ -1,0 +1,60 @@
+M286951 |TPC:0x11858  I4     T0 L0  |None                       |                           |                           |                           |C.BSTOP |bin: 0x62
+
+B37716  T0 BPC 0x11836 [FP] [COND] BNext 0x11860
+M286952 |TPC:0x11836  I0     T0 L0  |None                       |0x2                        |0x3                        |42                         |BSTART.FP COND, 0x11860 |bin: 0xab101
+M286953 |TPC:0x1183a  I1     T0 L0  |t:0x3f800000               |a0:0x21800                 |zero:0x0                   |                           |lw a0, zero -> t |bin: 0x12f89 AccMemAddr 0x21800
+M286954 |TPC:0x1183e  I2     T0 L0  |t:0x1083e                  |-4096                      |                           |                           |addtpc -4096 -> t |bin: 0xffffff87
+M286955 |TPC:0x11842  I3     T0 L0  |t:0x3f800000               |t#1:0x1083e                |-1598                      |                           |lwi.u t#1, -1598 -> t |bin: 0x9c2c2fa9 AccMemAddr 0x10200
+M286956 |TPC:0x11846  I4     T0 L0  |t:0x1                      |[t#3.fs]:0x3f800000        |[t#1.fs]:0x3f800000        |                           |feq [t#3.fs], [t#1.fs] -> t |bin: 0x38d0fdb
+M286957 |TPC:0x1184a  I5     T0 L0  |None                       |t#1:0x1                    |zero:0x0                   |                           |c.setc.eq t#1, zero |bin: 0x626
+
+B37717  T0 BPC 0x1184c [STD] [COND] BNext 0x11836
+M286958 |TPC:0x1184c  I0     T0 L0  |None                       |-22                        |                           |                           |C.BSTART.STD COND, 0x11836 |bin: 0xff54
+M286959 |TPC:0x1184e  I1     T0 L0  |a3:0x0                     |a3:0x1                     |0x1                        |                           |subi a3, 0x1 -> a3 |bin: 0x129295
+M286960 |TPC:0x11852  I2     T0 L0  |None                       |a3:0x0                     |zero:0x0                   |                           |c.setc.ne a3, zero |bin: 0x176
+M286961 |TPC:0x11854  I3     T0 L0  |a0:0x21a00                 |a0:0x21800                 |0x200                      |                           |addi a0, 0x200 -> a0 |bin: 0x20010115
+
+B37718  T0 BPC 0x11858 [STD] [DIRECT] BNext 0x11864
+M286962 |TPC:0x11858  I0     T0 L0  |None                       |12                         |                           |                           |C.BSTART.STD DIRECT, 0x11864 |bin: 0x62
+M286963 |TPC:0x1185a  I1     T0 L0  |a4:0x0                     |zero:0x0                   |                           |                           |c.movr zero -> a4 |bin: 0x3006
+M286964 |TPC:0x1185c  I2     T0 L0  |None                       |                           |                           |                           |C.BSTOP |bin: 0x42
+
+B37719  T0 BPC 0x11864 [STD] [FALL] BNext 0x11864
+M286965 |TPC:0x11864  I0     T0 L0  |None                       |0x0                        |0x1                        |0x0                        |C.BSTART.STD |bin: 0x800
+M286966 |TPC:0x11866  I1     T0 L0  |a0:0x0                     |a4:0x0                     |                           |                           |c.movr a4 -> a0 |bin: 0x1186
+
+B37720  T0 BPC 0x11868 [STD] [RET] [FRET_RA] [fp(s0) ~ s8], sp! 256 BNext 0x0
+M286967 |TPC:0x11868  I0     T0 L0  |None                       |0x100                      |0xb                        |0x13                       |FRET_RA [fp(s0) ~ s8], sp!, 0x100 |bin: 0x4135a041
+M286968 |TPC:0x1186c  I1     T0 L0  |None                       |                           |                           |                           |C.BSTOP |bin: 0x800
+
+B37721  T0 BPC 0x11592 [STD] [FALL] BNext 0x11592
+M286969 |TPC:0x11592  I0     T0 L0  |None                       |0x0                        |0x1                        |0x0                        |C.BSTART.STD |bin: 0x800
+M286970 |TPC:0x11594  I1     T0 L0  |t:0x1                      |a0:0x0                     |0                          |                           |cmp.eqi a0, 0 -> t |bin: 0x10fd5
+M286971 |TPC:0x11598  I2     T0 L0  |t:0xa                      |a0:0x0                     |10                         |                           |c.addi a0, 10 -> t |bin: 0x508c
+M286972 |TPC:0x1159a  I3     T0 L0  |fp(s0):0x0                 |t#2:0x1                    |zero:0x0                   |t#1:0xa                    |csel t#2, zero, t#1 -> fp(s0) |bin: 0xc98005f7
+
+B37722  T0 BPC 0x1159e [STD] [FALL] BNext 0x1159e
+M286973 |TPC:0x1159e  I0     T0 L0  |None                       |0x0                        |0x1                        |0x0                        |C.BSTART.STD |bin: 0x800
+M286974 |TPC:0x115a0  I1     T0 L0  |a0:0x0                     |zero:0x0                   |[fp(s0).sw]:0x0            |                           |or zero, [fp(s0).sw] -> a0 |bin: 0x2b03105
+
+B37723  T0 BPC 0x115a4 [STD] [RET] [FRET_STK] [ra ~ s2], sp! 256 BNext 0x0
+M286975 |TPC:0x115a4  I0     T0 L0  |None                       |0x100                      |0xa                        |0xd                        |FRET_STK [ra ~ s2], sp!, 0x100 |bin: 0x40d53041
+M286976 |TPC:0x115a8  I1     T0 L0  |None                       |                           |                           |                           |C.BSTOP |bin: 0x800
+
+B37724  T0 BPC 0x113b0 [STD] [FALL] BNext 0x113b0
+M286977 |TPC:0x113b0  I0     T0 L0  |None                       |0x0                        |0x1                        |0x0                        |C.BSTART.STD |bin: 0x800
+M286978 |TPC:0x113b2  I1     T0 L0  |x1:0x5e                    |zero:0x0                   |0x5e                       |                           |addi zero, 0x5e -> x1 |bin: 0x5e00a95
+M286979 |TPC:0x113b6  I2     T0 L0  |None                       |0x1                        |                           |                           |ACRC 0x1 |bin: 0x10302b
+
+Thread:0Total Block number = 37724
+Thread:0Total Inst number = 286980
+Thread:1Total Block number = 25096
+Thread:1Total Inst number = 160073
+Thread:2Total Block number = 25096
+Thread:2Total Inst number = 160073
+Thread:3Total Block number = 25094
+Thread:3Total Inst number = 160021
+
+Total Block number = 113010
+Total Inst number = 767147
+Suaccelss to Reach the End of Benchmark! R2 = 0

@@ -1,0 +1,60 @@
+B943282  T0 BPC 0x12ae6 [STD] [COND] BNext 0x12b0a
+M6204715|TPC:0x12ae6  I0     T0 L0  |None                       |36                         |                           |                           |C.BSTART.STD COND, 0x12b0a |bin: 0x124
+M6204716|TPC:0x12ae8  I1     T0 L0  |None                       |a2:0x8                     |[s3.sw]:0x8                |                           |setc.ne a2, [s3.sw] |bin: 0x2e21065
+M6204717|TPC:0x12aec  I2     T0 L0  |a0:0x2                     |2                          |                           |                           |c.movi 2 -> a0 |bin: 0x1096
+
+B943283  T0 BPC 0x12aee [STD] [COND] BNext 0x12b0a
+M6204718|TPC:0x12aee  I0     T0 L0  |None                       |28                         |                           |                           |C.BSTART.STD COND, 0x12b0a |bin: 0xe4
+M6204719|TPC:0x12af0  I1     T0 L0  |t:0x205                    |a4:0x205                   |                           |                           |c.sext.w a4 -> t |bin: 0x519c
+M6204720|TPC:0x12af2  I2     T0 L0  |None                       |t#1:0x205                  |a3:0x205                   |                           |c.setc.ne t#1, a3 |bin: 0x2e36
+M6204721|TPC:0x12af4  I3     T0 L0  |a0:0x3                     |3                          |                           |                           |c.movi 3 -> a0 |bin: 0x10d6
+
+B943284  T0 BPC 0x12af6 [STD] [COND] BNext 0x12b0a
+M6204722|TPC:0x12af6  I0     T0 L0  |None                       |20                         |                           |                           |C.BSTART.STD COND, 0x12b0a |bin: 0xa4
+M6204723|TPC:0x12af8  I1     T0 L0  |None                       |a6:0x9                     |[a5.sw]:0x9                |                           |setc.ne a6, [a5.sw] |bin: 0x2741065
+M6204724|TPC:0x12afc  I2     T0 L0  |a0:0x4                     |4                          |                           |                           |c.movi 4 -> a0 |bin: 0x1116
+
+B943285  T0 BPC 0x12afe [STD] [FALL] BNext 0x12afe
+M6204725|TPC:0x12afe  I0     T0 L0  |None                       |0x0                        |0x1                        |0x0                        |C.BSTART.STD |bin: 0x800
+M6204726|TPC:0x12b00  I1     T0 L0  |t:0x1                      |x0:0x205                   |[s2.sw]:0x205              |                           |cmp.eq x0, [s2.sw] -> t |bin: 0x2da0fc5
+M6204727|TPC:0x12b04  I2     T0 L0  |t:0x5                      |5                          |                           |                           |c.movi 5 -> t |bin: 0xf956
+M6204728|TPC:0x12b06  I3     T0 L0  |a0:0x0                     |t#2:0x1                    |zero:0x0                   |t#1:0x5                    |csel t#2, zero, t#1 -> a0 |bin: 0xc9800177
+
+B943286  T0 BPC 0x12b0a [STD] [FALL] BNext 0x12b0a
+M6204729|TPC:0x12b0a  I0     T0 L0  |None                       |0x0                        |0x1                        |0x0                        |C.BSTART.STD |bin: 0x800
+
+B943287  T0 BPC 0x12b0c [STD] [RET] [FRET_STK] [ra ~ s8], sp! 256 BNext 0x0
+M6204730|TPC:0x12b0c  I0     T0 L0  |None                       |0x100                      |0xa                        |0x13                       |FRET_STK [ra ~ s8], sp!, 0x100 |bin: 0x41353041
+M6204731|TPC:0x12b10  I1     T0 L0  |None                       |                           |                           |                           |C.BSTOP |bin: 0x800
+
+B943288  T0 BPC 0x123da [STD] [FALL] BNext 0x123da
+M6204732|TPC:0x123da  I0     T0 L0  |None                       |0x0                        |0x1                        |0x0                        |C.BSTART.STD |bin: 0x800
+M6204733|TPC:0x123dc  I1     T0 L0  |t:0x1                      |a0:0x0                     |0                          |                           |cmp.eqi a0, 0 -> t |bin: 0x10fd5
+M6204734|TPC:0x123e0  I2     T0 L0  |t:0xa                      |a0:0x0                     |10                         |                           |c.addi a0, 10 -> t |bin: 0x508c
+M6204735|TPC:0x123e2  I3     T0 L0  |a0:0x0                     |t#2:0x1                    |zero:0x0                   |t#1:0xa                    |csel t#2, zero, t#1 -> a0 |bin: 0xc9800177
+
+B943289  T0 BPC 0x123e6 [STD] [FALL] BNext 0x123e6
+M6204736|TPC:0x123e6  I0     T0 L0  |None                       |0x0                        |0x1                        |0x0                        |C.BSTART.STD |bin: 0x800
+M6204737|TPC:0x123e8  I1     T0 L0  |a0:0x0                     |zero:0x0                   |[a0.sw]:0x0                |                           |or zero, [a0.sw] -> a0 |bin: 0x2203105
+
+B943290  T0 BPC 0x123ec [STD] [RET] [FRET_STK] [ra ~ s8], sp! 768 BNext 0x0
+M6204738|TPC:0x123ec  I0     T0 L0  |None                       |0x300                      |0xa                        |0x13                       |FRET_STK [ra ~ s8], sp!, 0x300 |bin: 0xc1353041
+M6204739|TPC:0x123f0  I1     T0 L0  |None                       |                           |                           |                           |C.BSTOP |bin: 0x800
+
+B943291  T0 BPC 0x113b0 [STD] [FALL] BNext 0x113b0
+M6204740|TPC:0x113b0  I0     T0 L0  |None                       |0x0                        |0x1                        |0x0                        |C.BSTART.STD |bin: 0x800
+M6204741|TPC:0x113b2  I1     T0 L0  |x1:0x5e                    |zero:0x0                   |0x5e                       |                           |addi zero, 0x5e -> x1 |bin: 0x5e00a95
+M6204742|TPC:0x113b6  I2     T0 L0  |None                       |0x1                        |                           |                           |ACRC 0x1 |bin: 0x10302b
+
+Thread:0Total Block number = 943291
+Thread:0Total Inst number = 6204743
+Thread:1Total Block number = 549007
+Thread:1Total Inst number = 2901914
+Thread:2Total Block number = 549006
+Thread:2Total Inst number = 2901764
+Thread:3Total Block number = 549008
+Thread:3Total Inst number = 2901744
+
+Total Block number = 2590312
+Total Inst number = 14910165
+Suaccelss to Reach the End of Benchmark! R2 = 0

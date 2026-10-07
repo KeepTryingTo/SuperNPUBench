@@ -1,0 +1,25 @@
+./bin/gfrun -f /mnt/workspace/projects/0931_SuperNPUBench/SuperNPUBench/benchmark/one-level-arch/output/solution/mega_moe/elf/solution_mega_moe_mega_moe_sim_BS16_H32_HD64.elf 
+Memory: 0x10200 - 0x102e8 (Size=0KB) [.rodata]
+Memory: 0x102ec - 0x1032f (Size=0KB) [.eh_frame_hdr]
+Memory: 0x10330 - 0x1043b (Size=0KB) [.eh_frame]
+Memory: 0x1143c - 0x13287 (Size=7KB) [.text]
+Memory: 0x14288 - 0x14347 (Size=0KB) [.init_array]
+Memory: 0x14348 - 0x1435f (Size=0KB) [.data.rel.ro]
+Memory: 0x16000 - 0x2d537 (Size=93KB) [.bss]
+Memory: 0x2e000 - 0x2f0c7 (Size=4KB) [.sbss]
+Memory: 0x2f0d0 - 0x803f0d0 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+Starting PE0 from 0x1143c
+
+Thread:0Total Block number = 167509
+Thread:0Total Inst number = 1910907
+Thread:1Total Block number = 167509
+Thread:1Total Inst number = 1910907
+Thread:2Total Block number = 167509
+Thread:2Total Inst number = 1910907
+Thread:3Total Block number = 167509
+Thread:3Total Inst number = 1910907
+
+Total Block number = 670036
+Total Inst number = 7643628
+Suaccelss to Reach the End of Benchmark! R2 = 0
