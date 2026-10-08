@@ -50,7 +50,9 @@ constexpr uint32 kWorkspaceBytes =
     4U * ((kEprMax * kHMax * kHdMax
          + kEprMax * (kHdMax / 2U) * kHMax) * 2U           // 每 PE fp16 权重副本
         + kHMax * 2U + kHdMax * 4U + kHdMax * 2U + kHMax * 4U) +  // GMM scratch
-    4096U;
+    // [2026-10-04 修复] slack 4K→16K: 承载 x 预量化槽 (4 PE × myTok×h×2B,
+    // bs=18 时 2KB) + 裕量 (kernel 阶段 3 修复注)
+    16384U;
 
 // ==== GM 全局缓冲 (声明顺序 = bss 地址顺序; 全部置于高地址区 —
 //      gfrun/链接器对 bss 低地址区写不可靠 (已实测 0x14110 写丢失), 遇此问题时
@@ -69,6 +71,10 @@ __attribute__((aligned(4096))) uint8_t g_mmWeightScales2[kEprMax * (kHdMax / 64U
 __attribute__((aligned(4096))) float g_mmY[kBSMax * kHMax];
 __attribute__((aligned(4096))) int64 g_mmExpertTokenNums[kEprMax];
 __attribute__((aligned(4096))) uint8_t g_mmWorkspace[kWorkspaceBytes];
+// [2026-10-04 优化] golden 权重预解码备忘录 (double; 按 max-shape 定长):
+// 见 compute_golden 注
+__attribute__((aligned(4096))) double g_w1Dbl[kEprMax * kHMax * kHdMax];
+__attribute__((aligned(4096))) double g_w2Dbl[kEprMax * (kHdMax / 2U) * kHMax];
 
 // ==== 参考实现 (运行时 shape; gen_data.compute_golden 同语义) ====
 // [perf] PR #194 同款 golden 侧优化: 2^k 的 O(|k|) 连乘循环 → 位级 O(1) 构造。
@@ -146,8 +152,32 @@ static double ref_w2(uint32_t e, uint32_t k, uint32_t n, uint32_t h, uint32_t hd
 }
 
 // 完整 MoE 参考前向 (gen_data.compute_golden 语义, 运行时 shape; topK==1 驱动约定)
+// [2026-10-04 优化] golden 权重解码备忘录化 (静态 mt 版同款): 原实现
+// ref_w1/ref_w2 在 GMM 内循环按访问逐次解码 FP8 (每元素 ~20 op), cfgA/cfgB
+// 各 16/18 token 共享 2 expert → 每权重重复解码 8-9 次 (~2×49k 次冗余解码)。
+// gfsim fourpe 实测两轮验证为总周期主体, 且 PE0 独占验证长尾是末端 exit
+// lockstep 搁浅 (cycle 3,638,308 断言) 的直接成因。改为进入 golden 前按
+// 当前 shape 一次性预解码 (≤6144/12288 元素), GMM 内循环退化为纯乘加 ——
+// 数值逐位不变, gfrun R2 语义不变, 验证段缩短 ~5×。
 static void compute_golden(double* yRef, int64* tokRef, uint32 bs, uint32 h, uint32 hd)
 {
+    // 一次性预解码当前 shape 的全部权重 (e×k×n 展平, 与 ref_w1/ref_w2 同下标式)
+    for (uint32 e = 0; e < 2U; ++e) {
+        for (uint32 k = 0; k < h; ++k) {
+            for (uint32 n = 0; n < hd; ++n) {
+                g_w1Dbl[e * h * hd + k * hd + n] = ref_w1(e, k, n, h, hd);
+            }
+        }
+    }
+    for (uint32 e = 0; e < 2U; ++e) {
+        for (uint32 k = 0; k < hd / 2U; ++k) {
+            for (uint32 n = 0; n < h; ++n) {
+                g_w2Dbl[e * (hd / 2U) * h + k * h + n] =
+                    ref_w2(e, k, n, h, hd);
+            }
+        }
+    }
+
     for (uint32 t = 0; t < bs * h; ++t) yRef[t] = 0.0;
     // 注: volatile 阻止相邻 i64 清零被合并为 16B tile store (BLK_TSTORE v2i64),
     //     linxv5 后端不支持整数 tile 类型, 会报 "Cannot select: v2i64 = BUILD_VECTOR"
@@ -170,10 +200,11 @@ static void compute_golden(double* yRef, int64* tokRef, uint32 bs, uint32 h, uin
 
         // GMM1: y1[n] = Σ_k x[k]·w1[e][k][n]
         static double y1[kHdMax];
+        const double* w1e = g_w1Dbl + expert * h * hd;
         for (uint32 n = 0; n < hd; ++n) {
             double acc = 0.0;
             for (uint32 k = 0; k < h; ++k) {
-                acc += (double)g_mmX[t * h + k] * ref_w1(expert, k, n, h, hd);
+                acc += (double)g_mmX[t * h + k] * w1e[k * hd + n];
             }
             y1[n] = acc;
         }
@@ -186,10 +217,11 @@ static void compute_golden(double* yRef, int64* tokRef, uint32 bs, uint32 h, uin
         }
         // GMM2: y3[n] = Σ_k y2[k]·w2[e][k][n]
         static double y3[kHMax];
+        const double* w2e = g_w2Dbl + expert * (hd / 2U) * h;
         for (uint32 n = 0; n < h; ++n) {
             double acc = 0.0;
             for (uint32 k = 0; k < hd / 2U; ++k) {
-                acc += y2[k] * ref_w2(expert, k, n, h, hd);
+                acc += y2[k] * w2e[k * h + n];
             }
             y3[n] = acc;
         }
@@ -314,6 +346,52 @@ static int verify(int64_t bs, int64_t h, int64_t hd)
     return 9;                                    // 误差 >= 0.5
 }
 
+// ============================================================================
+// [2026-10-04 修复] cfgB 验证汇合屏障 — 写方定向驱逐版 (静态 mt 版同款)
+//
+// 根因 1 (退出 lockstep 搁浅, 用户所报 "全量 workload 执行完毕后被末端
+// exit lockstep 断言截断 @ cycle 3,638,308, 无 stats"): 原实现 c-loop 后
+// worker 直接 `return 0` 先行 park 到退出 lockstep AND 组; PE0 独占的
+// cfgB 验证长尾 (compute_golden bs=18×hd=128 双精度参考, 原逐次解码版
+// ~10^6 cycle 级) 使 AND 组停在 ready=3/4 超过 T_deadlock=9999 →
+// SyscallBarrier.cpp:1889 断言。"direct-boot 下各 PE 退出相互独立" 仅对
+// gfrun 成立。
+// 根因 2 (安静窗口陈旧 flag 活锁): 裸 volatile flag 屏障的发布为普通
+// 缓存 store (脏行滞留各 PE 私有 L1D, 跨 PE 无 snoop), 非缓存轮询读 L2
+// 永远看不到发布值 —— 静态 mt 版实测四线程全部到达屏障却互相等待
+// (mega_moe_sim_mt_gfsim_fix_report.md §3.3-2)。
+// 修复: 验证汇合屏障 (写方到达定向驱逐 + 非缓存轮询; 判定值经汇合行
+// sRzvDyn[4] 同 cacheline 传递, 随驱逐写回 L2), 全 PE 一起放行到 _end。
+// ============================================================================
+alignas(16384) static volatile uint32_t sRzvEvictSpanDyn[6 * 4096];  // 96KB 驱逐区
+// 汇合行: [0..3]=flags, [4]=PE0 判定值 (同一 cacheline, 随屏障驱逐写回 L2)
+alignas(64) static volatile uint32_t sRzvDyn[8];
+
+static void mtRendezvousDynFin(uint32_t verdict)
+{
+    const uint32_t tid = get_thread_idx();
+    if (tid == 0U) {
+        sRzvDyn[4] = verdict;           // PE0 publishes the verdict (same line)
+    }
+    mega_moe::mtCompilerBarrierDyn();
+    sRzvDyn[tid] = 1U;                  // publish my arrival
+    mega_moe::mtCompilerBarrierDyn();
+    // 写方到达驱逐: flag 行所在 set 的同 set 偏移行 (发布值立即写回 L2)
+    const uint32_t wordOff =
+        (static_cast<uint32_t>(
+            reinterpret_cast<uint64_t>(&sRzvDyn[0]) >> 2)) & 4095u;
+    for (uint32_t k = 1; k <= 5; ++k) {
+        (void)sRzvEvictSpanDyn[k * 4096u + wordOff];
+    }
+    mega_moe::mtCompilerBarrierDyn();
+    for (uint32_t t = 0U; t < mega_moe::kMtThreadsPerBlockDyn; ++t) {
+        if (t == tid) continue;         // 自己的槽: 程序序保证已置位
+        while (sRzvDyn[t] < 1U) {
+        }
+    }
+    mega_moe::mtCompilerBarrierDyn();
+}
+
 int main()
 {
     const uint32_t tid = get_thread_idx();
@@ -372,26 +450,40 @@ int main()
         mega_moe::mtBarrierDyn((uint32)c * 8U + 5U);
     }
 
-    // 非 leader PE 直接返回：09-01 版功能模型起 direct-boot 下各 PE 退出
-    // 相互独立，worker 退出不再截断 PE0 的验证。
-    if (tid != 0U) {
-        return 0;
+    // [2026-10-04 修复] cfgB 验证 + 验证汇合 + SPMD finisher (静态 mt 版同款):
+    // 1. 原 worker 提前 return 改为验证汇合屏障 —— PE0 的 cfgB 验证在 worker
+    //    存活期间执行 (worker 在汇合屏障自旋而非 park 到退出 lockstep), 完成
+    //    后全 PE 一起放行、同时到达 _end (消除 ready=3/4 长时停滞);
+    // 2. gfsim 判定行按 "全部 threadCount 线程都写过 finisher" 翻转 (SPMD
+    //    assumption) —— 全线程在汇合后以汇合行判定值各写一次 (四方同值,
+    //    次序无关; 早写会与 kernel 末端 nuke 竞态窗口叠加, 静态 mt 版实测
+    //    弃用), 判定值经驱逐屏障保证全 PE 可见。
+    int ret = 0;
+    uint32_t verdict = 0x5555u;
+    if (tid == 0U) {
+        // cfgB 验证 (PE0 独占; live 缓冲即 cfgB 数据)。
+        // 诊断码优先级保持原语义 (failA 优先)。
+        int rcB = verify(cfgs[1][0], cfgs[1][1], cfgs[1][2]);
+        if (failA != 0) {                        // cfgA: 静态版同款诊断码
+            verdict = 0x0001u;
+            ret = failA;
+        } else if (rcB == 0) {
+            verdict = 0x5555u;
+            ret = 0;                             // R2=0: PASS
+        } else {
+            verdict = 0x0001u;
+            ret = 10 + rcB;                      // cfgB: +10 偏移诊断码
+        }
     }
 
-    // cfgB 验证 (PE0 独占, worker 已退出零等待; live 缓冲即 cfgB 数据)。
-    // 诊断码优先级保持原语义 (failA 优先)。
-    int rcB = verify(cfgs[1][0], cfgs[1][1], cfgs[1][2]);
+    // [2026-10-04 修复] 验证汇合屏障 (写方定向驱逐版, 见 mtRendezvousDynFin 注)
+    mtRendezvousDynFin(verdict);
 
     // gfsim 判读通道: test-finisher (0x10009000, 低 16 位 0x5555 = PASS)
+    // [2026-10-04 修复] SPMD 全线程写: 值取自汇合行 (PE0 发布、屏障驱逐
+    // 保证可见), 四方同值次序无关。
     volatile uint32_t* finisher = reinterpret_cast<volatile uint32_t*>(0x10009000ULL);
-    if (failA != 0) {                              // cfgA: 静态版同款诊断码
-        *finisher = 0x0001;
-        return failA;
-    }
-    if (rcB == 0) {
-        *finisher = 0x5555;
-        return 0;  // R2=0: PASS
-    }
-    *finisher = 0x0001;
-    return 10 + rcB;                               // cfgB: +10 偏移诊断码
+    *finisher = sRzvDyn[4];
+
+    return ret;
 }

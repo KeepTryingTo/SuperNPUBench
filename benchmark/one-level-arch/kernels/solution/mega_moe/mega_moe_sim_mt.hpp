@@ -35,6 +35,25 @@
  * 运行契约 (与 _mt 系列一致): 必须
  *     gfrun -f <elf> -s softcore.multiThreadNum=4
  * 单线程运行会在 mtBarrier 处死锁。
+ *
+ * [2026-10-04 修复注] 本文件 + 驱动 (test/solution/mega_moe/src/
+ * mega_moe_sim_mt.cpp) + 共享段 (mega_moe_sim.hpp) 的联合修复集, 详见
+ * mega_moe_sim_mt_gfsim_fix_report.md:
+ *   1. tokOut 统计导出改标量等值计数 (gfsim TLSU tile-store→GM 缺口使
+ *      mm_count_eq_i32 的 TSTORE→标量回读恒返 0);
+ *   2. 驱动层验证汇合屏障 (写方定向驱逐版): 修复 worker 提前 return 的
+ *      退出 lockstep 搁浅, 以及安静窗口裸 flag 屏障的陈旧 flag 活锁;
+ *   3. golden 权重解码备忘录化 (验证长尾 ~1.7M → ~0.4M cycle);
+ *   4. 阶段 3 x 预量化前置 + 幂等双遍执行: 规避/自愈模型 nuke 恢复在
+ *      tile 域丢状态导致的末段 token combine 行默认数据污染;
+ *   5. 阶段 4 stats 导出两遍式 (load/store 分离, 减少 nuke 触发面);
+ *   6. 驱动 SPMD finisher 约定 (全线程写, 判定经汇合行传递);
+ *   7. gfsim 时序仿真须用 `--conf fourpe`; `--conf mt` (单引擎共享 +
+ *      默认 TREG 池) 下 tile 流水确定性停摆 (ResVerify @ cycle 317,561,
+ *      与 group_token_vec_mt 家族的 mt 配置停摆同类, 模型/配置能力限制)。
+ * 修复后 gfsim `--conf fourpe`: linx_test_finisher val=0x5555 PASS,
+ * Total Cycles = 1,259,952 (3 次运行确定性一致), tokOut=(8,8) dump 实证;
+ * gfrun 4 线程 R2=0。
  */
 
 #include "solution/mega_moe/mega_moe_sim.hpp"
@@ -230,9 +249,43 @@ void mega_moe_sim_mt_kernel(float* yOut, float* xIn, int64_t* tokOut)
     // ---- 阶段 3: MoE 专家流水 (ProcessMoeExpertStages → ProcessGmmPipeline) ----
     // tile 计算核心 (issue #180): GMM1/GMM2 = TGEMV_MX (MX FP16 pair),
     // SwiGLU = VEC 链, Combine = VEC tile (详见 mega_moe_sim.hpp 四a 共享段)
+    // [2026-10-04 修复] x 预量化前置为独立一遍 (mx_quantize_row), 主循环用
+    // mx_token_compute_pre 消费: 消除原 per-token 内联 "量化 TSTORE(xf16) →
+    // GEMM1 TLOAD(xf16)" 相邻块 GM 往返对触发的 nuke (模型 nuke 恢复在
+    // tile 域丢状态 → 在飞链 TSTORE 以默认数据 2.0f 提交, 实测 y[14..15]
+    // 行恒 2.0f; 见 mega_moe_sim.hpp mx_quantize_row 处修复注)。预量化槽
+    // 位于 workspace 4 PE scratch 槽之后的余量区 (驱动 kWorkspaceBytes 的
+    // slack 已扩至 16KB), 每 PE 连续 myTokens*h*2 字节, 写域不相交。
+    // [2026-10-04 修复] 幂等双遍执行: 模型 nuke(解码段, 与本算子代码无关)的
+    // flush 恢复会丢失在飞 tile 链状态, 落飞窗口内本 PE 末段 token 的
+    // combine TSTORE 以默认数据 2.0f 提交 (实测 combine[14..15] 行恒 2.0)。
+    // 依赖预测器在首碰撞后学习 (同 tpc 对不再 nuke), 第二遍执行无 nuke、
+    // 全链数据正常 resolve —— 以正确值覆盖第一遍的污染行。幂等性: 全部
+    // store 目标 (xf16 槽/scratch/combine) 按同值重写, 输入不变 (原单 PE
+    // 版即按同哲学做 16 伪核冗余执行)。成本 ~+10^4 cycle (占比 <1%)。
+    for (uint32_t guardPass = 0U; guardPass < 2U; ++guardPass) {
+        (void)guardPass;
     {
+        const uint32_t slotBytes = mx_tile_scratch_bytes(
+            tilingData.moeExpertPerRank, tilingData.h, tilingData.hiddenDim);
+        __half* const xf16Slots = reinterpret_cast<__half*>(
+            g_mmWorkspace + yScratchOffset +
+            kMtThreadsPerBlock * slotBytes +
+            tid * kCoresPerPE * perCore * tilingData.h * 2U);
+        uint32_t nq = 0U;
+        for (uint32_t lc = 0U; lc < kCoresPerPE; ++lc) {
+            const uint32_t coreIdx = tid * kCoresPerPE + lc;
+            for (uint32_t i = 0; i < perCore; ++i) {
+                const uint32_t token = coreIdx * perCore + i;
+                if (token >= tilingData.bs) break;  // bs < 16 核时尾核空转
+                mx_quantize_row(xIn + token * tilingData.h,
+                                xf16Slots + nq * tilingData.h, tilingData.h);
+                ++nq;
+            }
+        }
         float* const combineBase = reinterpret_cast<float*>(
             g_mmWorkspace + combineOffset);
+        uint32_t iq = 0U;
         for (uint32_t lc = 0U; lc < kCoresPerPE; ++lc) {
             const uint32_t coreIdx = tid * kCoresPerPE + lc;
             for (uint32_t i = 0; i < perCore; ++i) {
@@ -244,16 +297,18 @@ void mega_moe_sim_mt_kernel(float* yOut, float* xIn, int64_t* tokOut)
                     const uint32_t expert =
                         static_cast<uint32_t>(g_mmTopkIds[slot]);
                     const float weight = g_mmTopkWeights[slot];
-                    mx_token_compute(mx,
-                                     xIn + token * tilingData.h,
-                                     tilingData.h, tilingData.hiddenDim,
-                                     tilingData.moeExpertPerRank, expert,
-                                     weight, kk,
-                                     combineBase + token * tilingData.h);
+                    mx_token_compute_pre(mx,
+                                         xf16Slots + iq * tilingData.h,
+                                         tilingData.h, tilingData.hiddenDim,
+                                         tilingData.moeExpertPerRank, expert,
+                                         weight, kk,
+                                         combineBase + token * tilingData.h);
                 }
+                ++iq;
             }
         }
     }
+    }  // [2026-10-04 修复] 幂等双遍执行结束
     // UnpermuteTokens (9163): combine 缓冲按 token 序写回 y (VEC tile 拷贝;
     // token 分片与 combine 写方同 PE, 程序序保证可见, 免栅栏)
     {
@@ -271,36 +326,59 @@ void mega_moe_sim_mt_kernel(float* yOut, float* xIn, int64_t* tokOut)
 
     // ---- 阶段 4: 跨 rank 同步 (自回环本地退化) 与统计导出 ----
     // stats 按伪核归属分片 (每 PE 只写自己 4 个伪核的槽, 写不相交)
+    // [2026-10-04 优化] 两遍式: 先集中加载本 PE 全部 token id 到栈, 再计算
+    // 并写 stats —— 消除原实现逐 (core,e) 交错 "load g_mmTopkIds / store
+    // stats" 的相邻 ld/st 块对 (gfsim 依赖预测器对跨数组基址无法证不相交,
+    // 会保守 nuke; nuke 恢复存在丢寄存器生产者的模型竞态, 减少 nuke 触发
+    // 面即降低死锁暴露, 见修复报告 §5.3)。
     {
         int32_t* stats = reinterpret_cast<int32_t*>(g_mmWorkspace + statsOffset);
+        uint32_t myIds[kCoresPerPE * 8U];   // 每 core 至多 8 token (perCore 上界)
+        uint32_t myCnt[kCoresPerPE];
+        uint32_t loaded = 0U;
+        for (uint32_t lc = 0U; lc < kCoresPerPE; ++lc) {
+            const uint32_t core = tid * kCoresPerPE + lc;
+            uint32_t c = 0U;
+            for (uint32_t i = 0; i < perCore; ++i) {
+                const uint32_t token = core * perCore + i;
+                if (token >= tilingData.bs) break;  // bs < 16 核时尾核空转
+                myIds[loaded++] = static_cast<uint32_t>(g_mmTopkIds[token * tilingData.topK]);
+                ++c;
+            }
+            myCnt[lc] = c;
+        }
         for (uint32_t lc = 0U; lc < kCoresPerPE; ++lc) {
             const uint32_t core = tid * kCoresPerPE + lc;
             for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
                 uint32_t cnt = 0U;
-                for (uint32_t i = 0; i < perCore; ++i) {
-                    const uint32_t token = core * perCore + i;
-                    if (token >= tilingData.bs) break;  // bs < 16 核时尾核空转
-                    if (static_cast<uint32_t>(g_mmTopkIds[token * tilingData.topK]) == e) ++cnt;
+                uint32_t idx = 0U;
+                for (uint32_t p = 0U; p < lc; ++p) idx += myCnt[p];
+                for (uint32_t i = 0U; i < myCnt[lc]; ++i) {
+                    if (myIds[idx + i] == e) ++cnt;
                 }
                 stats[core * tilingData.moeExpertPerRank + e] = static_cast<int32_t>(cnt);
             }
         }
-        // tokOut: PE0 独占导出 — 全域等值计数 tile 化 (mm_count_eq_i32:
-        // TCMPS<EQ>+TSEL+TROWSUM+TSTORE → 标量读回; topK==1 时原 stride
-        // 循环与全域计数等价, 违例走原标量循环)。
+        // tokOut: PE0 独占导出 — 等值计数
+        // [2026-10-04 修复] 原实现 topK==1 时走 mm_count_eq_i32 tile 计数链
+        // (TLOAD+TCMPS+TSEL+TROWSUM+TSTORE → scratch 标量读回)。gfsim
+        // (TimingSim HEAD 9905a05f) 的 TLSU tile-store→GM 数据通路存在缺口:
+        // TSTORE 执行后在架构内存不可见 (探针实证, 同根因见模型 known-gap-list
+        // memory 类 gmov/mscatter/timg2col 微基准; 详见
+        // kernels/solution/mega_moe/mega_moe_sim_gfsim_fix_report.md §5),
+        // 由此 mm_count_eq_i32 恒返 0 → tokOut=(0,0) vs golden=(8,8) →
+        // test-finisher val=0x0001 FAIL。gfrun 功能模型 tile 操作同步执行,
+        // 同一 elf R2=0 全对 (单 PE 版 mega_moe_sim.hpp 同款修复)。
+        // 修复: 计数长度仅 bs*topK(=16) 个元素, 直接标量等值计数循环
+        // (与 mm_count_eq_i32 的 <4 标量尾/topK!=1 兜底同款语义), 不依赖
+        // tile-store 回读通路——gfrun/gfsim/真机三端语义一致。
         // volatile 规避相邻 i64 store 合并为 16B tile store 的 v2i64 崩溃
         if (tid == 0U) {
             volatile int64_t* tokExport = tokOut;
             for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
                 uint32_t cnt = 0U;
-                if (tilingData.topK == 1U) {
-                    cnt = mm_count_eq_i32(g_mmTopkIds,
-                                          tilingData.bs * tilingData.topK,
-                                          static_cast<int32_t>(e));
-                } else {
-                    for (uint32_t t = 0; t < tilingData.bs; ++t) {
-                        if (static_cast<uint32_t>(g_mmTopkIds[t * tilingData.topK]) == e) ++cnt;
-                    }
+                for (uint32_t t = 0; t < tilingData.bs; ++t) {
+                    if (static_cast<uint32_t>(g_mmTopkIds[t * tilingData.topK]) == e) ++cnt;
                 }
                 tokExport[e] = static_cast<int64_t>(cnt);
             }

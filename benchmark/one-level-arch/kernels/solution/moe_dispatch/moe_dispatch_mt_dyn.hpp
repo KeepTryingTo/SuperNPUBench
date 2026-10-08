@@ -621,4 +621,19 @@ void moe_dispatch_mt_dyn(
 }
 
 } // namespace supernpu::tile_isa
+
+// ============================================================================
+// [2026-10-06 修复注] gfsim `--conf fourpe` 下本算子末端 exit lockstep 断言
+// (@ cycle 45,448) 的根因与修复在驱动层 (test/solution/moe_dispatch/src/
+// mega.../moe_dispatch_mt_dyn.cpp): 原实现 worker (tid!=0) 在 c-loop 末端
+// 直接 `return 0` 先行 park 到退出 lockstep AND 组, PE0 独占 cfgB 验证后
+// 迟到 —— gfsim 时序模型的退出 ecall 按 lockstep AND 组汇聚, 迟到者
+// t0 永远未 join (st=0, 全簇无 retired 进展) → T_deadlock=9999 后
+// SyscallBarrier.cpp:1889 断言截断。修复: cfgB 验证后补齐验证汇合屏障
+// mtBarrier(13) (相位 13 = 8*1+5, 与本 kernel 的 sInvCnt 单调相位方案
+// 9..12 严格衔接), 全 PE 一起放行到 _end。kernel 本身无需修改; 详见同目录
+// moe_dispatch_mt_dyn_gfsim_fix_report.md。修复后 gfsim fourpe:
+// 完整 PASS (Total Cycles = 36,798, 3 次运行确定性一致, exit_parks=4),
+// gfrun 4 线程 R2=0。
+// ============================================================================
 #endif

@@ -21,6 +21,14 @@
 //      row-major 顺序 RMW) —— 旧注释 "TCMP/TCMPS u32 被汇编器拒绝" 已过时
 //      ([C1], qli #177 与探针双重实证)。
 //   4. Cross-PE hand-offs are guarded by mtBarrier.
+//      [2026-10-01 修改] mtBarrier 由裸热自旋改为 mt_dyn 同款驱逐屏障
+//      (写方定向驱逐 + 读方寄存器延迟链 + 1/64 稀疏驱逐): gfsim 跨 PE
+//      无 L1D snoop, 裸自旋仅靠 busy 阶段容量驱逐侥幸放行, 末端低流量
+//      屏障存在确定性活锁风险 (dyn 开发期实证, 见 barrier 实现处注);
+//      Phase2 per-PE scratch 补齐 64B 行粒度 (跨 PE 同行 16B tile 写
+//      丢更新竞态, dyn 同源已证修复)。gfsim fourpe 下本算子的确定性
+//      失败根因 (退出 lockstep 搁浅) 在驱动层, 见
+//      group_token_vec_mt_gfsim_fix_report.md。
 //   5. [N×1] 归约输出只可 TSTORE; 行向量经 GM 往返转 [1×N] ([C4]);
 //      原子族/标量 TEPL 一律 [1×N] 静态 valid 形状 ([C4]/[C6])。
 //
@@ -52,23 +60,82 @@ constexpr uint32_t kTileM = 16;   // rows per TMA block (4 rows per PE)
 constexpr uint32_t kTileN = 16;   // = kTopK
 
 // ============================================================================
-// Multi-PE barrier: volatile per-PE phase flags + compiler memory barrier,
-// same convention as multi_thread/matmul RES_CHECK leader_ready spin.
+// Multi-PE barrier —— 单行 flag + 寄存器延迟链 + 稀疏定向集驱逐
+// (时序模型跨 PE 无 snoop: flag 行须主动驱逐使 L1D miss 才能看到新值;
+//  驱逐流量须稀疏, 否则 prior 洪泛饿死 L2 tile 派发)。gfrun 无缓存, 语义同
+// 原始屏障。
+// [2026-10-01 修改] 原实现为裸热自旋 (plain hot spin): busy 阶段靠海量
+//  内存流量的容量驱逐侥幸观察到 flag 更新; 屏障处于低流量窗口 (如末端
+//  汇合、其它 PE 已安静) 时自旋 PE 持续命中私有 L1D 陈旧 flag 行 →
+//  活锁风险 (dyn 开发期实证, 其注释: "纯 plain 热自旋在长偏斜下读陈旧
+//  flag 活锁")。自 group_token_vec_mt_dyn.hpp 移植同款驱逐屏障 (该变体
+//  gfsim fourpe 实测 PASS, Total Cycles 1,282,647)。
 // ============================================================================
-static volatile uint32_t sPhaseDone[kThreadsPerBlock];
+// [2026-10-01 修改] flag 行显式 64B 对齐; 新增 96KB 驱逐区 (16KB 对齐)
+alignas(16384) static volatile uint32_t sEvictSpan[6 * 4096];   // 96KB 驱逐区
+alignas(64) static volatile uint32_t sPhaseDone[kThreadsPerBlock];  // 4 flag 同一行
 
 static inline void mtCompilerBarrier()
 {
     __asm__ volatile("" : : : "memory");
 }
 
+// [2026-10-01 修改] 整体替换为 mt_dyn 同款驱逐屏障 (原裸自旋见上方修复注)
 static inline void mtBarrier(uint32_t phase)
 {
     mtCompilerBarrier();
-    sPhaseDone[get_thread_idx()] = phase;
+    const uint32_t tid = get_thread_idx();
+    sPhaseDone[tid] = phase;
     mtCompilerBarrier();
+    // 写方到达驱逐: 写方从不自旋, 其脏 flag 行不会经自旋被写回 —— 立即
+    // 定向驱逐一次, 使 L2 尽早看到到达 store (等待方的稀疏驱逐 poll 才有
+    // 新值可见; 原始设计靠写方自旋期驱逐, 最后到达者无自旋 → 缺这一步)
+    const uint32_t wordOffW =
+        (static_cast<uint32_t>(
+             reinterpret_cast<uint64_t>(&sPhaseDone[0]) >> 2)) & 4095u;
+    for (uint32_t k = 1; k <= 5; ++k) {
+        (void)sEvictSpan[k * 4096u + wordOffW];
+    }
+    mtCompilerBarrier();
+    // flag 行的 L1D set 内偏移 (字粒度): sEvictSpan 基址 16KB 对齐 →
+    // sEvictSpan[k*4096 + wordOff] 与 sPhaseDone[0] 同 set (k 任意)
+    const uint32_t wordOff =
+        (static_cast<uint32_t>(
+            reinterpret_cast<uint64_t>(&sPhaseDone[0]) >> 2)) & 4095u;
+    // 定向集驱逐自旋 + 跳自槽: 纯 plain 热自旋在长偏斜下读陈旧 flag 活锁,
+    // 须周期性驱逐 flag 行所在 set 迫使 miss 重取新值; 跳自槽消除同地址
+    // store→load 对。
     for (uint32_t t = 0; t < kThreadsPerBlock; ++t) {
+        if (t == tid) {
+            continue;
+        }
+        uint32_t spins = 0x9E3779B9u ^ (phase * 2654435761u) ^ (t * 0x85EBCA6Bu);
         while (sPhaseDone[t] < phase) {
+            // 寄存器驻留延迟链 + 稀疏驱逐: 驱逐读是 prior 流量, 过密会饿死
+            // L2 tile 派发, 故延迟链全程寄存器 (零内存流量) + 驱逐降频
+            // 1/64 轮; 可见性由写方到达驱逐 + 稀疏驱逐后的 poll miss 保证。
+            spins = spins * 2654435761u + 0x2545F491u;
+            spins = spins * 2654435761u + 0x2545F492u;
+            spins = spins * 2654435761u + 0x2545F493u;
+            spins = spins * 2654435761u + 0x2545F494u;
+            spins = spins * 2654435761u + 0x2545F495u;
+            spins = spins * 2654435761u + 0x2545F496u;
+            spins = spins * 2654435761u + 0x2545F497u;
+            spins = spins * 2654435761u + 0x2545F498u;
+            spins = spins * 2654435761u + 0x2545F499u;
+            spins = spins * 2654435761u + 0x2545F49Au;
+            spins = spins * 2654435761u + 0x2545F49Bu;
+            spins = spins * 2654435761u + 0x2545F49Cu;
+            spins = spins * 2654435761u + 0x2545F49Du;
+            spins = spins * 2654435761u + 0x2545F49Eu;
+            spins = spins * 2654435761u + 0x2545F49Fu;
+            spins = spins * 2654435761u + 0x2545F4A0u;
+            __asm__ volatile("" : "+r"(spins));
+            if ((spins & 63u) == 0u) {
+                for (uint32_t k = 1; k <= 5; ++k) {
+                    (void)sEvictSpan[k * 4096u + wordOff];   // 同 set 驱逐
+                }
+            }
         }
     }
     mtCompilerBarrier();
@@ -217,10 +284,14 @@ static inline void groupToken_mt_tile(
         for (uint32_t i = 0; i < expertPerRank; i++) v[i] = 0u;
     }
 
-    // GM 往返 scratch (per-PE 私有切片, [C4] 列→行转换; bss 静态, TMA 写可靠)
-    static uint32_t minScratch[kThreadsPerBlock][4];
-    static uint32_t podScratch[kThreadsPerBlock][kSuperPodNum][4];
-    static uint32_t rankScratch[kThreadsPerBlock][4];
+    // GM 往返 scratch (per-PE 私有切片, [C4] 列→行转换; bss 静态, TMA 写可靠)。
+    // [2026-10-01 修改] 原 [kThreadsPerBlock][4] 布局使 4 PE 的 16B tile 读写
+    // 挤同一 cacheline —— gfsim 跨 PE 无 snoop, 同行并发的 16B tile 写会
+    // 互相丢更新 (mt_dyn 同源竞态的已证修复); tile 访问的 scratch 每 PE
+    // 补齐到 64B 行粒度 (pod flag p 位于 +p*4 字), cntGm 仅标量访问保持紧凑。
+    static uint32_t minScratch[kThreadsPerBlock][16];
+    static uint32_t podFlagScratch[kThreadsPerBlock][16];
+    static uint32_t rankScratch[kThreadsPerBlock][16];
     static uint32_t cntGm[kThreadsPerBlock];
 
     using TilePerPE = Tile<Location::Vec, uint32_t, 4, kTileN, BLayout::RowMajor>;
@@ -269,7 +340,7 @@ static inline void groupToken_mt_tile(
             TSEL(sel, pred, onev);
             TRed4 flagCol;
             TROWMAX(flagCol, sel);
-            G4x1 gFlagW(podScratch[tid][p]);
+            G4x1 gFlagW(podFlagScratch[tid] + p * 4u);   // [2026-10-01 修改] 64B 行内 +p*4 字
             TSTORE(gFlagW, flagCol);
         }
 
@@ -314,7 +385,7 @@ static inline void groupToken_mt_tile(
         // 6. perPePodInfo[(...)*spn + p] = podFlag_p
         for (uint32_t p = 0; p < superPodNum; ++p) {
             TCol4 flagRow;
-            G1x4 gFlagR(podScratch[tid][p]);
+            G1x4 gFlagR(podFlagScratch[tid] + p * 4u);   // [2026-10-01 修改] 64B 行内 +p*4 字
             TLOAD(flagRow, gFlagR);
             TCol4 po;
             TMULS(po, offE, superPodNum);

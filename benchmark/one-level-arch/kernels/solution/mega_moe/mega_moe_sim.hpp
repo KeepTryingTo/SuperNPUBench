@@ -37,6 +37,17 @@
  * 仿真绑定说明: gfrun 功能仿真器对"经函数指针参数间接写 GM"支持不完整 (仓库既有
  * 限制: moe_dispatch_v2 / group_token_vec 自校验用例同因 R2=1), 本实现保留源
  * 签名 (指针入参), 计算一律绑定 GM 全局缓冲, 逻辑与指针签名语义完全等价。
+ *
+ * [2026-10-04 修复注] gfsim (TimingSim) 默认 single-PE 下 test-finisher
+ * val=0x0001 FAIL 的根因是 tokOut 统计导出走 mm_count_eq_i32 的
+ * tile-store→标量回读通路, 而该模型构建的 TLSU tile-store→GM 数据通路
+ * 存在缺口 (TSTORE 架构不可见, 同根因见模型 known-gap-list memory 类
+ * gmov/mscatter/timg2col 微基准)。已改为标量等值计数 (语义一致, 三端
+ * gfrun/gfsim/真机通用), 详见同目录 mega_moe_sim_gfsim_fix_report.md。
+ * 另: 本算子 y 输出在 gfsim 下同样受模型 tile-store 缺口影响 (y=0),
+ * 仅因测试数据 E8M0 scale=0x00 使 golden ~1e-113 而弱校验通过——
+ * gfsim PASS ≠ tile 流水数值全验证, 功能正确性以 gfrun R2=0 为准
+ * (报告 §6 详述与数据侧建议)。
  */
 
 #include <common/pto_tileop.hpp>
@@ -430,8 +441,16 @@ MM_INLINE void mx_token_compute(const MxTileScratch& s,
     }
 
     // Combine (源 ProcessCombineExperts): yAcc = Σ_kk weight·y3 (VEC tile)
+    // [2026-10-04 修复] 改用全宽 [1×32] 静态块 tile (无 ValidRow 掩码):
+    // 原 MxChainF32 [1×64,v1×32] 的 tile store 在 gfsim 下存在 valid 泄漏
+    // (物理 256B 越过 valid 128B 写入相邻行, [C6] "动态 ValidRow 链泄漏
+    // lane" 同类) —— 末端 combineRow 相邻 token 行互相覆写, 末 token 的
+    // 泄漏半幅残留垃圾 (实测 y[14..15] 行恒 2.0f) → 数值自检 FAIL。
+    // 全宽块无掩码不泄漏 ([C6] 静态块二元分解同款); 中段 (xf16/y1/y2f16)
+    // 的泄漏被程序序后续 store 全幅覆写, 无需修改。
+    using MxFullF32 = Tile<Location::Vec, float, 1, 32, BLayout::RowMajor>;
     for (uint32_t c = 0U; c < h; c += 32U) {
-        MxChainF32 t;
+        MxFullF32 t;
         global_tensor<float, RowMajor<1, 32>> gT(s.y3 + c);
         TLOAD(t, gT);
         TMULS(t, t, weight);
@@ -439,7 +458,139 @@ MM_INLINE void mx_token_compute(const MxTileScratch& s,
         if (kk == 0U) {
             TSTORE(gAcc, t);
         } else {
-            MxChainF32 acc;
+            MxFullF32 acc;
+            TLOAD(acc, gAcc);
+            TADD(acc, acc, t);
+            TSTORE(gAcc, acc);
+        }
+    }
+}
+
+// ============================================================================
+// [2026-10-04 修复] 预量化辅助 (mega_moe_sim_mt 专用; sim/mt_dyn 不受影响)
+//
+// 根因: mx_token_compute 内联的 "x 量化 TSTORE(xf16) → GEMM1 TLOAD_CUBE
+// (xf16)" GM 往返对在块流上是相邻块 (量化循环尾 → GEMM1 循环头)。gfsim
+// 的依赖预测器在首次执行时无法证明同址, OOO 投机的 load 越过 store 触发
+// nuke (实测 ld_bid/st_bid 相邻, cycle≈313.5k); nuke 的 flush 恢复在
+// tile 域存在丢状态缺陷 —— 落飞窗口内其它 PE 在飞 tile 链的 TMULS 结果
+// 丢失, 依赖它的 TSTORE 以默认数据 (2.0f) 提交 (实测 combine[14..15] 行
+// 恒 2.0f → y 数值自检 FAIL; 换布局则退化为 ResVerify 死锁, 详见
+// mega_moe_sim_mt_gfsim_fix_report.md §5)。
+// 修复: 把全部本 PE token 的 x 量化提前为独立一遍 (mx_quantize_row),
+// 主循环改用 mx_token_compute_pre 消费预量化结果 —— 量化 store 与 GEMM
+// load 之间隔整个预量化批次, store 早已 resolve, 不再触发首次碰撞 nuke。
+// ============================================================================
+MM_INLINE void mx_quantize_row(const float* xRow, __half* dst, uint32_t h)
+{
+    for (uint32_t c = 0U; c < h; c += 32U) {
+        MxChainF32 xf;
+        global_tensor<float, RowMajor<1, 32>> gX(
+            const_cast<float*>(xRow) + c);
+        TLOAD(xf, gX);
+        MxChainF16 xh;
+        TCVT(xh, xf);
+        global_tensor<__half, RowMajor<1, 32>> gXH(dst + c);
+        TSTORE(gXH, xh);
+    }
+}
+
+// mx_token_compute 的预量化变体: 跳过内部量化, GEMM1 A 侧直接读预量化
+// xf16 槽 (其余阶段与 mx_token_compute 逐行一致)
+MM_INLINE void mx_token_compute_pre(const MxTileScratch& s,
+                                            const __half* xf16Pre, uint32_t h,
+                                            uint32_t hd, uint32_t epr,
+                                            uint32_t expert, float weight,
+                                            uint32_t kk, float* combineRow)
+{
+    // GMM1 (源 ProcessGmm1Wave): y1[n] = Σ_k x[k]·w1[e][k][n]  (A 侧 = 预量化槽)
+    for (uint32_t n0 = 0U; n0 < hd; n0 += 32U) {
+        MxGemvDst d;
+        {
+            MxGemvVec v;
+            global_tensor<__half, RowMajor<1, 32>> gV(
+                const_cast<__half*>(xf16Pre));
+            TLOAD_CUBE(v, gV);
+            MxGemvMtx m;
+            global_tensor<__half, RowMajor<-1, -1>> gM(
+                s.w1F16 + expert * h * hd + n0, 32, hd);
+            TLOAD_CUBE(m, gM);
+            TGEMV_MX(d, m, v, fixp::keep_acc());
+        }
+        for (uint32_t k0 = 32U; k0 < h; k0 += 32U) {
+            MxGemvVec v;
+            global_tensor<__half, RowMajor<1, 32>> gV(
+                const_cast<__half*>(xf16Pre) + k0);
+            TLOAD_CUBE(v, gV);
+            MxGemvMtx m;
+            global_tensor<__half, RowMajor<-1, -1>> gM(
+                s.w1F16 + expert * h * hd + k0 * hd + n0, 32, hd);
+            TLOAD_CUBE(m, gM);
+            TGEMV_MX_ACC(d, d, m, v, fixp::keep_acc());
+        }
+        global_tensor<float, RowMajor<1, 32>> gY1(s.y1 + n0);
+        TSTORE_CUBE(gY1, d);
+    }
+
+    // SwiGLU (源 Gmm1SwigluState): y2 = silu(y1[:hd/2]) * y1[hd/2:]  (VEC 链)
+    for (uint32_t c = 0U; c < hd / 2U; c += 32U) {
+        MxChainF32 a, b;
+        global_tensor<float, RowMajor<1, 32>> gA(s.y1 + c);
+        TLOAD(a, gA);
+        global_tensor<float, RowMajor<1, 32>> gB(s.y1 + hd / 2U + c);
+        TLOAD(b, gB);
+        MxChainF32 neg, e, one, r, sig;
+        TMULS(neg, a, -1.0f);
+        TEXP(e, neg);
+        TADDS(one, e, 1.0f);
+        TRECIP(r, one);
+        TMUL(sig, a, r);
+        TMUL(sig, sig, b);
+        MxChainF16 h16;
+        TCVT(h16, sig);
+        global_tensor<__half, RowMajor<1, 32>> gY2(s.y2f16 + c);
+        TSTORE(gY2, h16);
+    }
+
+    // GMM2 (源 ProcessGmm2Wave): y3[n] = Σ_k y2[k]·w2[e][k][n]
+    for (uint32_t n0 = 0U; n0 < h; n0 += 32U) {
+        MxGemvDst d;
+        {
+            MxGemvVec v;
+            global_tensor<__half, RowMajor<1, 32>> gV(s.y2f16);
+            TLOAD_CUBE(v, gV);
+            MxGemvMtx m;
+            global_tensor<__half, RowMajor<-1, -1>> gM(
+                s.w2F16 + expert * (hd / 2U) * h + n0, 32, h);
+            TLOAD_CUBE(m, gM);
+            TGEMV_MX(d, m, v, fixp::keep_acc());
+        }
+        for (uint32_t k0 = 32U; k0 < hd / 2U; k0 += 32U) {
+            MxGemvVec v;
+            global_tensor<__half, RowMajor<1, 32>> gV(s.y2f16 + k0);
+            TLOAD_CUBE(v, gV);
+            MxGemvMtx m;
+            global_tensor<__half, RowMajor<-1, -1>> gM(
+                s.w2F16 + expert * (hd / 2U) * h + k0 * h + n0, 32, h);
+            TLOAD_CUBE(m, gM);
+            TGEMV_MX_ACC(d, d, m, v, fixp::keep_acc());
+        }
+        global_tensor<float, RowMajor<1, 32>> gY3(s.y3 + n0);
+        TSTORE_CUBE(gY3, d);
+    }
+
+    // Combine (源 ProcessCombineExperts): 与 mx_token_compute 同款全宽块
+    using MxFullF32 = Tile<Location::Vec, float, 1, 32, BLayout::RowMajor>;
+    for (uint32_t c = 0U; c < h; c += 32U) {
+        MxFullF32 t;
+        global_tensor<float, RowMajor<1, 32>> gT(s.y3 + c);
+        TLOAD(t, gT);
+        TMULS(t, t, weight);
+        global_tensor<float, RowMajor<1, 32>> gAcc(combineRow + c);
+        if (kk == 0U) {
+            TSTORE(gAcc, t);
+        } else {
+            MxFullF32 acc;
             TLOAD(acc, gAcc);
             TADD(acc, acc, t);
             TSTORE(gAcc, acc);
@@ -449,10 +600,14 @@ MM_INLINE void mx_token_compute(const MxTileScratch& s,
 
 // VEC tile 行拷贝 (UnpermuteTokens 用)
 // 去掉inline，修复编译告警
+// [2026-10-04 修复] 改用全宽 [1×32] 静态块 tile (原 MxChainF32 [1×64,v1×32]
+// 的 valid 泄漏会把物理 256B 的无效半幅写入相邻 token 行, 见 mx_token_compute
+// Combine 处同款修复注; 本拷贝是 y 输出的最后一环, 泄漏直接残留到 y)。
 MM_INLINE void mx_copy_row_tile(const float* src, float* dst, uint32_t h)
 {
+    using MxFullF32 = Tile<Location::Vec, float, 1, 32, BLayout::RowMajor>;
     for (uint32_t c = 0U; c < h; c += 32U) {
-        MxChainF32 v;
+        MxFullF32 v;
         global_tensor<float, RowMajor<1, 32>> gSrc(const_cast<float*>(src) + c);
         TLOAD(v, gSrc);
         global_tensor<float, RowMajor<1, 32>> gDst(dst + c);
@@ -1183,21 +1338,29 @@ void mega_moe_sim_kernel(float* yOut, float* xIn, int64_t* tokOut)
                 stats[core * tilingData.moeExpertPerRank + e] = static_cast<int32_t>(cnt);
             }
         }
-        // tokOut 导出: 全域等值计数 tile 化 (mm_count_eq_i32: TCMPS<EQ>+
-        // TSEL+TROWSUM+TSTORE → 标量读回; topK==1 时原 stride 循环与全域
-        // 计数等价, 违例走原标量循环)
+        // tokOut 导出: 统计计数
+        // [2026-10-04 修复] 原实现 topK==1 时走 mm_count_eq_i32 tile 计数链
+        // (TLOAD+TCMPS+TSEL+TROWSUM+TSTORE → scratch 标量读回, "qli CountChunk
+        // 同款")。gfsim (TimingSim HEAD 9905a05f) 的 TLSU tile-store→GM 数据
+        // 通路存在缺口: TSTORE 执行后在架构内存中不可见 (探针实测——链后
+        // 立即/延迟/非缓存读均为 0, scratch 终值保持预填模式; 同根因见模型
+        // known-gap-list 的 memory 类 gmov/mscatter/timg2col 微基准, gmov
+        // 纯 TLOAD→TSTORE 用例直接挂死)。由此 mm_count_eq_i32 恒返 0 →
+        // tokOut=(0,0), golden=(8,8) → test-finisher val=0x0001 FAIL (实测
+        // mega_moe_sim 默认 single-PE @1,058,314 cycle)。gfrun 功能模型 tile
+        // 操作同步执行, 同一 elf R2=0 全对。
+        // 修复: 本导出点计数长度仅 bs*topK(=16) 个元素, 直接走标量等值
+        // 计数循环 (与 mm_count_eq_i32 的 <4 标量尾/topK!=1 兜底同款语义),
+        // 不依赖 tile-store 回读通路——gfrun/gfsim/真机三端语义一致。
+        // 注: y 输出校验不受此修复影响 (tile GMM 流水输出); gfsim 下 y 与
+        // golden 的数值比对在本数据分布 (E8M0 scale=0x00, golden ~1e-113)
+        // 为弱校验, 详见同目录 mega_moe_sim_gfsim_fix_report.md §6。
         // 注: volatile 阻止相邻 i64 写入被合并为 16B tile store (BLK_TSTORE v2i64)
         volatile int64_t* tokExport = tokOut;
         for (uint32_t e = 0; e < tilingData.moeExpertPerRank; ++e) {
             uint32_t cnt = 0U;
-            if (tilingData.topK == 1U) {
-                cnt = mm_count_eq_i32(g_mmTopkIds,
-                                      tilingData.bs * tilingData.topK,
-                                      static_cast<int32_t>(e));
-            } else {
-                for (uint32_t t = 0; t < tilingData.bs; ++t) {
-                    if (static_cast<uint32_t>(g_mmTopkIds[t * tilingData.topK]) == e) ++cnt;
-                }
+            for (uint32_t t = 0; t < tilingData.bs; ++t) {
+                if (static_cast<uint32_t>(g_mmTopkIds[t * tilingData.topK]) == e) ++cnt;
             }
             tokExport[e] = static_cast<int64_t>(cnt);
         }

@@ -144,16 +144,31 @@ int main() {
         }
     }
 
-    // Verification runs on PE0 only (all outputs are visible after the
-    // kernel's final barrier). Non-leader PEs return right away: since the
-    // 09-01 functional-model change (direct-boot PE exits are independent)
-    // a worker's exit no longer truncates PE0's verification, and each PE
-    // terminating itself lets the simulation finish cleanly.
-    if (tid != 0) {
-        return 0;
+    // [2026-10-06 修复] cfgB 验证汇合屏障 (相位 13 = 8*1+5, 本轮 kernel 内部
+    // 用 9..12) —— 替换原 "worker 直接 return": 原实现 worker (tid!=0) 在
+    // c-loop 末端直接 `return 0`, 先于 PE0 到达 _end 退出 ecall 并 park 到
+    // 退出 lockstep AND 组; PE0 独占的 cfgB 验证 (verify 的 expert×slot 扫描
+    // + 逐 slot×h 的 expandXOut 逐位比对, gfsim fourpe 标量侧 ~4x 减速下
+    // >10^4 cycle) 使退出 AND 组停在 ready=3/4 超过 T_deadlock=9999 →
+    // SyscallBarrier.cpp:1889 断言截断 (实测确定性复现 @ cycle 45,448,
+    // ready=3/4, bpc=0x11390, 无 stats)。"direct-boot 下各 PE 退出相互独立"
+    // 仅对 gfrun 功能模型成立, gfsim 时序模型的退出 ecall 仍按 lockstep
+    // AND 组汇聚。
+    // 修复镜像 group_token_old_mt / group_token_vec_mt / mega_moe 家族的
+    // 已证方案 (cfgA 的 mtBarrier(5) 汇合在本驱动已存在且 gfsim 实证可用,
+    // cfgB 补齐同款): 验证在 worker 存活期间执行 (worker 在汇合屏障自旋
+    // 而非 park 到退出 lockstep), PE0 验证完成后全 PE 一起放行、同时到达
+    // _end, 消除 ready=3/4 长时停滞。
+    int ret = 0;
+    if (tid == 0) {
+        if (failA != 0) {
+            ret = failA;                             // cfgA: 静态版同款诊断码
+        } else {
+            int rcB = verify(cfgs[1][0], cfgs[1][1], cfgs[1][2], cfgs[1][3]);
+            ret = (rcB == 0) ? 0 : 10 + rcB;         // cfgB: +10 偏移诊断码
+        }
     }
+    mtBarrier(8U * 1U + 5U);   // cfgB 验证汇合 (kernel 单调相位 9..12 之后)
 
-    if (failA != 0) return failA;                    // cfgA: 静态版同款诊断码
-    int rcB = verify(cfgs[1][0], cfgs[1][1], cfgs[1][2], cfgs[1][3]);
-    return rcB == 0 ? 0 : 10 + rcB;                  // cfgB: +10 偏移诊断码
+    return ret;
 }
