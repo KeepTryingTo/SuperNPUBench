@@ -1,4 +1,4 @@
-// rms_norm_dynamic_tree_32k: default test shape [128,8192].
+// rms_norm_dynamic_tree_32k: default test shapes [128,8192] and [32,16384].
 // Dynamic 4PE implementation with FP32 Tile=[32,256] (32 KiB).
 // Full 8192-element R blocks; up to 16 blocks. Original 2 KiB kernel is unchanged.
 // R <= 8192: one block, reduced entirely in Tiles (no workspace).
@@ -149,47 +149,55 @@ inline void rms_norm_tile(dtype *x, const dtype *gamma, dtype *out,
 template <typename dtype, typename gm_t, typename tile_h, typename tile_f,
           typename tile_m_v, typename tile_s_wide>
 inline void rms_norm_tile_single_block(dtype *x, const dtype *gamma,
-                                       dtype *out, int64_t gR, int64_t a_off,
+                                       dtype *out, int64_t gR, int64_t peA,
                                        float inv_r) {
-    const int64_t offset = a_off * gR;
     const int64_t curtile_factal_r = (gR + 31) / 32;
     const int64_t curtile_factal_a =
         (gR + curtile_factal_r - 1) / curtile_factal_r;
-    gm_t gi(x + offset, static_cast<int>(curtile_factal_a),
-            static_cast<int>(curtile_factal_r));
+    // Gamma is identical for every row. Load it once here so the FP32 tile
+    // and the per-row TMUL destination share this function's M carrier.
     gm_t gg(const_cast<dtype *>(gamma), static_cast<int>(curtile_factal_a),
             static_cast<int>(curtile_factal_r));
-    gm_t go(out + offset, static_cast<int>(curtile_factal_a),
-            static_cast<int>(curtile_factal_r));
-    tile_h h(curtile_factal_a, curtile_factal_r),
-        gh(curtile_factal_a, curtile_factal_r);
-    tile_f src(curtile_factal_a, curtile_factal_r),
-        sq(curtile_factal_a, curtile_factal_r),
-        gf(curtile_factal_a, curtile_factal_r),
-        normalized(curtile_factal_a, curtile_factal_r),
-        dst(curtile_factal_a, curtile_factal_r);
-    TLOAD(h, gi);
-    TCVT(src, h);
-    TMUL(sq, src, src);
+    tile_f gf(curtile_factal_a, curtile_factal_r);
+    {
+        tile_h gh(curtile_factal_a, curtile_factal_r);
+        TLOAD(gh, gg);
+        TCVT(gf, gh);
+    }
+    for (int64_t ia = 0; ia < peA; ++ia) {
+        const int64_t offset = ia * gR;
+        gm_t gi(x + offset, static_cast<int>(curtile_factal_a),
+                static_cast<int>(curtile_factal_r));
+        gm_t go(out + offset, static_cast<int>(curtile_factal_a),
+                static_cast<int>(curtile_factal_r));
+        // h_in and h_out are distinct Tiles: the next row's TLOAD must not WAW
+        // against this row's in-flight TSTORE.
+        tile_h h_in(curtile_factal_a, curtile_factal_r),
+            h_out(curtile_factal_a, curtile_factal_r);
+        tile_f src(curtile_factal_a, curtile_factal_r),
+            sq(curtile_factal_a, curtile_factal_r),
+            dst(curtile_factal_a, curtile_factal_r);
+        TLOAD(h_in, gi);
+        TCVT(src, h_in);
+        TMUL(sq, src, src);
 
-    // TCOLSUM requires the destination to keep the source physical columns,
-    // so the scalar lives in a [1,256] Tile here instead of [1,8].
-    tile_m_v row_sums(curtile_factal_a);
-    TROWSUM(row_sums, sq);
-    tile_s_wide tile_sum, mean, denom, rms;
-    TCOLSUM(tile_sum, row_sums);
-    TMULS(mean, tile_sum, inv_r);
-    TADDS(denom, mean, kEpsilon);
-    rsqrt_regbase(rms, denom);
+        // TCOLSUM requires the destination to keep the source physical columns,
+        // so the scalar lives in a [1,256] Tile here instead of [1,8].
+        tile_m_v row_sums(curtile_factal_a);
+        TROWSUM(row_sums, sq);
+        tile_s_wide tile_sum, mean, denom, rms;
+        TCOLSUM(tile_sum, row_sums);
+        TMULS(mean, tile_sum, inv_r);
+        TADDS(denom, mean, kEpsilon);
+        rsqrt_regbase(rms, denom);
 
-    tile_m_v rms_rows(curtile_factal_a);
-    TCOLEXPAND(rms_rows, rms);
-    TLOAD(gh, gg);
-    TCVT(gf, gh);
-    TROWEXPANDMUL(normalized, src, rms_rows);
-    TMUL(dst, normalized, gf);
-    TCVT(h, dst);
-    TSTORE(go, h);
+        tile_m_v rms_rows(curtile_factal_a);
+        TCOLEXPAND(rms_rows, rms);
+        TROWEXPANDMUL(dst, src, rms_rows);
+        TMUL(dst, dst, gf);
+        TCVT(h_out, dst);
+        TSTORE(go, h_out);
+    }
 }
 
 } // namespace rms_detail_simt_dynamic_tree_32k
@@ -246,11 +254,9 @@ void rms_norm_dynamic_tree_32k(dtype *x, const dtype *gamma,
     if (gR <= tile_r) {
         using tile_s_wide = Tile<Location::Vec, float, 1, 256,
                                  BLayout::CubeM32, 1, 1>;
-        for (int64_t ia = 0; ia < peA; ++ia) {
-            rms_detail_simt_dynamic_tree_32k::rms_norm_tile_single_block<
-                dtype, gm_t, tile_h, tile_f, tile_m_v, tile_s_wide>(
-                x, gamma, out, gR, ia, inv_r);
-        }
+        rms_detail_simt_dynamic_tree_32k::rms_norm_tile_single_block<
+            dtype, gm_t, tile_h, tile_f, tile_m_v, tile_s_wide>(
+            x, gamma, out, gR, peA, inv_r);
         return;
     }
 
