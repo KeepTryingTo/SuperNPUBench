@@ -2,16 +2,14 @@
 #include <cstdint>
 #include "fileop.h"
 #include "multi_thread_res_check.h"  // 官方 4-PE 收尾协议（输入/输出屏障 + PE0 落盘）
-#include "solution/quant/dynamic_mx_quant/dynamic_mx_quant_tail_ocp_fp8_dyn_V2-10101002.hpp"  // V2：Cube_M32 dyn（时间戳存档，canonical 头留给后续优化）
+#include "solution/quant/dynamic_mx_quant/dynamic_mx_quant_tail_ocp_fp8_dyn_V3-10101714.hpp"  // V3：2D 切分版（时间戳存档，canonical 头留给后续优化）
 using namespace supernpu::tile_isa::mxquant;
 
-// TAIL_OCP_FP8 bench_small 的 **V2（Cube_M32 布局）动态 shape** 版：[M=64, N=16384], BS=32,
-//   bf16 in -> e4m3 out。与 V1（tail_ocp_fp8_bench_small_V1_dyn.cpp，RowMajor dyn）同规格/同数据/
-//   同 golden，仅 kernel 布局不同：V2 走 CUBE_M32（VecTileM32 + #311 归约 + TREDUCEPREFIXVIEW）。
-//   依赖 Linx-TileOP-API#187（reduction-prefix 发射补上动态 ValidRow 的寄存器 B.DIM 分支
-//   `B.DIM %[reg],0` + `"r"(src.GetValidRow())`，PR#189）+ #180（B.DATR NORM）+ SuperScalarModel#749，
-//   均已合入上游 main → 现编译 + gfrun 4-PE 逐字节 PASS，与 V1 一致。（曾在 #187 未落地时因动态
-//   ValidRow=-1 塞进无符号 uimm 发出 `B.DIM zero, -1` → Match Instruction Error 编译阻塞，作 witness。）
+// TAIL_OCP_FP8 bench_small 的 **V3（优化版）动态 shape** driver：[M=64, N=16384], BS=32,
+//   bf16 in -> e4m3 out。与 V1（RowMajor dyn）/V2（Cube_M32 dyn，钉 _V2-10101002 存档头）
+//   **同规格/同数据/同 golden**，三 driver 并列对比。V3 include canonical 头
+//   dynamic_mx_quant_tail_ocp_fp8_dyn.hpp —— 优化改动一律落在 canonical 头上。
+//   当前 canonical == V2 内容（优化尚未开始），本用例先行打通验证链。
 //   固定 SPMD 4-PE：M 按 tid 切 4 份，每 PE 16 行。numKb = 16384/32 = 512。必须 4 线程跑：
 //   gfrun -s softcore.multiThreadNum=4。
 //   RES_CHECK：读 gen（--M 64 --K 16384 --block-size 32 --algo OCP --kernel tail --dtype FP8

@@ -72,22 +72,21 @@ constexpr int tilem_max(int blockSize) {
 //   必须用 4 线程跑 (gfrun -s softcore.multiThreadNum=4 / gfsim --conf fourpe)；单线程跑本
 //   变体只会写 1/4 输出。
 //
-// 2D 切分模型（V3，与 dyn 版同公式；替代旧「L1 均分行 + L2 段内 tiling」两级模型）：
-//   M 按 TileM=32 切成 rowTiles 个行 tile，行方向铺 peRows=min(rowTiles,4) 个 PE（tile
-//   粒度均分、连续区间，前 rem 个 lane 各 +1 tile）；行方向用不满 4 PE 时，剩余 PE 切到
-//   N 轴（peCols=4/peRows：rowTiles=1→1×4、=2→2×2、=3→3×1〔PE3 闲〕、>=4→4×1）。
-//   kb（列块）区间在 colLane 间均分（前 rem 个各 +1 kb，连续区间）——kb 块沿 N 两两独立，
-//   y/scale 以全局 kb 寻址，PE 间 store 天然不重叠；oddTail 补齐列由持有最末 kb 的 PE 写。
-//   动机（2026-10-10 性能分析）：瓶颈 = per-kb 串行链周期 × 每 PE 链数（PipeView 实测链
-//   ~350cyc、Vector BLOCK Retire 均值 ~1.2K；STQ 99.61% 在等生产者数据）。旧均分下 M<128
-//   每 PE 扫全 N 且 tile 半幅（M=64：4PE×16行×512链）；2D 切分让链数/PE 随 peCols 减少
-//   （M=64 → 4PE 各 32 行×256 链满幅，实测 1.45×）。
-//   实现：kPeNum 编译期已知 → 按 TID 编译期展开 (模板 lambda)，切分参数均为 constexpr，
-//   满足 boxed 尾块 tile 的 validRow 编译期常量要求；运行期 switch(tid) 分派。
+// 两级切分模型：
+//   L1 (行切分, 定 SubM)：把 M 行尽量均分给 kPeNum 个 PE，每个 PE 拿一段 **连续** 行区间
+//     [row_begin, row_begin+SubM)；行数余数 (M%kPeNum) 按连续块规则分给前几个 PE (前 row_rem
+//     个各多 1 行, 起点仍连续, 不散布)，负载均衡 Δ≤1，每 PE 数据连续利于 TMA/缓存。
+//   L2 (段内 tiling, 定 TileM)：TileM = **仅由 blocksize 决定的固定上限** (tilem_max, BS=32→64,
+//     受 fp32 中间量 tile<=8KB 约束, 且取 2 的幂避免 LLVM getSimpleVT 崩)；**不能把 SubM 当 tile
+//     行** (SubM 可远大于 64, 直接当行会爆 8KB)。SubM 只决定循环次数：
+//     seg_full = SubM/TileM 个 full-tile + seg_tail = SubM%TileM 余行 boxed 尾块。
+//   例 M=680,4PE: 各 170 行 = 2×64 full + 42 tail；M=1024,4PE: 各 256 = 4×64 full + 0 tail。
+//   实现：kPeNum 编译期已知 → 按 TID 编译期展开 (模板 lambda)，令 SubM/row_begin/seg_tail 均为
+//   constexpr，满足 boxed 尾块 tile 的 validRow 编译期常量要求；运行期 switch(tid) 分派。
 //
-// 约束：BS=32/half·fp32 (守住 TROWMAX/TROWEXPANDMUL 私有通路两道门)。M/N 任意 (N%BS==0，
-//   尾块 tile 自理)。注：M%32≠0 的最后全局 tile 会触碰 boxed sub-TileM reduce→TCVT
-//   形状契约缺陷 (全 mx_quant 家族共有, 见 RECORD 问题22 /
+// 约束：BS=32/half·fp32 (守住 TROWMAX/TROWEXPANDMUL 私有通路两道门)。M/full_m 任意 (行粒度
+//   均分, 尾块段内自理)。注：seg_tail>0 (M 非 TileM 整除) 会触碰 boxed sub-TileM reduce→TCVT
+//   reduce→TCVT 形状契约缺陷 (全 mx_quant 家族共有, 见 RECORD 问题22 /
 //   ISSUE_reduce_output_stride_tail.md)，该缺陷独立于本切分模型。
 // ===========================================================================
 template <int M, int N, int BlockSize = 32, typename InT = __half>
@@ -126,14 +125,11 @@ void dynamic_mx_quant_tail_ocp_fp8(InT *x, __fp8_e4m3 *y, uint8_t *scale) {
     using gm_s = global_tensor<__fp8_e8m0, RowMajor<M, scaleCols>>;
 
     // 单个 tile-行块的完整计算 (scale pass + data pass)。ValidRows = 该 tile 活跃行数
-    //   (full-tile: TileM；尾块: M%32≠0 的最后全局 tile，boxed)。row0 = 该 tile 的全局起始行。
+    //   (full-tile: TileM；尾块: seg_tail<TileM，boxed)。row0 = 该 tile 的全局起始行。
     //   物理 tile 恒 TileM×BlockSize (logicalTileBytes>=512B，避免 sub-512B spill)，boxed
     //   ValidRow=ValidRows 只触碰活跃行。base 指针按 row0 偏移，段起点可非 TileM 对齐。
-    // TileMv = 该 PE 的物理 tile 行高 (固定 32，CUBE_M32 cell)。kb 区间 [kbBegin, kbBegin+kbCount)
-    //   为 2D 切分下本 PE 分到的列块范围（全局 kb 索引，store 天然不重叠）；
-    //   ownsLastKb = 本 PE 持有最末 kb（oddTail 补齐列归属）。
-    auto process_tile = [&]<int TileMv, int ValidRows>(int row0, int kbBegin,
-                                                       int kbCount, bool ownsLastKb) {
+    // TileMv = 该 PE 的物理 tile 行高 (per-PE 编译期常量, 由 tilem_max 推得, 2 的幂)。
+    auto process_tile = [&]<int TileMv, int ValidRows>(int row0) {
         // 【M32 版】编译期 ValidRows（满足 TREDUCEPREFIXVIEW asm 立即数约束）。
         //   #311 归约输出宽 carrier（physical Col=BlockSize、valid Col=1）→ TREDUCEPREFIXVIEW 取首个
         //   128B CELL 窄视图 → TADD(zero+view) materialize 成普通窄 tile → 标量链全在窄 tile 上。
@@ -148,7 +144,7 @@ void dynamic_mx_quant_tail_ocp_fp8(InT *x, __fp8_e4m3 *y, uint8_t *scale) {
         using t_f   = VecTileM32<float,      TileMv, BlockSize, ValidRows, BlockSize>; // data-pass fp32
         using t_o   = VecTileM32<__fp8_e4m3, TileMv, BlockSize, ValidRows, BlockSize>; // 输出
 
-        for (int kb = kbBegin; kb < kbBegin + kbCount; ++kb) {
+        for (int kb = 0; kb < numKb; ++kb) {
             // === scale pass：M32 全宽 load 一次（[TileMv,BlockSize]=2048B 免 #585 切片），行归约 ===
             global_iterator<gm_x, t_blk> x_iter(x + row0 * N + kb * BlockSize);
             auto gx = x_iter(0, 0);
@@ -222,78 +218,39 @@ void dynamic_mx_quant_tail_ocp_fp8(InT *x, __fp8_e4m3 *y, uint8_t *scale) {
             global_iterator<gm_y, t_o> y_iter(y + row0 * N + kb * BlockSize);
             auto gy = y_iter(0, 0); TSTORE(gy, oq);
         }
-        // 奇尾 scale 列补 0x00 E8M0（numKb 奇数）：2D 切分下同一行 tile 的 kb 区间分属多个
-        //   PE，补齐列只由持有最末 kb 区间者写（ownsLastKb），保证每行恰好写一次。
-        //   构造链（两个约束叠加）：① TEXPANDS dtype 白名单无 E8M0 → 先产 bf16 再 TCVT；
-        //   ② e8m0 无法表示 0（模型 ConvertFloatToE8M0：零输入→0xFF invalid），而 ADR-0101
-        //   契约 pad = 2^-127（byte 0x00）→ 用 bf16 subnormal 0x0040（=2^-127）经 TCVT
-        //   精确落 byte 0x00。V1/V2 存档用 TEXPANDS-e8m0 非法元组（奇 numKb 触发 emulator
-        //   断言；历史用例 numKb 全偶从未暴露）。
         if constexpr (oddTail) {
-            if (ownsLastKb) {
-                t_row zpad_bf;
-                TEXPANDS(zpad_bf, __builtin_bit_cast(__bf16, static_cast<uint16_t>(0x0040)));  // 2^-127
-                t_e8b zpad;
-                TCVT(zpad, zpad_bf);     // bf16 2^-127 -> e8m0 0x00
-                global_iterator<gm_s, t_e8b> zs_iter(
-                    reinterpret_cast<__fp8_e8m0 *>(scale) + row0 * scaleCols + numKb);
-                auto gzs = zs_iter(0, 0); TSTORE(gzs, zpad);
-            }
+            t_e8b zpad;
+            TEXPANDS(zpad, __builtin_bit_cast(__fp8_e8m0, static_cast<uint8_t>(0)));
+            global_iterator<gm_s, t_e8b> zs_iter(
+                reinterpret_cast<__fp8_e8m0 *>(scale) + row0 * scaleCols + numKb);
+            auto gzs = zs_iter(0, 0); TSTORE(gzs, zpad);
         }
     };
-    // 单个 PE (编译期常量 Pe) 的驱动（V3 2D 切分，与 dyn 版同公式）：
-    //   M 按 TileM=32 切 rowTiles 个行 tile，行方向铺 peRows=min(rowTiles,4) 个 PE（tile
-    //   粒度均分、连续区间：前 rem 个 lane 各 +1 tile）；行方向用不满 4 PE 时剩余 PE 切到
-    //   N 轴（peCols=4/peRows，仅整除时>1：rowTiles=1→1×4、=2→2×2、=3→3×1〔PE3 闲〕、
-    //   >=4→4×1）。kb 区间在 colLane 间均分（前 rem 个各 +1 kb）。全部 constexpr → 满足
-    //   boxed 尾块 validRow 编译期常量要求（TREDUCEPREFIXVIEW 立即数约束）。
-    //   注：rowTiles>=4 且不被 4 整除时 tile 粒度有 ±1 tile 负载差（如 M=160 → 2:1:1:1），
-    //   换取全部满幅链；此类形状旧均分更均衡，属已知取舍。
+    // 单个 PE (编译期常量 Pe) 的驱动：算自己那段连续行 [row_begin, row_begin+my_rows)，
+    // 段内先 seg_full 个 TileM full-tile，再 (若有) 一个 seg_tail 行的 boxed 尾块。
+    //   row_base = M / kPeNum;  row_rem = M % kPeNum
+    //   Pe < row_rem -> my_rows = row_base+1, row_begin = Pe*(row_base+1)  (前几个 PE 各多 1 行)
+    //   Pe >= row_rem-> my_rows = row_base,   row_begin = row_rem*(row_base+1)+(Pe-row_rem)*row_base
+    // row_begin/my_rows/seg_tail 全为 constexpr → 满足 boxed 尾块 validRow 编译期常量要求。
     auto run_pe = [&]<int Pe>() {
-        constexpr int TileM = 32;  // 【M32】CUBE_M32 cell 行高固定 32
-        constexpr int rowTiles = (M + TileM - 1) / TileM;
-        constexpr int peRows   = rowTiles < kPeNum ? rowTiles : kPeNum;
-        constexpr int peCols   = kPeNum / peRows;             // 整除：4/3→1（PE3 闲）
-        constexpr int rowLane  = Pe / peCols;
-        constexpr int colLane  = Pe % peCols;
-        if constexpr (rowLane < peRows) {
-            // 行方向：rowTiles 均分到 peRows 个 lane（前 rem 个各 +1 tile，连续 tile 区间）。
-            constexpr int tilesBase   = rowTiles / peRows;
-            constexpr int tilesRem    = rowTiles % peRows;
-            constexpr int myTiles     = tilesBase + (rowLane < tilesRem ? 1 : 0);
-            constexpr int myTileBegin =
-                rowLane * tilesBase + (rowLane < tilesRem ? rowLane : tilesRem);
-            // 列方向：numKb 均分到 peCols 个 lane（前 rem 个各 +1 kb，连续 kb 区间）。
-            constexpr int kbBase  = numKb / peCols;
-            constexpr int kbRem   = numKb % peCols;
-            constexpr int myKb    = kbBase + (colLane < kbRem ? 1 : 0);
-            constexpr int kbBegin = colLane * kbBase + (colLane < kbRem ? colLane : kbRem);
-            constexpr bool ownsLastKb = (kbBegin + myKb == numKb);   // oddTail 补齐列归属
-            if constexpr (myTiles > 0 && myKb > 0) {
-                // 最后全局 tile 由拥有它的 lane 单独处理：M%32≠0 → boxed ValidRows=M%32；
-                //   M%32==0 → lastValid=TileM（等价 full，仍走第二调用）。**不能**写成
-                //   `if constexpr (ownLastTile && M%TileM != 0) { ...<TileM, M%TileM>... }`——
-                //   clang-15(linx) 怪癖：泛型 lambda 内 if constexpr 的条件若**值依赖该
-                //   lambda 模板参 Pe**（ownLastTile 经 rowLane←Pe）且为 false，丢弃分支中
-                //   的 .template operator()<...> 调用仍被实例化（探针实证：连 `if constexpr
-                //   (Pe > 3)` 都丢弃失败；条件仅依赖外层 M 时丢弃正常，见
-                //   /tmp/opencode/probe_ifconstexpr.cpp 写法 B2/B4 vs B7/B8）。ownLastTile
-                //   天然 Pe 依赖无法规避 → 唯一稳健不变式：run_pe 内**所有**模板调用点的
-                //   实参对每个 Pe 实例化都必须合法（lastValid>=1 恒成立）。
-                //   注：旧 V2 的 `if constexpr (seg_tail > 0)` 同受此怪癖影响（seg_tail 经
-                //   SubM←Pe 依赖 Pe；M=128 时 seg_tail=0 丢弃失败会实例化 <32,0>）——只是
-                //   V2 从未编译过 M%128==0 形状而未暴露。
-                constexpr bool ownLastTile = (myTileBegin + myTiles == rowTiles);
-                constexpr int lastValid = (M % TileM) != 0 ? (M % TileM) : TileM;
-                constexpr int myFull = ownLastTile ? myTiles - 1 : myTiles;
-                for (int t = 0; t < myFull; ++t) {
-                    process_tile.template operator()<TileM, TileM>(
-                        (myTileBegin + t) * TileM, kbBegin, myKb, ownsLastKb);
-                }
-                if constexpr (ownLastTile) {
-                    process_tile.template operator()<TileM, lastValid>(
-                        (rowTiles - 1) * TileM, kbBegin, myKb, ownsLastKb);
-                }
+        // L1: 行切分 -> SubM (本 PE 连续行段行数), 前 row_rem 个 PE 各多 1 行。
+        constexpr int row_base  = M / kPeNum;
+        constexpr int row_rem   = M % kPeNum;
+        constexpr int SubM      = row_base + (Pe < row_rem ? 1 : 0);
+        constexpr int row_begin = (Pe < row_rem)
+                                      ? Pe * (row_base + 1)
+                                      : row_rem * (row_base + 1) + (Pe - row_rem) * row_base;
+        // L2: TileM = blocksize 决定的固定上限 (与 SubM 无关)；SubM 只决定循环次数。
+        //     SubM=0 (M<kPeNum 时的空 PE) -> 不发 tile。
+        if constexpr (SubM > 0) {
+            constexpr int TileM    = 32;  // 【M32】CUBE_M32 cell 行高固定 32
+            constexpr int seg_full = SubM / TileM;   // SubM>TileM 时循环多个 full-tile
+            constexpr int seg_tail = SubM % TileM;   // 余行 (< TileM), boxed 尾块
+            for (int lm = 0; lm < seg_full; ++lm) {
+                process_tile.template operator()<TileM, TileM>(row_begin + lm * TileM);
+            }
+            if constexpr (seg_tail > 0) {
+                process_tile.template operator()<TileM, seg_tail>(row_begin + seg_full * TileM);
             }
         }
     };

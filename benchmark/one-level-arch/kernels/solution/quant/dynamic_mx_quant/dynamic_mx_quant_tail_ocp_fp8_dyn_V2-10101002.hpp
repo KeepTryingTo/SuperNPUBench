@@ -30,15 +30,8 @@ namespace supernpu::tile_isa::mxquant {
 //   TCMPS/TSEL 已由 SuperScalarModel #785（按 ASL 实现 CUBE PredicateCell）修复，静态 M32
 //   版先行验证；本版为同一守卫序列在运行期 ValidRow tile 上的移植。
 //
-// 切分（V3 2D）：L1 把 M 按 TileM=32 切成 rowTiles 个行 tile，行方向铺 min(rowTiles,4) 个
-//   PE（tile 粒度均分、连续区间）；行方向用不满 4 PE 时把剩余 PE 切到 N 轴（peCols=4/peRows：
-//   rowTiles=1→1×4、=2→2×2、=3→3×1〔PE3 闲〕、>=4→4×1）。kb（列块）区间在 colLane 间均分，
-//   PE 只扫自己的 [kbBegin, kbBegin+myKb)——kb 块沿 N 两两独立，y/scale 以全局 kb 寻址，
-//   区间天然不重叠；oddTail scale 补齐列由持有最末 kb 的 PE 写（ownsLastKb）。L2 每 tile
-//   全宽 32 行（最后一个全局 tile M%32≠0 时 boxed）。
-//   动机（2026-10-10 性能分析）：瓶颈 = per-kb 串行链周期 × 每 PE 链数（PipeView 实测链 ~350cyc、
-//   Vector BLOCK Retire 均值 ~1.2K；STQ 99.61% 在等生产者数据）。旧均分下 M<128 每 PE 扫全 N
-//   且 tile 半幅（M=64：4PE×16行×512链）；2D 切分让链数/PE 随 peCols 减少（M=64 → 256 链满幅）。
+// 切分（不改）：L1 M 行按 kPeNum 均分（每 PE 连续 SubM 行）；L2 TileM=32、seg_full+seg_tail
+//   （M32 cell 32 行，SubM<32 时 boxed valid<32）；内层 kb 循环 numKb=N/BlockSize。
 // tiling：tiling[0]=M，tiling[1]=N（N%BlockSize==0）。
 // ===========================================================================
 template <int BlockSize = 32, int kPeNum = 1, typename InT = __half>
@@ -86,10 +79,9 @@ void dynamic_mx_quant_tail_ocp_fp8_dyn(InT *x, __fp8_e4m3 *y, uint8_t *scale,
     using t_f   = VecTileM32<float,      32, BlockSize, -1, BlockSize>; // data-pass fp32
     using t_o   = VecTileM32<__fp8_e4m3, 32, BlockSize, -1, BlockSize>; // 输出
 
-    auto process_tile = [&](int64_t row0, int64_t validRows, int64_t kbBegin,
-                            int64_t kbCount, bool ownsLastKb) {
+    auto process_tile = [&](int64_t row0, int64_t validRows) {
         const size_t vr = static_cast<size_t>(validRows);
-        for (int64_t kb = kbBegin; kb < kbBegin + kbCount; ++kb) {
+        for (int64_t kb = 0; kb < numKb; ++kb) {
             // === scale pass：M32 全宽 load 一次，行归约（无 #585 切片）===
             gm_x gx(x + row0 * N + kb * BlockSize,
                     static_cast<int>(M), static_cast<int>(N));
@@ -161,60 +153,34 @@ void dynamic_mx_quant_tail_ocp_fp8_dyn(InT *x, __fp8_e4m3 *y, uint8_t *scale,
                     static_cast<int>(M), static_cast<int>(N));
             TSTORE(gy, oq);
         }
-        // 奇尾 scale 列补 0x00 E8M0（numKb 奇数）：2D 切分下同一行 tile 的 kb 区间分属多个
-        //   PE，补齐列只由持有最末 kb 区间者写（ownsLastKb），保证每行恰好写一次。
-        //   构造链（两个约束叠加）：① TEXPANDS dtype 白名单无 E8M0 → 先产 bf16 再 TCVT；
-        //   ② e8m0 无法表示 0（模型 ConvertFloatToE8M0：零输入→0xFF invalid），而 ADR-0101
-        //   契约 pad = 2^-127（byte 0x00）→ 用 bf16 subnormal 0x0040（=2^-127，frac 64 ×
-        //   2^-133）经 TCVT 精确落 byte 0x00。V1/V2 存档用 TEXPANDS-e8m0 非法元组（奇
-        //   numKb 触发 emulator 断言；历史用例 numKb 全偶从未暴露）。
-        if (ownsLastKb && (numKb % 2) != 0) {
-            t_row zpad_bf(vr);
-            TEXPANDS(zpad_bf, __builtin_bit_cast(__bf16, static_cast<uint16_t>(0x0040)));  // 2^-127
+        // 奇尾 scale 列补 0x00 E8M0（numKb 奇数）。
+        if ((numKb % 2) != 0) {
             t_e8b zpad(vr);
-            TCVT(zpad, zpad_bf);             // bf16 2^-127 -> e8m0 0x00
+            TEXPANDS(zpad, __builtin_bit_cast(__fp8_e8m0, static_cast<uint8_t>(0)));
             gm_s gzs(scale_e8 + row0 * scaleCols + numKb,
                      static_cast<int>(M), static_cast<int>(scaleCols));
             TSTORE(gzs, zpad);
         }
     };
 
-    // ---- L1 2D 切分：行 tile 粒度 × N 轴补切 ----
-    //   rowTiles 个 32 行 tile 优先铺满行方向；行方向用不满 kPeNum 个 PE 时，剩余 PE 切到
-    //   N 轴（peCols=kPeNum/peRows，仅整除时>1：1→1×4、2→2×2、3→3×1、>=4→4×1）。
-    //   注：rowTiles>=4 且不被 4 整除时 tile 粒度有 ±1 tile 负载差（如 M=160 → 2:1:1:1），
-    //   换取全部满幅链；此类形状旧均分更均衡，属已知取舍（网络形状 M 通常为 128 的倍数）。
-    const int64_t itid = static_cast<int64_t>(tid);
-    const int64_t rowTiles = (M + TileM - 1) / TileM;
-    const int64_t peRows   = rowTiles < kPeNum ? rowTiles : kPeNum;
-    const int64_t peCols   = kPeNum / peRows;             // 整除：4/3→1（PE3 闲）
-    const int64_t rowLane  = itid / peCols;
-    const int64_t colLane  = itid % peCols;
-    if (rowLane >= peRows) return;                        // 空 PE（如 3×1 时的 tid3）
+    // ---- L1 行切分 ----
+    const int64_t row_base = M / kPeNum;
+    const int64_t row_rem  = M % kPeNum;
+    const int64_t itid     = static_cast<int64_t>(tid);
+    const int64_t SubM     = row_base + (itid < row_rem ? 1 : 0);
+    const int64_t row_begin = (itid < row_rem)
+                                  ? itid * (row_base + 1)
+                                  : row_rem * (row_base + 1) + (itid - row_rem) * row_base;
+    if (SubM == 0) return;
 
-    // 行方向：rowTiles 均分到 peRows 个 lane（前 rem 个各 +1 tile，连续 tile 区间）。
-    const int64_t tilesBase = rowTiles / peRows;
-    const int64_t tilesRem  = rowTiles % peRows;
-    const int64_t myTiles   = tilesBase + (rowLane < tilesRem ? 1 : 0);
-    const int64_t myTileBegin =
-        rowLane * tilesBase + (rowLane < tilesRem ? rowLane : tilesRem);
-    if (myTiles <= 0) return;
-
-    // 列方向：numKb 均分到 peCols 个 lane（前 rem 个各 +1 kb，连续 kb 区间）。
-    const int64_t kbBase = numKb / peCols;
-    const int64_t kbRem  = numKb % peCols;
-    const int64_t myKb   = kbBase + (colLane < kbRem ? 1 : 0);
-    if (myKb <= 0) return;                                // 行有份但列区间空（numKb<peCols）
-    const int64_t kbBegin = colLane * kbBase + (colLane < kbRem ? colLane : kbRem);
-    const bool ownsLastKb = (kbBegin + myKb == numKb);    // oddTail 补齐列归属
-
-    // ---- L2 段内 tiling：每 tile 全宽 32 行；最后一个全局 tile M%32≠0 时 boxed ----
-    for (int64_t t = 0; t < myTiles; ++t) {
-        const int64_t tileIdx = myTileBegin + t;
-        const int64_t row0 = tileIdx * TileM;
-        const int64_t validRows =
-            (tileIdx == rowTiles - 1) ? (M - (rowTiles - 1) * TileM) : TileM;
-        process_tile(row0, validRows, kbBegin, myKb, ownsLastKb);
+    // ---- L2 段内 tiling（M32 cell 32 行）----
+    const int64_t seg_full = SubM / TileM;
+    const int64_t seg_tail = SubM % TileM;
+    for (int64_t lm = 0; lm < seg_full; ++lm) {
+        process_tile(row_begin + lm * TileM, TileM);
+    }
+    if (seg_tail > 0) {
+        process_tile(row_begin + seg_full * TileM, seg_tail);
     }
 }
 
