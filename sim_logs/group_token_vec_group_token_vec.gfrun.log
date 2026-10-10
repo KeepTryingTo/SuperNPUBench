@@ -1,0 +1,25 @@
+./bin/gfrun -f /mnt/workspace/projects/1009_SuperNPUBench_v2/SuperNPUBench/benchmark/one-level-arch/output/solution/group_token_vec/elf/solution_group_token_vec_group_token_vec.elf 
+Memory: 0x10200 - 0x10248 (Size=0KB) [.rodata]
+Memory: 0x1024c - 0x1025f (Size=0KB) [.eh_frame_hdr]
+Memory: 0x10260 - 0x102ab (Size=0KB) [.eh_frame]
+Memory: 0x112ac - 0x127b7 (Size=5KB) [.text]
+Memory: 0x137b8 - 0x13827 (Size=0KB) [.init_array]
+Memory: 0x13828 - 0x1383f (Size=0KB) [.data.rel.ro]
+Memory: 0x14840 - 0x2ff53 (Size=109KB) [.bss]
+Memory: 0x2ff58 - 0x2ffdb (Size=0KB) [.sbss]
+Memory: 0x2ffe0 - 0x803ffe0 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+Starting PE0 from 0x112ac
+
+Thread:0Total Block number = 468713
+Thread:0Total Inst number = 2878731
+Thread:1Total Block number = 7
+Thread:1Total Inst number = 29
+Thread:2Total Block number = 7
+Thread:2Total Inst number = 29
+Thread:3Total Block number = 7
+Thread:3Total Inst number = 29
+
+Total Block number = 468734
+Total Inst number = 2878818
+Suaccelss to Reach the End of Benchmark! R2 = 0
