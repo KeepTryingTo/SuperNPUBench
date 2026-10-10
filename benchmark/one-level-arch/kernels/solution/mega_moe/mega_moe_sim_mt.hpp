@@ -15,7 +15,8 @@
  *       阶段 1  统计槽清零        每 PE 只清自己 4 个伪核的槽
  *               量化解码 w1/w2     每 PE 私有 tile 化解码 (TCVT + TMULS scale
  *                                 折叠) 为 fp16 权重副本, 无 fp32 workspace,
- *                                 无跨 PE 权重栅栏 (原 mtBarrier(1) 删除)
+ *                                 权重读由 driver kernel 前的输入发布屏障
+ *                                 mtBarrier(1) 覆盖 (genInputs 按 PE 分片)
  *               mask 表/dispatch   按伪核归属 token 分片
  *       阶段 3  GMM 流水          PE tid 只处理自己 4 个伪核的 token;
  *                                 GMM1/GMM2 = TGEMV_MX (MX FP16 pair),
@@ -24,8 +25,9 @@
  *               Unpermute          token 分片与 combine 写方同 PE, 程序序
  *                                 保证可见, 免栅栏 (VEC tile 拷贝)
  *       阶段 4  统计导出          stats 按伪核归属分片; tokOut PE0 独占导出
- *       栅栏    mtBarrier(1)      末端汇合: 全部 yOut/tokOut 就绪后才返回,
- *                                 PE0 验证依赖全量输出
+ *       栅栏    mtBarrier(2)      末端汇合: 全部 yOut/tokOut 就绪后才返回,
+ *                                 PE0 验证依赖全量输出 (相位 1 为 driver 的
+ *                                 kernel 前输入发布屏障)
  *   - tile 计算核心 (类型/解码/GEMV/SwiGLU/拷贝) 由 mega_moe_sim.hpp 的
  *     "四a、tile 计算核心" 共享段提供 (与 sim / sim_mt_dyn 同源)。
  *   - mtBarrier 为 volatile per-PE phase flags + compiler barrier, 与
@@ -192,7 +194,10 @@ void mega_moe_sim_mt_kernel(float* yOut, float* xIn, int64_t* tokOut)
         tokV[1] = static_cast<int64_t>(tilingData.bs) / 2;
     }
     // 末端汇合: yOut 全量 (含其他 PE 分片) 就绪后才允许 PE0 验证
-    mtBarrier(1U);
+    // [2026-10-09 优化] 相位 1→2: driver 在 kernel 前新增输入发布屏障
+    // mtBarrier(1) (genInputs 已按 PE 分片, 权重 tile 解码读全量 g_mmWeight*
+    // 须待分片写发布; 镜像 mega_moe_sim_mt_dyn 的 mtBarrierDyn(8c+1) 模式)
+    mtBarrier(2U);
 #else
     // ============ 完整真机流水 — 真 4PE 分片执行 ============
     // ---- 阶段 1: 输入准备 (各 PE 写域不相交) ----
@@ -387,7 +392,8 @@ void mega_moe_sim_mt_kernel(float* yOut, float* xIn, int64_t* tokOut)
 
     // ---- 跨 PE 交接点: 末端汇合栅栏 (fp32 解码栅栏已随 MX 原地消费删除) ----
     // 所有 PE 的 yOut / tokOut 写入完成后才返回 (PE0 随后的验证依赖全量输出)
-    mtBarrier(1U);
+    // [2026-10-09 优化] 相位 1→2 (driver kernel 前新增输入发布屏障 1)
+    mtBarrier(2U);
 #endif
 }
 

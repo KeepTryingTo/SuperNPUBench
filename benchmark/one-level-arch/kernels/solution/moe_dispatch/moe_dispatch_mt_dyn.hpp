@@ -518,10 +518,11 @@ void moe_dispatch_mt_dyn(
     // (每 PE 只读写自己的槽, 零跨 PE 写), 相位 = inv*8 + k 跨调用单调
     // 递增 → 陈旧 flag 天然失效, driver 复位彻底删除。契约同值判定保证
     // 各 PE 的 inv 序列一致。
-    // 步长 8 而非 4: driver 在两次 cfg 之间自有 mtBarrier(8*c+5) (PE0 独占
-    // 验证汇合点) —— 若 kernel 相位与 driver 相位重合 (gtv dyn 现状:
-    // driver barrier(4) == cfgB 首个 kernel 相位 4), 后者被陈旧 flag 立即
-    // 通过而失去同步 (gfrun 靠 lockstep 侥幸, gfsim 时序漂移下成真竞争)。
+    // 步长 8 而非 4: driver 在 kernel 前有输入发布屏障 (8c+1)、两次 cfg
+    // 之间/末端有验证汇合屏障 (8c+6) —— 若 kernel 相位与 driver 相位重合
+    // (gtv dyn 现状: driver barrier(4) == cfgB 首个 kernel 相位 4), 后者被
+    // 陈旧 flag 立即通过而失去同步 (gfrun 靠 lockstep 侥幸, gfsim 时序漂移
+    // 下成真竞争)。
     static uint32_t sInvCnt[kMtThreadsPerBlock];   // bss 零初始化 = 首轮 inv 0
     const uint32_t inv = sInvCnt[tid];
     sInvCnt[tid] = inv + 1u;
@@ -538,19 +539,21 @@ void moe_dispatch_mt_dyn(
     // ====== Phase 1: AllToAllDispatch (pack x → window + flag) ======
     dispatch_pack_mt_dyn<DType, TileW, WindowStride>(
         x, expertIds, windowTriple, windowData, windowFlag, bs, h, k);
-    mtBarrier(ph + 1u);
+    // [2026-10-09 优化] 相位整体 +1: driver 在 kernel 前新增输入发布屏障
+    // (8c+1, genInputs 已按 PE 分片), kernel 内部相位 = inv*8 + 2..5。
+    mtBarrier(ph + 2u);
 
-    // ====== Phase 2: CalCumSum (count + cumsum) ======
+    // ====== Phase 2: CalCumsum (count + cumsum) ======
     cal_cumsum_mt_dyn(expertIds, sendCountsOut, expertTokenNumsOut,
                       cntLocal, expertStarts, bs, k, moeExpertNum,
-                      ph + 2u);
+                      ph + 3u);
 
     // CUMSUM soft sync + flag check — PE0 only (same PE writes then reads)
     if (tid == 0) {
         write_cumsum_flag_dyn<TileW>(windowState);
         check_cumsum_flag_mt_dyn<TileW>(windowState, predBuf);
     }
-    mtBarrier(ph + 3u);
+    mtBarrier(ph + 4u);
 
     // ====== Phase 3: LocalWindowCopy (read window → continuous output) ======
     // 每 PE 把自己的 slot 段按 expert-major 位置重发 (与静态版语义一致):
@@ -612,7 +615,7 @@ void moe_dispatch_mt_dyn(
         // Clear flag (TEXPANDS(0.0) + TSTORE)
         clear_flag_mt_dyn<TileW>(windowFlag, i, slotCount);
     }
-    mtBarrier(ph + 4u);
+    mtBarrier(ph + 5u);
 
     // Window state writeback — PE0 only
     if (tid == 0) {
@@ -630,8 +633,8 @@ void moe_dispatch_mt_dyn(
 // 迟到 —— gfsim 时序模型的退出 ecall 按 lockstep AND 组汇聚, 迟到者
 // t0 永远未 join (st=0, 全簇无 retired 进展) → T_deadlock=9999 后
 // SyscallBarrier.cpp:1889 断言截断。修复: cfgB 验证后补齐验证汇合屏障
-// mtBarrier(13) (相位 13 = 8*1+5, 与本 kernel 的 sInvCnt 单调相位方案
-// 9..12 严格衔接), 全 PE 一起放行到 _end。kernel 本身无需修改; 详见同目录
+// mtBarrier(14) (相位 14 = 8*1+6, 与本 kernel 的 sInvCnt 单调相位方案
+// 10..13 严格衔接), 全 PE 一起放行到 _end。kernel 本身无需修改; 详见同目录
 // moe_dispatch_mt_dyn_gfsim_fix_report.md。修复后 gfsim fourpe:
 // 完整 PASS (Total Cycles = 36,798, 3 次运行确定性一致, exit_parks=4),
 // gfrun 4 线程 R2=0。
