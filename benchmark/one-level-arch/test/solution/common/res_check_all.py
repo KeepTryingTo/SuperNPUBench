@@ -145,21 +145,21 @@ _GNG1D_CMP = "normalization/group_norm_grad/src/group_norm_grad_1d_data_compare.
 # name : 相对目录 : gen 脚本 : compare 脚本 : ELF basename(= CHK_DIR) : gen shape 参数
 _NORM = [
     *((f"rms_norm_{v}_32k_r{r // 1024}k", "normalization/rms_norm", _RMS_GEN, _RMS_CMP,
-       f"solution_normalization_rms_norm_rms_norm_dynamic_{v}_32k_DType__half_gA128_gR{r}_PE4",
-       ("--g-a", "128", "--g-r", str(r)))
-      for v in ("simt", "tree") for r in (8192, 16384)),
+       f"solution_normalization_rms_norm_rms_norm_dynamic_{v}_32k_DType__half_gA{a}_gR{r}_PE4",
+       ("--g-a", str(a), "--g-r", str(r)))
+      for v in ("simt", "tree") for a, r in ((128, 8192), (32, 16384))),
     # V0 (archived, backup only): rms_norm_split_r moved to normalization/rms_norm/V0/, not run.
     # ("rms_norm_split_r", "normalization/rms_norm_split_r",
     #  "normalization/rms_norm_split_r/src/gen_rms_norm_split_r_data.py",
     #  "normalization/rms_norm_split_r/src/rms_norm_split_r_data_compare.py",
     #  "solution_normalization_rms_norm_split_r_rms_norm_split_r_DType__half_gA16_gR16384_PE4"),
     *((f"group_norm_grad_{v}", "normalization/group_norm_grad", _GNG_GEN, _GNG_CMP,
-       f"solution_normalization_group_norm_grad_group_norm_grad_{v}_DType__half_N2_C32_G8_HxW2048_PE4",
-       ("--n", "2", "--c", "32", "--g", "8", "--hxw", "2048"))
+       f"solution_normalization_group_norm_grad_group_norm_grad_{v}_DType__half_N2_C16_G8_HxW2048_PE4",
+       ("--n", "2", "--c", "16", "--g", "8", "--hxw", "2048"))
       for v in ("dynamic", "static")),
     *((f"group_norm_grad_1d_{v}", "normalization/group_norm_grad", _GNG1D_GEN, _GNG1D_CMP,
-       f"solution_normalization_group_norm_grad_group_norm_grad_1d_{v}_DType__half_N256_C4096_G8_PE4",
-       ("--n", "256", "--c", "4096", "--g", "8"))
+       f"solution_normalization_group_norm_grad_group_norm_grad_1d_{v}_DType__half_N256_C512_G8_PE4",
+       ("--n", "256", "--c", "512", "--g", "8"))
       for v in ("dynamic", "static")),
 ]
 
