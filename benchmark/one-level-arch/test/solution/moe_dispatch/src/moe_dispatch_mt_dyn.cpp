@@ -57,19 +57,38 @@ static dtype outBuf[kSlotMax * kHMax] __attribute__((aligned(4096))) = {};
 static int32_t cntLocal[kMtThreadsPerBlock * kExpertMax] __attribute__((aligned(4096))) = {};
 static int32_t expertStarts[kExpertMax] __attribute__((aligned(4096))) = {};
 
-// Input init runs redundantly on every PE (deterministic, identical writes —
-// same convention as moe_dispatch_mt.cpp), so no extra barrier is needed.
+// [2026-10-09 优化] Input init 按 PE 连续 ceil 分片 (原实现 4 PE 冗余全量
+// 写)。分片写域不相交 (单写者/cacheline); 调用方在 kernel 前
+// mtBarrier(8c+1) 发布 (pack 的 Phase 1 跨 PE 读 x —— cfgB 的 slot 段
+// 边界 token 会被相邻两 PE 读取, 须屏障发布后才能进 kernel)。
 static void genInputs(int64_t bs, int64_t h, int64_t k, int64_t expertNum)
 {
-    for (int64_t i = 0; i < bs * h; i++) {
-        float fval = static_cast<float>(i) * 0.1f;
-        uint32_t bits; std::memcpy(&bits, &fval, 4);
-        uint16_t raw = (uint16_t)(bits >> 16);
-        std::memcpy(&x[i], &raw, 2);
+    const uint32_t tidU = get_thread_idx();
+    const int64_t tid = static_cast<int64_t>(tidU);
+    // 连续 ceil 分片 [begin, begin+len), 值按绝对下标 (与全量版逐位一致)
+    auto slice = [](int64_t n, int64_t me, int64_t &begin, int64_t &len) {
+        const int64_t seg = n / 4;
+        const int64_t rem = n % 4;
+        begin = me * seg + (me < rem ? me : rem);
+        len = seg + (me < rem ? 1 : 0);
+    };
+    {
+        int64_t begin, len;
+        slice(bs * h, tid, begin, len);
+        for (int64_t i = begin; i < begin + len; i++) {
+            float fval = static_cast<float>(i) * 0.1f;
+            uint32_t bits; std::memcpy(&bits, &fval, 4);
+            uint16_t raw = (uint16_t)(bits >> 16);
+            std::memcpy(&x[i], &raw, 2);
+        }
     }
-    for (int64_t i = 0; i < bs * k; i++) {
-        expertIds[i] = static_cast<int32_t>(i % expertNum);
-        expertScales[i] = 0.25f;
+    {
+        int64_t begin, len;
+        slice(bs * k, tid, begin, len);
+        for (int64_t i = begin; i < begin + len; i++) {
+            expertIds[i] = static_cast<int32_t>(i % expertNum);
+            expertScales[i] = 0.25f;
+        }
     }
 }
 
@@ -121,6 +140,12 @@ int main() {
     for (int c = 0; c < 2; ++c) {
         genInputs(cfgs[c][0], cfgs[c][1], cfgs[c][2], cfgs[c][3]);
 
+        // [2026-10-09 优化] kernel 前输入发布屏障 (相位 8c+1, 镜像
+        // mega_moe_sim_mt_dyn 的 mtBarrierDyn(8c+1) 模式): genInputs 已按
+        // PE 分片, pack Phase 1 对 x 的跨 PE 读 (cfgB slot 段边界 token)
+        // 须待全部分片写发布。kernel 相位相应移至 8c+2..8c+5。
+        mtBarrier(static_cast<uint32_t>(c) * 8U + 1U);
+
         BENCHSTART;
 
         moe_dispatch_mt_dyn<dtype, kTileW, kWindowStride>(
@@ -133,14 +158,14 @@ int main() {
         BENCHEND;
 
         // cfgA 验证须在其输入被 cfgB 数据生成覆盖之前完成: PE0 立即验证,
-        // 其余 PE 在 mtBarrier(5) 汇合等待 (kernel 单调相位 = inv*8 + 1..4,
-        // driver 汇合点取 8*c+5 ——  strictly between cfgA 的 4 与 cfgB 的 9,
-        // 无陈旧 flag 直通; 见 kernel sInvCnt 注)。
+        // 其余 PE 在 mtBarrier(8c+6) 汇合等待 (kernel 单调相位 = inv*8 +
+        // 2..5, driver 汇合点取 8*c+6 ——  strictly between cfgA 的 6 与
+        // cfgB 的 10, 无陈旧 flag 直通; 见 kernel sInvCnt 注)。
         if (c == 0) {
             if (tid == 0) {
                 failA = verify(cfgs[0][0], cfgs[0][1], cfgs[0][2], cfgs[0][3]);
             }
-            mtBarrier(5);
+            mtBarrier(6);
         }
     }
 
@@ -168,7 +193,7 @@ int main() {
             ret = (rcB == 0) ? 0 : 10 + rcB;         // cfgB: +10 偏移诊断码
         }
     }
-    mtBarrier(8U * 1U + 5U);   // cfgB 验证汇合 (kernel 单调相位 9..12 之后)
+    mtBarrier(8U * 1U + 6U);   // cfgB 验证汇合 (kernel 单调相位 10..13 之后)
 
     return ret;
 }

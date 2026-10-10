@@ -63,23 +63,47 @@ static inline uint16_t f32ToBf16Bits(float v)
 
 // Input init runs redundantly on every PE (deterministic, identical writes —
 // same convention as moe_combine_mt.cpp), so no extra barrier is needed.
+// [2026-10-09 优化] 改为按 PE 写域 ceil 分片 (原 4 PE 冗余全量写):
+//   - expand_x / expand_idx 按 pack 的 numExpanded ceil 分片 (kernel
+//     combine_pack_mt_dyn 的 begin/len 同款公式);
+//   - expert_scales 按 reduce 的 bs ceil 分片 (token 槽 [n*K+k])。
+// 分片写域不相交 (无同 cacheline 并发写); kernel 内部屏障 (ph+1/ph+2)
+// 之前全为自写自读, PE0 逐组验证位于 kernel 末端屏障之后 (分片写已发布)。
 static void genInputs(int64_t bs, int64_t h, int64_t k, int64_t numExpanded)
 {
-    for (int64_t i = 0; i < numExpanded * h; i++) {
-        float fval = static_cast<float>(i) * 0.1f;
-        uint32_t bits; std::memcpy(&bits, &fval, 4);
-        uint16_t raw = (uint16_t)(bits >> 16);
-        std::memcpy(&expand_x[i], &raw, 2);
-    }
-    for (int64_t tk = 0; tk < numExpanded; tk++) {
-        expand_idx[tk * 3 + 0] = 0;
-        expand_idx[tk * 3 + 1] = static_cast<int32_t>(tk / k);
-        expand_idx[tk * 3 + 2] = static_cast<int32_t>(tk % k);
+    const uint32_t tidU = get_thread_idx();
+    const int64_t tid = static_cast<int64_t>(tidU);
+    // 连续 ceil 分片 [begin, begin+len) —— 与 kernel 的运行时分片公式一致
+    auto slice = [](int64_t n, int64_t me, int64_t &begin, int64_t &len) {
+        const int64_t seg = n / 4;
+        const int64_t rem = n % 4;
+        begin = me * seg + (me < rem ? me : rem);
+        len = seg + (me < rem ? 1 : 0);
+    };
+    // expand_x: pack 只读本 PE 的 expandX 行 (值按绝对下标, 与全量版逐位一致)
+    {
+        int64_t begin, len;
+        slice(numExpanded, tid, begin, len);
+        for (int64_t i = begin * h; i < (begin + len) * h; i++) {
+            float fval = static_cast<float>(i) * 0.1f;
+            uint32_t bits; std::memcpy(&bits, &fval, 4);
+            uint16_t raw = (uint16_t)(bits >> 16);
+            std::memcpy(&expand_x[i], &raw, 2);
+        }
+        for (int64_t tk = begin; tk < begin + len; tk++) {
+            expand_idx[tk * 3 + 0] = 0;
+            expand_idx[tk * 3 + 1] = static_cast<int32_t>(tk / k);
+            expand_idx[tk * 3 + 2] = static_cast<int32_t>(tk % k);
+        }
     }
     // The kernel reads expertScales densely at [n*K + k]; fill the dense
-    // prefix so every slot carries a real weight.
-    for (int64_t i = 0; i < numExpanded; i++) {
-        expert_scales[i] = 0.25f;
+    // prefix so every slot carries a real weight (per-PE token ceil slice).
+    {
+        int64_t begin, len;
+        slice(bs, tid, begin, len);
+        for (int64_t i = begin * k; i < (begin + len) * k; i++) {
+            expert_scales[i] = 0.25f;
+        }
     }
 }
 

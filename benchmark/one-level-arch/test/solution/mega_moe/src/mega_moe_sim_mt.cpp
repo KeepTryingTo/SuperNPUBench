@@ -316,56 +316,79 @@ int main()
     }
     g_mmExpertTokenNums[0] = -1;
 
-    // ---- 确定性数据生成 (各 PE 冗余执行, 同值写无需栅栏) ----
-    // x: LCG 均匀 [-1,1] 混合边界
+    // ---- 确定性数据生成 (按 PE 连续 ceil 分片; 镜像 mega_moe_sim_mt_dyn 的
+    //      genInputs 模式) ----
+    // [2026-10-09 优化] 原实现各 PE 冗余全量写 (~10.9K 迭代 × 4 PE), 其中
+    // w1 的随机小值循环 (原第一遍) 被后续确定性细化循环逐元素完全覆盖 ——
+    // 纯死代码, 一并删除。分片后每 PE 只写 1/4 (单写者/cacheline), kernel
+    // 前 mtBarrier(1) 发布 (tile 量化解码读全量 g_mmWeight* 需要)。
     {
-        uint32 seed = 42U;
-        for (uint32 i = 0; i < kTotalElems; ++i) {
-            seed = seed * 1664525U + 1013904223U;
-            const float u = (float)((seed >> 8) & 0xFFFFu) / 65536.0f;
-            const float v = (u - 0.5f) * 2.0f;
-            x[i] = (i % 5u == 0u) ? v * 0.5f : v;
+        const uint32 me = tid;
+        // 连续 ceil 分片 [begin, end)
+        auto slice = [me](uint32 n, uint32 &begin, uint32 &end) {
+            const uint32 seg = n / 4U;
+            const uint32 rem = n % 4U;
+            begin = me * seg + (me < rem ? me : rem);
+            end = begin + seg + (me < rem ? 1U : 0U);
+        };
+        // x: LCG 均匀 [-1,1] 混合边界
+        {
+            uint32 b, e;
+            slice(kTotalElems, b, e);
+            uint32 seed = 42U;
+            for (uint32 i = 0; i < e; ++i) {   // LCG 链推进到切片尾 (值与全量版逐位一致)
+                seed = seed * 1664525U + 1013904223U;
+                if (i < b) {
+                    continue;                  // 他人切片: 只推进链, 不写
+                }
+                const float u = (float)((seed >> 8) & 0xFFFFu) / 65536.0f;
+                const float v = (u - 0.5f) * 2.0f;
+                x[i] = (i % 5u == 0u) ? v * 0.5f : v;
+            }
+        }
+        // 路由: 与 gen_data 同规则 topk_ids = (i//128)%2, 权重 1.0
+        // 注: ids 经 volatile 写 —— BS16 等小规格下循环全展开, 前 kBS/2 个
+        //     i32 零 store 会被后端合并为 16B 零 tile store (v2i64 崩溃)
+        {
+            uint32 b, e;
+            slice(kBS, b, e);
+            volatile int32_t* ids = g_mmTopkIds;
+            for (uint32 t = b; t < e; ++t) {
+                ids[t] = (int32_t)((t / (kBS / 2u)) % 2u);   // 与 gen_data 同规则
+                g_mmTopkWeights[t] = 1.0f;
+            }
+        }
+        // FP8 权重: 确定性细化, 值域 [-2,2] 内的 E4M3 可表示值; scale = 1.0
+        // (E8M0 0x00 → 2^0)。原第一遍随机循环为死代码 (被本循环逐元素
+        // 覆盖) 已删除 —— 值与原版逐位一致。
+        {
+            uint32 b, e;
+            slice(2U * kHiddenDim * kH, b, e);
+            for (uint32 i = b; i < e; ++i) {
+                const uint32 e4 = 4U + ((i * 7U) % 5U);            // 4..8
+                const uint32 m = ((i * 3U + 1U) & 0x7U);
+                const uint32 s = (i / 7U) & 1U;
+                g_mmWeight1[i] = (uint8_t)((s << 7U) | (e4 << 3U) | m);
+            }
+            slice(2U * (kHiddenDim / 2U) * kH, b, e);
+            for (uint32 i = b; i < e; ++i) {
+                const uint32 e4 = 4U + ((i * 11U + 2U) % 5U);
+                const uint32 m = ((i * 5U + 3U) & 0x7U);
+                const uint32 s = (i / 13U) & 1U;
+                g_mmWeight2[i] = (uint8_t)((s << 7U) | (e4 << 3U) | m);
+            }
+            slice(2U * (kH * kHiddenDim / 32U + 4U), b, e);
+            for (uint32 i = b; i < e; ++i) {
+                g_mmWeightScales1[i] = 0x00;   // scale = 1.0
+                g_mmWeightScales2[i] = 0x00;
+            }
         }
     }
-    // 路由: 与 gen_data 同规则 topk_ids = (i//128)%2, 权重 1.0
-    // 注: ids 经 volatile 写 —— BS16 等小规格下循环全展开, 前 kBS/2 个 i32 零 store
-    //     会被后端合并为 16B 零 tile store (v2i64 Cannot select 崩溃)
-    {
-        volatile int32_t* ids = g_mmTopkIds;
-        for (uint32 t = 0; t < kBS; ++t) {
-            ids[t] = (int32_t)((t / (kBS / 2u)) % 2u);   // 与 gen_data 同规则
-            g_mmTopkWeights[t] = 1.0f;
-        }
-    }
-    // FP8 权重: 小随机值 (E4M3 可表示), scale 取 1.0 (E8M0 0x00 → 2^0)
-    {
-        uint32 seed = 7U;
-        for (uint32 i = 0; i < 2U * kHiddenDim * kH; ++i) {
-            seed = seed * 1664525U + 1013904223U;
-            const uint32 m = (seed >> 1U) & 0x7U;            // 尾数
-            const uint32 e = ((seed >> 4U) & 0xFU) == 0U ? 1U : ((seed >> 4U) & 0xFU);  // 指数 1..15
-            const uint32 s = (seed >> 8U) & 1U;
-            g_mmWeight1[i] = (uint8_t)((s << 7U) | (e << 3U) | m);   // E4M3 ✓ 但范围 [-15,15]
-            // 控制幅值: 用指数 4..8 → 值域 ~2^-3..2^1
-        }
-        // 用确定性细化: 值域 [-2, 2] 内的可表示值
-        for (uint32 i = 0; i < 2U * kHiddenDim * kH; ++i) {
-            const uint32 e = 4U + ((i * 7U) % 5U);            // 4..8
-            const uint32 m = ((i * 3U + 1U) & 0x7U);
-            const uint32 s = (i / 7U) & 1U;
-            g_mmWeight1[i] = (uint8_t)((s << 7U) | (e << 3U) | m);
-        }
-        for (uint32 i = 0; i < 2U * (kHiddenDim / 2U) * kH; ++i) {
-            const uint32 e = 4U + ((i * 11U + 2U) % 5U);
-            const uint32 m = ((i * 5U + 3U) & 0x7U);
-            const uint32 s = (i / 13U) & 1U;
-            g_mmWeight2[i] = (uint8_t)((s << 7U) | (e << 3U) | m);
-        }
-        for (uint32 i = 0; i < 2U * (kH * kHiddenDim / 32U + 4U); ++i) {
-            g_mmWeightScales1[i] = 0x00;   // scale = 1.0
-            g_mmWeightScales2[i] = 0x00;
-        }
-    }
+
+    // [2026-10-09 优化] kernel 前输入发布屏障 (相位 1; 镜像 mega_moe_sim_mt_dyn
+    // 的 mtBarrierDyn(8c+1) 模式): genInputs 已按 PE 分片, kernel 内 tile 量化
+    // 解码读全量 g_mmWeight* 须待全部分片写发布。kernel 末端汇合相位为 2。
+    mega_moe::mtBarrier(1U);
 
     BENCHSTART;
     mega_moe::mega_moe_sim_mt_kernel<kBS, kH>(y, x, tokenNumsOut);
