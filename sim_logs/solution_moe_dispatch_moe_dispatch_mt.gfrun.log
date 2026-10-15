@@ -1,0 +1,25 @@
+./bin/gfrun -s softcore.multiThreadNum=4 -f /mnt/workspace/projects/1011_SuperNPUBench_v3/SuperNPUBench/benchmark/one-level-arch/output/solution/moe_dispatch/elf/solution_moe_dispatch_moe_dispatch_mt.elf 
+Memory: 0x10200 - 0x10258 (Size=0KB) [.rodata]
+Memory: 0x1025c - 0x10287 (Size=0KB) [.eh_frame_hdr]
+Memory: 0x10288 - 0x1032b (Size=0KB) [.eh_frame]
+Memory: 0x1132c - 0x125cf (Size=4KB) [.text]
+Memory: 0x135d0 - 0x1365f (Size=0KB) [.init_array]
+Memory: 0x13660 - 0x13677 (Size=0KB) [.data.rel.ro]
+Memory: 0x15000 - 0x2f4af (Size=105KB) [.bss]
+Memory: 0x2f4b0 - 0x2f53f (Size=0KB) [.sbss]
+Memory: 0x2f540 - 0x803f540 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+Starting PE0 from 0x1132c
+
+Thread:0Total Block number = 9400
+Thread:0Total Inst number = 49936
+Thread:1Total Block number = 9399
+Thread:1Total Inst number = 49347
+Thread:2Total Block number = 9399
+Thread:2Total Inst number = 49379
+Thread:3Total Block number = 9399
+Thread:3Total Inst number = 49411
+
+Total Block number = 37597
+Total Inst number = 198073
+Suaccelss to Reach the End of Benchmark! R2 = 0

@@ -1,0 +1,23 @@
+./bin/gfrun -s softcore.multiThreadNum=4 -f /mnt/workspace/projects/1011_SuperNPUBench_v3/SuperNPUBench/benchmark/one-level-arch/output/solution/group_token_old/elf/solution_group_token_old_group_token_old_mt.elf 
+Memory: 0x10200 - 0x10248 (Size=0KB) [.rodata]
+Memory: 0x1024c - 0x10267 (Size=0KB) [.eh_frame_hdr]
+Memory: 0x10268 - 0x102d3 (Size=0KB) [.eh_frame]
+Memory: 0x112d4 - 0x12587 (Size=4KB) [.text]
+Memory: 0x13588 - 0x1359f (Size=0KB) [.data.rel.ro]
+Memory: 0x145a0 - 0x2623f (Size=71KB) [.bss]
+Memory: 0x26240 - 0x8036240 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+Starting PE0 from 0x112d4
+
+Thread:0Total Block number = 44999
+Thread:0Total Inst number = 415604
+Thread:1Total Block number = 44999
+Thread:1Total Inst number = 284170
+Thread:2Total Block number = 44999
+Thread:2Total Inst number = 284170
+Thread:3Total Block number = 44999
+Thread:3Total Inst number = 284170
+
+Total Block number = 179996
+Total Inst number = 1268114
+Suaccelss to Reach the End of Benchmark! R2 = 0

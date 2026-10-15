@@ -1,0 +1,145 @@
+bin/gfsim -f /mnt/workspace/projects/1011_SuperNPUBench_v3/SuperNPUBench/benchmark/one-level-arch/output/solution/moe_dispatch/elf/solution_moe_dispatch_moe_dispatch_mt_dyn.elf --conf fourpe --pto-v02 true -s tlsu.fake_l2_enable=false 
+[gfsim] explicit PE config present; skipping ELF auto-detection
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Override configurations:
+tlsu.fake_l2_enable=false
+core.threadCount=4
+core.stdPeCount=1
+core.cube_core_num=4
+core.cube_thread_num=1
+core.vec_core_num=4
+fourpe.pe_cluster_enable=true
+fourpe.pe_cluster_count=4
+fourpe.pe_cluster_frontend_thread_count=4
+fourpe.pe_cluster_aggregate_decode_width=8
+fourpe.pe_cluster_gpr_rename_partition_entries=128
+fourpe.pe_cluster_scalar_rob_partition_entries=128
+fourpe.pe_cluster_scalar_iq_partition_entries=128
+fourpe.pe_cluster_block_rob_partition_entries=256
+fourpe.pe_cluster_block_iq_partition_entries=88
+fourpe.pe_cluster_local_reg_partition_entries=88
+bfu.brq_depth=1024
+fourpe.pe_cluster_partition_borrow_enable=false
+fourpe.pe_cluster_eligible_rr_fairness_check=true
+fourpe.pe_cluster_group_contract_fatal=false
+dfx.swimCounterSampleInterval=8
+Memory: 0x10200 - 0x1029f (Size=0KB) [.rodata]
+Memory: 0x102a0 - 0x102cb (Size=0KB) [.eh_frame_hdr]
+Memory: 0x102d0 - 0x1038b (Size=0KB) [.eh_frame]
+Memory: 0x1138c - 0x1302f (Size=7KB) [.text]
+Memory: 0x14030 - 0x1409f (Size=0KB) [.init_array]
+Memory: 0x140a0 - 0x140b7 (Size=0KB) [.data.rel.ro]
+Memory: 0x16000 - 0x30ed7 (Size=107KB) [.bss]
+Memory: 0x30ed8 - 0x30f47 (Size=0KB) [.sbss]
+Memory: 0x30f50 - 0x8040f50 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+[C:3549   ][TMA.NA    ]: nuke_pair_diag ld_stid=0 ld_bid=18/w1 ld_rid=68 st_stid=0 st_bid=17/w1 st_rid=62
+[C:4580   ][TMA.NA    ]: nuke_pair_diag ld_stid=0 ld_bid=141/w1 ld_rid=29 st_stid=0 st_bid=140/w1 st_rid=23
+[C:5781   ][TMA.NA    ]: nuke_pair_diag ld_stid=0 ld_bid=215/w1 ld_rid=80 st_stid=0 st_bid=214/w1 st_rid=74
+[C:6115   ][TMA.NA    ]: nuke_pair_diag ld_stid=0 ld_bid=245/w1 ld_rid=28 st_stid=0 st_bid=244/w1 st_rid=22
+[C:8647   ][TMA.NA    ]: nuke_pair_diag ld_stid=0 ld_bid=10/w1 ld_rid=42 st_stid=0 st_bid=9/w1 st_rid=36
+[C:13368  ][TMA.NA    ]: nuke_pair_diag ld_stid=0 ld_bid=66/w0 ld_rid=10 st_stid=0 st_bid=65/w0 st_rid=4
+[C:14172  ][TMA.NA    ]: nuke_pair_diag ld_stid=0 ld_bid=166/w0 ld_rid=85 st_stid=0 st_bid=165/w0 st_rid=79
+[C:15133  ][TMA.NA    ]: nuke_pair_diag ld_stid=0 ld_bid=251/w0 ld_rid=69 st_stid=0 st_bid=250/w0 st_rid=63
+[C:17159  ][TMA.NA    ]: nuke_pair_diag ld_stid=0 ld_bid=23/w0 ld_rid=26 st_stid=0 st_bid=22/w0 st_rid=20
+[C:18034  ][TMA.NA    ]: nuke_pair_diag ld_stid=3 ld_bid=233/w0 ld_rid=10 st_stid=3 st_bid=229/w0 st_rid=116
+[gfsim] caught std::exception: ASSERTION FAILED: sharedTileBinders.empty() && srcTile.size() == 1 && dstTile.size() == 1 && srcTile[0] && dstTile[0] && srcTile[0]->size == dstTile[0]->size && srcTile[0]->tileInfo && dstTile[0]->tileInfo && srcTile[0]->tileInfo->dataType == dstTile[0]->tileInfo->dataType && srcTile[0]->tileInfo->layout == dstTile[0]->tileInfo->layout && srcTile[0]->tileInfo->validRow == dstTile[0]->tileInfo->validRow && srcTile[0]->tileInfo->validCol == dstTile[0]->tileInfo->validCol && srcTile[0]->tileInfo->row == dstTile[0]->tileInfo->row && srcTile[0]->tileInfo->col == dstTile[0]->tileInfo->col && "PTO 0.58 Local TMOV requires matching source/destination descriptors"
+, func ValidateOperandContract, file /mnt/workspace/projects/1009_SuperScalarModel/SuperScalarModel/isa/Block.cpp:3581
+stack:
+bin/gfsim(+0x81b70c) [0xaaaab0d6b70c]
+bin/gfsim(+0x81f580) [0xaaaab0d6f580]
+bin/gfsim(+0x732544) [0xaaaab0c82544]
+bin/gfsim(+0x35eb48) [0xaaaab08aeb48]
+bin/gfsim(+0x3603a8) [0xaaaab08b03a8]
+bin/gfsim(+0x36d6b4) [0xaaaab08bd6b4]
+bin/gfsim(+0x31663c) [0xaaaab086663c]
+bin/gfsim(+0x546b80) [0xaaaab0a96b80]
+bin/gfsim(+0x356cc) [0xaaaab05856cc]
+/lib/aarch64-linux-gnu/libc.so.6(+0x284c4) [0xffff9d1c84c4]
+/lib/aarch64-linux-gnu/libc.so.6(__libc_start_main+0x98) [0xffff9d1c8598]
+bin/gfsim(+0x14e2f0) [0xaaaab069e2f0]
+
+std::terminate called (unhandled exception or exception during unwinding)
+
+FATAL: gfsim received signal 6
+bin/gfsim(+0x14e41c)[0xaaaab069e41c]
+linux-vdso.so.1(__kernel_rt_sigreturn+0x0)[0xffff9d7d98dc]
+/lib/aarch64-linux-gnu/libc.so.6(+0x87608)[0xffff9d227608]
+/lib/aarch64-linux-gnu/libc.so.6(gsignal+0x1c)[0xffff9d1dcb3c]
+/lib/aarch64-linux-gnu/libc.so.6(abort+0xf4)[0xffff9d1c7e00]
+bin/gfsim(+0x14e4c8)[0xaaaab069e4c8]
+/lib/aarch64-linux-gnu/libstdc++.so.6(+0xaa570)[0xffff9d4fa570]
+/lib/aarch64-linux-gnu/libstdc++.so.6(_ZSt10unexpectedv+0x0)[0xffff9d4f0e04]
+/lib/aarch64-linux-gnu/libstdc++.so.6(__cxa_rethrow+0x64)[0xffff9d4fa984]
+bin/gfsim(+0x3787c)[0xaaaab058787c]
+/lib/aarch64-linux-gnu/libc.so.6(+0x284c4)[0xffff9d1c84c4]
+/lib/aarch64-linux-gnu/libc.so.6(__libc_start_main+0x98)[0xffff9d1c8598]
+bin/gfsim(+0x14e2f0)[0xaaaab069e2f0]

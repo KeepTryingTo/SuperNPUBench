@@ -1,0 +1,1097 @@
+bin/gfsim -f /mnt/workspace/projects/1011_SuperNPUBench_v3/SuperNPUBench/benchmark/one-level-arch/output/solution/group_token_vec/elf/solution_group_token_vec_group_token_vec_mt_dyn.elf --conf fourpe --pto-v02 true -s tlsu.fake_l2_enable=false 
+[gfsim] explicit PE config present; skipping ELF auto-detection
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Override configurations:
+tlsu.fake_l2_enable=false
+core.threadCount=4
+core.stdPeCount=1
+core.cube_core_num=4
+core.cube_thread_num=1
+core.vec_core_num=4
+fourpe.pe_cluster_enable=true
+fourpe.pe_cluster_count=4
+fourpe.pe_cluster_frontend_thread_count=4
+fourpe.pe_cluster_aggregate_decode_width=8
+fourpe.pe_cluster_gpr_rename_partition_entries=128
+fourpe.pe_cluster_scalar_rob_partition_entries=128
+fourpe.pe_cluster_scalar_iq_partition_entries=128
+fourpe.pe_cluster_block_rob_partition_entries=256
+fourpe.pe_cluster_block_iq_partition_entries=88
+fourpe.pe_cluster_local_reg_partition_entries=88
+bfu.brq_depth=1024
+fourpe.pe_cluster_partition_borrow_enable=false
+fourpe.pe_cluster_eligible_rr_fairness_check=true
+fourpe.pe_cluster_group_contract_fatal=false
+dfx.swimCounterSampleInterval=8
+Memory: 0x10200 - 0x10248 (Size=0KB) [.rodata]
+Memory: 0x1024c - 0x1029f (Size=0KB) [.eh_frame_hdr]
+Memory: 0x102a0 - 0x103ab (Size=0KB) [.eh_frame]
+Memory: 0x113ac - 0x13967 (Size=9KB) [.text]
+Memory: 0x14968 - 0x149ef (Size=0KB) [.init_array]
+Memory: 0x149f0 - 0x14a07 (Size=0KB) [.data.rel.ro]
+Memory: 0x15a08 - 0x15a93 (Size=0KB) [.sbss]
+Memory: 0x18000 - 0x8417b (Size=432KB) [.bss]
+Memory: 0x84180 - 0x8094180 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+tid: 0 Core@100000: Retired blocks 22624. BROB head info: B24 STID0 BPC 0x1151a [STD COND]
+tid: 1 Core@100000: Retired blocks 22624. BROB head info: B25 STID1 BPC 0x1151a [STD COND]
+tid: 2 Core@100000: Retired blocks 22624. BROB head info: B22 STID2 BPC 0x1151a [STD COND]
+tid: 3 Core@100000: Retired blocks 22624. BROB head info: B25 STID3 BPC 0x1151a [STD COND]
+tid: 0 Core@200000: Retired blocks 48705. BROB head info: B142 STID0 BPC 0x12084 [STD COND]
+tid: 1 Core@200000: Retired blocks 48705. BROB head info: B143 STID1 BPC 0x120a6 [STD DIRECT]
+tid: 2 Core@200000: Retired blocks 48705. BROB head info: B146 STID2 BPC 0x120c6 [STD COND]
+tid: 3 Core@200000: Retired blocks 48705. BROB head info: B146 STID3 BPC 0x120c6 [STD COND]
+[C:242151 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=128 younger_rid=128 older_bid=119 older_rid=119 younger_slot=1 older_slot=4
+[C:242152 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=129 younger_rid=129 older_bid=120 older_rid=120 younger_slot=3 older_slot=5
+[C:243077 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=19 younger_rid=19 older_bid=10 older_rid=10 younger_slot=10 older_slot=14
+[C:243079 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=19 younger_rid=19 older_bid=10 older_rid=10 younger_slot=15 older_slot=0
+[C:243109 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=19 younger_rid=19 older_bid=10 older_rid=10 younger_slot=17 older_slot=1
+[C:243125 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=20 younger_rid=20 older_bid=11 older_rid=11 younger_slot=18 older_slot=3
+[C:244003 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=166 younger_rid=166 older_bid=157 older_rid=157 younger_slot=8 older_slot=0
+[C:244044 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=166 younger_rid=166 older_bid=157 older_rid=157 younger_slot=18 older_slot=17
+[C:244097 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=166 younger_rid=166 older_bid=157 older_rid=157 younger_slot=8 older_slot=2
+[C:244127 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=167 younger_rid=167 older_bid=158 older_rid=158 younger_slot=15 older_slot=5
+[C:245003 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=57 younger_rid=57 older_bid=48 older_rid=48 younger_slot=9 older_slot=0
+[C:245044 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=57 younger_rid=57 older_bid=48 older_rid=48 younger_slot=18 older_slot=17
+[C:245097 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=57 younger_rid=57 older_bid=48 older_rid=48 younger_slot=9 older_slot=2
+[C:245127 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=58 younger_rid=58 older_bid=49 older_rid=49 younger_slot=5 older_slot=1
+[C:246005 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=204 younger_rid=204 older_bid=195 older_rid=195 younger_slot=9 older_slot=0
+[C:246046 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=204 younger_rid=204 older_bid=195 older_rid=195 younger_slot=18 older_slot=16
+[C:246099 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=204 younger_rid=204 older_bid=195 older_rid=195 younger_slot=9 older_slot=2
+[C:246127 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=205 younger_rid=205 older_bid=196 older_rid=196 younger_slot=14 older_slot=5
+[C:246974 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=95 younger_rid=95 older_bid=86 older_rid=86 younger_slot=8 older_slot=7
+[C:247016 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=95 younger_rid=95 older_bid=86 older_rid=86 younger_slot=15 older_slot=5
+[C:247069 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=95 younger_rid=95 older_bid=86 older_rid=86 younger_slot=20 older_slot=19
+[C:247111 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=96 younger_rid=96 older_bid=87 older_rid=87 younger_slot=8 older_slot=0
+[C:247999 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=242 younger_rid=242 older_bid=233 older_rid=233 younger_slot=1 older_slot=10
+[C:248016 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=242 younger_rid=242 older_bid=233 older_rid=233 younger_slot=15 older_slot=14
+[C:248057 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=242 younger_rid=242 older_bid=233 older_rid=233 younger_slot=21 older_slot=20
+[C:248129 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=243 younger_rid=243 older_bid=234 older_rid=234 younger_slot=9 older_slot=2
+[C:249001 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=133 younger_rid=133 older_bid=124 older_rid=124 younger_slot=1 older_slot=8
+[C:249050 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=133 younger_rid=133 older_bid=124 older_rid=124 younger_slot=18 older_slot=17
+[C:249059 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=133 younger_rid=133 older_bid=124 older_rid=124 younger_slot=20 older_slot=2
+[C:249100 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=134 younger_rid=134 older_bid=125 older_rid=125 younger_slot=21 older_slot=1
+[C:249985 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=24 younger_rid=24 older_bid=15 older_rid=15 younger_slot=11 older_slot=9
+[C:250001 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=24 younger_rid=24 older_bid=15 older_rid=15 younger_slot=12 older_slot=2
+[C:250093 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=24 younger_rid=24 older_bid=15 older_rid=15 younger_slot=19 older_slot=18
+[C:250139 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=25 younger_rid=25 older_bid=16 older_rid=16 younger_slot=11 older_slot=2
+[C:251012 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=171 younger_rid=171 older_bid=162 older_rid=162 younger_slot=1 older_slot=10
+[C:251029 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=171 younger_rid=171 older_bid=162 older_rid=162 younger_slot=14 older_slot=13
+[C:251099 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=171 younger_rid=171 older_bid=162 older_rid=162 younger_slot=10 older_slot=2
+[C:251143 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=172 younger_rid=172 older_bid=163 older_rid=163 younger_slot=13 older_slot=11
+[C:252047 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=62 younger_rid=62 older_bid=53 older_rid=53 younger_slot=13 older_slot=12
+[C:252065 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=62 younger_rid=62 older_bid=53 older_rid=53 younger_slot=19 older_slot=17
+[C:252103 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=62 younger_rid=62 older_bid=53 older_rid=53 younger_slot=8 older_slot=5
+[C:252145 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=63 younger_rid=63 older_bid=54 older_rid=54 younger_slot=13 older_slot=12
+[C:253049 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=209 younger_rid=209 older_bid=200 older_rid=200 younger_slot=12 older_slot=0
+[C:253063 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=209 younger_rid=209 older_bid=200 older_rid=200 younger_slot=16 older_slot=17
+[C:253105 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=209 younger_rid=209 older_bid=200 older_rid=200 younger_slot=8 older_slot=5
+[C:253147 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=210 younger_rid=210 older_bid=201 older_rid=201 younger_slot=12 older_slot=0
+[C:254027 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=100 younger_rid=100 older_bid=91 older_rid=91 younger_slot=9 older_slot=0
+[C:254068 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=100 younger_rid=100 older_bid=91 older_rid=91 younger_slot=18 older_slot=16
+[C:254121 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=100 younger_rid=100 older_bid=91 older_rid=91 younger_slot=9 older_slot=2
+[C:254149 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=101 younger_rid=101 older_bid=92 older_rid=92 younger_slot=14 older_slot=5
+[C:254996 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=247 younger_rid=247 older_bid=238 older_rid=238 younger_slot=9 older_slot=8
+[C:255036 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=247 younger_rid=247 older_bid=238 older_rid=238 younger_slot=14 older_slot=5
+[C:255089 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=247 younger_rid=247 older_bid=238 older_rid=238 younger_slot=20 older_slot=19
+[C:255133 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=248 younger_rid=248 older_bid=239 older_rid=239 younger_slot=11 older_slot=9
+[C:256022 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=138 younger_rid=138 older_bid=129 older_rid=129 younger_slot=11 older_slot=10
+[C:256038 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=138 younger_rid=138 older_bid=129 older_rid=129 younger_slot=15 older_slot=14
+[C:256081 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=138 younger_rid=138 older_bid=129 older_rid=129 younger_slot=9 older_slot=20
+[C:256153 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=139 younger_rid=139 older_bid=130 older_rid=130 younger_slot=10 older_slot=1
+[C:257023 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=29 younger_rid=29 older_bid=20 older_rid=20 younger_slot=1 older_slot=9
+[C:257072 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=29 younger_rid=29 older_bid=20 older_rid=20 younger_slot=19 older_slot=18
+[C:257083 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=29 younger_rid=29 older_bid=20 older_rid=20 younger_slot=9 older_slot=20
+[C:257123 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=30 younger_rid=30 older_bid=21 older_rid=21 younger_slot=10 older_slot=1
+[C:258005 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=176 younger_rid=176 older_bid=167 older_rid=167 younger_slot=11 older_slot=10
+[C:258021 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=176 younger_rid=176 older_bid=167 older_rid=167 younger_slot=12 older_slot=2
+[C:258113 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=176 younger_rid=176 older_bid=167 older_rid=167 younger_slot=19 older_slot=18
+[C:258159 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=177 younger_rid=177 older_bid=168 older_rid=168 younger_slot=11 older_slot=2
+[C:259032 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=67 younger_rid=67 older_bid=58 older_rid=58 younger_slot=1 older_slot=10
+[C:259048 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=67 younger_rid=67 older_bid=58 older_rid=58 younger_slot=15 older_slot=13
+[C:259119 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=67 younger_rid=67 older_bid=58 older_rid=58 younger_slot=10 older_slot=2
+[C:259163 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=68 younger_rid=68 older_bid=59 older_rid=59 younger_slot=13 older_slot=11
+[C:260065 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=214 younger_rid=214 older_bid=205 older_rid=205 younger_slot=13 older_slot=12
+[C:260082 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=214 younger_rid=214 older_bid=205 older_rid=205 younger_slot=18 older_slot=17
+[C:260121 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=214 younger_rid=214 older_bid=205 older_rid=205 younger_slot=8 older_slot=5
+[C:260163 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=215 younger_rid=215 older_bid=206 older_rid=206 younger_slot=13 older_slot=12
+[C:261041 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=105 younger_rid=105 older_bid=96 older_rid=96 younger_slot=9 older_slot=0
+[C:261084 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=105 younger_rid=105 older_bid=96 older_rid=96 younger_slot=19 older_slot=17
+[C:261135 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=105 younger_rid=105 older_bid=96 older_rid=96 younger_slot=9 older_slot=2
+[C:261165 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=106 younger_rid=106 older_bid=97 older_rid=97 younger_slot=5 older_slot=1
+[C:262043 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=252 younger_rid=252 older_bid=243 older_rid=243 younger_slot=9 older_slot=0
+[C:262084 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=252 younger_rid=252 older_bid=243 older_rid=243 younger_slot=18 older_slot=16
+[C:262137 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=252 younger_rid=252 older_bid=243 older_rid=243 younger_slot=9 older_slot=2
+[C:262165 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=253 younger_rid=253 older_bid=244 older_rid=244 younger_slot=15 older_slot=5
+[C:263013 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=143 younger_rid=143 older_bid=134 older_rid=134 younger_slot=9 older_slot=7
+[C:263055 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=143 younger_rid=143 older_bid=134 older_rid=134 younger_slot=14 older_slot=13
+[C:263109 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=143 younger_rid=143 older_bid=134 older_rid=134 younger_slot=20 older_slot=19
+[C:263151 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=144 younger_rid=144 older_bid=135 older_rid=135 younger_slot=9 older_slot=0
+[C:264041 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=34 younger_rid=34 older_bid=25 older_rid=25 younger_slot=10 older_slot=1
+[C:264057 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=34 younger_rid=34 older_bid=25 older_rid=25 younger_slot=16 older_slot=14
+[C:264095 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=34 younger_rid=34 older_bid=25 older_rid=25 younger_slot=21 older_slot=20
+[C:264169 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=35 younger_rid=35 older_bid=26 older_rid=26 younger_slot=9 older_slot=2
+[C:265041 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=181 younger_rid=181 older_bid=172 older_rid=172 younger_slot=1 older_slot=9
+[C:265090 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=181 younger_rid=181 older_bid=172 older_rid=172 younger_slot=20 older_slot=18
+[C:265099 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=181 younger_rid=181 older_bid=172 older_rid=172 younger_slot=19 older_slot=2
+[C:265140 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=182 younger_rid=182 older_bid=173 older_rid=173 younger_slot=21 older_slot=1
+[C:266023 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=72 younger_rid=72 older_bid=63 older_rid=63 younger_slot=11 older_slot=10
+[C:266039 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=72 younger_rid=72 older_bid=63 older_rid=63 younger_slot=12 older_slot=2
+[C:266131 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=72 younger_rid=72 older_bid=63 older_rid=63 younger_slot=19 older_slot=18
+[C:266162 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=73 younger_rid=73 older_bid=64 older_rid=64 younger_slot=20 older_slot=3
+[C:267049 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=219 younger_rid=219 older_bid=210 older_rid=210 younger_slot=1 older_slot=10
+[C:267066 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=219 younger_rid=219 older_bid=210 older_rid=210 younger_slot=14 older_slot=13
+[C:267137 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=219 younger_rid=219 older_bid=210 older_rid=210 younger_slot=2 older_slot=10
+[C:267181 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=220 younger_rid=220 older_bid=211 older_rid=211 younger_slot=13 older_slot=11
+[C:268083 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=110 younger_rid=110 older_bid=101 older_rid=101 younger_slot=13 older_slot=12
+[C:268100 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=110 younger_rid=110 older_bid=101 older_rid=101 younger_slot=19 older_slot=17
+[C:268139 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=110 younger_rid=110 older_bid=101 older_rid=101 younger_slot=8 older_slot=5
+[C:268181 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=111 younger_rid=111 older_bid=102 older_rid=102 younger_slot=13 older_slot=12
+[C:269059 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=1 younger_rid=1 older_bid=248 older_rid=248 younger_slot=9 older_slot=0
+[C:269102 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=1 younger_rid=1 older_bid=248 older_rid=248 younger_slot=19 older_slot=17
+[C:269153 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=1 younger_rid=1 older_bid=248 older_rid=248 younger_slot=9 older_slot=2
+[C:269183 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=2 younger_rid=2 older_bid=249 older_rid=249 younger_slot=5 older_slot=1
+[C:270061 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=148 younger_rid=148 older_bid=139 older_rid=139 younger_slot=9 older_slot=0
+[C:270102 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=148 younger_rid=148 older_bid=139 older_rid=139 younger_slot=19 older_slot=17
+[C:270155 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=148 younger_rid=148 older_bid=139 older_rid=139 younger_slot=9 older_slot=2
+[C:270183 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=149 younger_rid=149 older_bid=140 older_rid=140 younger_slot=5 older_slot=1
+[C:271030 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=39 younger_rid=39 older_bid=30 older_rid=30 younger_slot=10 older_slot=7
+[C:271071 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=39 younger_rid=39 older_bid=30 older_rid=30 younger_slot=15 older_slot=5
+[C:271123 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=39 younger_rid=39 older_bid=30 older_rid=30 younger_slot=20 older_slot=19
+[C:271167 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=40 younger_rid=40 older_bid=31 older_rid=31 younger_slot=10 older_slot=0
+[C:272055 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=186 younger_rid=186 older_bid=177 older_rid=177 younger_slot=1 older_slot=10
+[C:272073 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=186 younger_rid=186 older_bid=177 older_rid=177 younger_slot=16 older_slot=14
+[C:272111 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=186 younger_rid=186 older_bid=177 older_rid=177 younger_slot=21 older_slot=20
+[C:272185 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=187 younger_rid=187 older_bid=178 older_rid=178 younger_slot=8 older_slot=2
+[C:273057 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=77 younger_rid=77 older_bid=68 older_rid=68 younger_slot=1 older_slot=9
+[C:273106 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=77 younger_rid=77 older_bid=68 older_rid=68 younger_slot=20 older_slot=18
+[C:273115 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=77 younger_rid=77 older_bid=68 older_rid=68 younger_slot=19 older_slot=2
+[C:273156 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=78 younger_rid=78 older_bid=69 older_rid=69 younger_slot=21 older_slot=1
+[C:277271 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=92 younger_rid=92 older_bid=79 older_rid=79 younger_slot=1 older_slot=0
+[C:277272 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=105 younger_rid=105 older_bid=79 older_rid=79 younger_slot=2 older_slot=0
+[C:277272 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=105 younger_rid=105 older_bid=92 older_rid=92 younger_slot=2 older_slot=1
+[C:277291 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=118 younger_rid=118 older_bid=92 older_rid=92 younger_slot=0 older_slot=1
+[C:277291 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=118 younger_rid=118 older_bid=105 older_rid=105 younger_slot=0 older_slot=2
+[C:282830 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=254 younger_rid=254 older_bid=241 older_rid=241 younger_slot=1 older_slot=0
+tid: 0 Core@300000: Retired blocks 105985. BROB head info: B2 STID0 BPC 0x124e8 [STD COND]
+tid: 1 Core@300000: Retired blocks 105985. BROB head info: B255 STID1 BPC 0x12b9c [STD FALL]
+tid: 2 Core@300000: Retired blocks 105985. BROB head info: B2 STID2 BPC 0x12b9c [STD FALL]
+tid: 3 Core@300000: Retired blocks 105985. BROB head info: B254 STID3 BPC 0x12b9c [STD FALL]
+tid: 0 Core@400000: Retired blocks 180985. BROB head info: B64 STID0 BPC 0x124e8 [STD COND]
+tid: 1 Core@400000: Retired blocks 180985. BROB head info: B61 STID1 BPC 0x12b9c [STD FALL]
+tid: 2 Core@400000: Retired blocks 180985. BROB head info: B64 STID2 BPC 0x12b9c [STD FALL]
+tid: 3 Core@400000: Retired blocks 180985. BROB head info: B60 STID3 BPC 0x12b9c [STD FALL]
+tid: 0 Core@500000: Retired blocks 246320. BROB head info: B186 STID0 BPC 0x125aa [STD COND]
+tid: 1 Core@500000: Retired blocks 246320. BROB head info: B122 STID1 BPC 0x12b8e [STD COND]
+tid: 2 Core@500000: Retired blocks 246320. BROB head info: B129 STID2 BPC 0x12b9c [STD FALL]
+tid: 3 Core@500000: Retired blocks 246320. BROB head info: B123 STID3 BPC 0x12bb6 [STD COND]
+tid: 0 Core@600000: Retired blocks 308743. BROB head info: B217 STID0 BPC 0x1262a [STD COND]
+tid: 1 Core@600000: Retired blocks 308743. BROB head info: B183 STID1 BPC 0x12bb6 [STD COND]
+tid: 2 Core@600000: Retired blocks 308743. BROB head info: B191 STID2 BPC 0x12b9c [STD FALL]
+tid: 3 Core@600000: Retired blocks 308743. BROB head info: B184 STID3 BPC 0x12b9c [STD FALL]
+tid: 0 Core@700000: Retired blocks 371229. BROB head info: B72 STID0 BPC 0x1262a [STD COND]
+tid: 1 Core@700000: Retired blocks 371229. BROB head info: B241 STID1 BPC 0x12b9c [STD FALL]
+tid: 2 Core@700000: Retired blocks 371229. BROB head info: B238 STID2 BPC 0x12b9c [STD FALL]
+tid: 3 Core@700000: Retired blocks 371229. BROB head info: B246 STID3 BPC 0x12b9c [STD FALL]
+tid: 0 Core@800000: Retired blocks 423786. BROB head info: B217 STID0 BPC 0x1151a [STD COND]
+tid: 1 Core@800000: Retired blocks 423786. BROB head info: B224 STID1 BPC 0x1151a [STD COND]
+tid: 2 Core@800000: Retired blocks 423786. BROB head info: B217 STID2 BPC 0x1151a [STD COND]
+tid: 3 Core@800000: Retired blocks 423786. BROB head info: B216 STID3 BPC 0x1151a [STD COND]
+tid: 0 Core@900000: Retired blocks 446494. BROB head info: B9 STID0 BPC 0x1151a [STD COND]
+tid: 1 Core@900000: Retired blocks 446494. BROB head info: B10 STID1 BPC 0x1151a [STD COND]
+tid: 2 Core@900000: Retired blocks 446494. BROB head info: B5 STID2 BPC 0x1151a [STD COND]
+tid: 3 Core@900000: Retired blocks 446494. BROB head info: B6 STID3 BPC 0x1151a [STD COND]
+tid: 0 Core@1000000: Retired blocks 478748. BROB head info: B132 STID0 BPC 0x120a6 [STD DIRECT]
+tid: 1 Core@1000000: Retired blocks 478748. BROB head info: B132 STID1 BPC 0x12084 [STD COND]
+tid: 2 Core@1000000: Retired blocks 478748. BROB head info: B137 STID2 BPC 0x1207a [STD COND]
+tid: 3 Core@1000000: Retired blocks 478748. BROB head info: B139 STID3 BPC 0x120a6 [STD DIRECT]
+[C:1022052][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=196 younger_rid=196 older_bid=187 older_rid=187 younger_slot=5 older_slot=4
+[C:1022059][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=206 younger_rid=206 older_bid=197 older_rid=197 younger_slot=2 older_slot=3
+[C:1022105][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=213 younger_rid=213 older_bid=204 older_rid=204 younger_slot=3 older_slot=1
+[C:1022139][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=219 younger_rid=219 older_bid=210 older_rid=210 younger_slot=1 older_slot=0
+[C:1023315][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=139 younger_rid=139 older_bid=130 older_rid=130 younger_slot=3 older_slot=2
+[C:1023347][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=149 younger_rid=149 older_bid=140 older_rid=140 younger_slot=1 older_slot=0
+[C:1023387][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=156 younger_rid=156 older_bid=147 older_rid=147 younger_slot=3 older_slot=6
+[C:1023415][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=162 younger_rid=162 older_bid=153 older_rid=153 younger_slot=7 older_slot=5
+[C:1024461][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=82 younger_rid=82 older_bid=73 older_rid=73 younger_slot=6 older_slot=5
+[C:1024505][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=92 younger_rid=92 older_bid=83 older_rid=83 younger_slot=3 older_slot=0
+[C:1024549][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=99 younger_rid=99 older_bid=90 older_rid=90 younger_slot=6 older_slot=5
+[C:1024580][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=105 younger_rid=105 older_bid=96 older_rid=96 younger_slot=11 older_slot=7
+[C:1025627][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=25 younger_rid=25 older_bid=16 older_rid=16 younger_slot=9 older_slot=4
+[C:1025657][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=35 younger_rid=35 older_bid=26 older_rid=26 younger_slot=5 older_slot=15
+[C:1025703][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=42 younger_rid=42 older_bid=33 older_rid=33 younger_slot=10 older_slot=2
+[C:1025743][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=48 younger_rid=48 older_bid=39 older_rid=39 younger_slot=9 older_slot=4
+[C:1026773][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=224 younger_rid=224 older_bid=215 older_rid=215 younger_slot=28 older_slot=26
+[C:1026851][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=234 younger_rid=234 older_bid=225 older_rid=225 younger_slot=23 older_slot=22
+[C:1026869][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=241 younger_rid=241 older_bid=232 older_rid=232 younger_slot=28 older_slot=26
+[C:1026899][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=247 younger_rid=247 older_bid=238 older_rid=238 younger_slot=11 older_slot=9
+[C:1027982][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=167 younger_rid=167 older_bid=158 older_rid=158 younger_slot=21 older_slot=19
+[C:1028011][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=177 younger_rid=177 older_bid=168 older_rid=168 younger_slot=27 older_slot=26
+[C:1028063][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=184 younger_rid=184 older_bid=175 older_rid=175 younger_slot=35 older_slot=1
+[C:1028117][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=190 younger_rid=190 older_bid=181 older_rid=181 younger_slot=10 older_slot=9
+[C:1029213][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=110 younger_rid=110 older_bid=101 older_rid=101 younger_slot=17 older_slot=2
+[C:1029267][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=120 younger_rid=120 older_bid=111 older_rid=111 younger_slot=28 older_slot=25
+[C:1029335][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=127 younger_rid=127 older_bid=118 older_rid=118 younger_slot=17 older_slot=2
+[C:1029387][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=133 younger_rid=133 older_bid=124 older_rid=124 younger_slot=19 older_slot=18
+[C:1030496][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=53 younger_rid=53 older_bid=44 older_rid=44 younger_slot=21 older_slot=20
+[C:1030523][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=63 younger_rid=63 older_bid=54 older_rid=54 younger_slot=27 older_slot=26
+[C:1030577][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=70 younger_rid=70 older_bid=61 older_rid=61 younger_slot=35 older_slot=1
+[C:1030631][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=76 younger_rid=76 older_bid=67 older_rid=67 younger_slot=21 older_slot=10
+[C:1031727][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=252 younger_rid=252 older_bid=243 older_rid=243 younger_slot=17 older_slot=2
+[C:1031780][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=6 younger_rid=6 older_bid=253 older_rid=253 younger_slot=26 older_slot=25
+[C:1031847][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=13 younger_rid=13 older_bid=4 older_rid=4 younger_slot=17 older_slot=2
+[C:1031903][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=19 younger_rid=19 older_bid=10 older_rid=10 younger_slot=18 older_slot=10
+[C:1033012][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=195 younger_rid=195 older_bid=186 older_rid=186 younger_slot=21 older_slot=20
+[C:1033041][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=205 younger_rid=205 older_bid=196 older_rid=196 younger_slot=27 older_slot=26
+[C:1033093][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=212 younger_rid=212 older_bid=203 older_rid=203 younger_slot=35 older_slot=17
+[C:1033147][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=218 younger_rid=218 older_bid=209 older_rid=209 younger_slot=21 older_slot=11
+[C:1034245][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=138 younger_rid=138 older_bid=129 older_rid=129 younger_slot=17 older_slot=2
+[C:1034296][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=148 younger_rid=148 older_bid=139 older_rid=139 younger_slot=27 older_slot=25
+[C:1034361][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=155 younger_rid=155 older_bid=146 older_rid=146 younger_slot=17 older_slot=2
+[C:1034401][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=161 younger_rid=161 older_bid=152 older_rid=152 younger_slot=18 older_slot=9
+[C:1035523][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=81 younger_rid=81 older_bid=72 older_rid=72 younger_slot=21 older_slot=19
+[C:1035553][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=91 younger_rid=91 older_bid=82 older_rid=82 younger_slot=27 older_slot=26
+[C:1035605][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=98 younger_rid=98 older_bid=89 older_rid=89 younger_slot=35 older_slot=17
+[C:1035659][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=104 younger_rid=104 older_bid=95 older_rid=95 younger_slot=21 older_slot=10
+[C:1036755][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=24 younger_rid=24 older_bid=15 older_rid=15 younger_slot=17 older_slot=2
+[C:1036808][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=34 younger_rid=34 older_bid=25 older_rid=25 younger_slot=27 older_slot=25
+[C:1036875][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=41 younger_rid=41 older_bid=32 older_rid=32 younger_slot=17 older_slot=2
+[C:1036931][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=47 younger_rid=47 older_bid=38 older_rid=38 younger_slot=18 older_slot=9
+[C:1038037][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=223 younger_rid=223 older_bid=214 older_rid=214 younger_slot=20 older_slot=19
+[C:1038067][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=233 younger_rid=233 older_bid=224 older_rid=224 younger_slot=27 older_slot=26
+[C:1038119][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=240 younger_rid=240 older_bid=231 older_rid=231 younger_slot=35 older_slot=17
+[C:1038173][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=246 younger_rid=246 older_bid=237 older_rid=237 younger_slot=20 older_slot=10
+[C:1039269][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=166 younger_rid=166 older_bid=157 older_rid=157 younger_slot=17 older_slot=2
+[C:1039323][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=176 younger_rid=176 older_bid=167 older_rid=167 younger_slot=26 older_slot=27
+[C:1039389][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=183 younger_rid=183 older_bid=174 older_rid=174 younger_slot=34 older_slot=17
+[C:1039445][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=189 younger_rid=189 older_bid=180 older_rid=180 younger_slot=18 older_slot=10
+[C:1040554][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=109 younger_rid=109 older_bid=100 older_rid=100 younger_slot=21 older_slot=20
+[C:1040581][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=119 younger_rid=119 older_bid=110 older_rid=110 younger_slot=27 older_slot=26
+[C:1040633][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=126 younger_rid=126 older_bid=117 older_rid=117 younger_slot=35 older_slot=17
+[C:1040687][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=132 younger_rid=132 older_bid=123 older_rid=123 younger_slot=21 older_slot=10
+[C:1041785][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=52 younger_rid=52 older_bid=43 older_rid=43 younger_slot=17 older_slot=2
+[C:1041839][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=62 younger_rid=62 older_bid=53 older_rid=53 younger_slot=26 older_slot=27
+[C:1041903][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=69 younger_rid=69 older_bid=60 older_rid=60 younger_slot=17 older_slot=2
+[C:1041959][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=75 younger_rid=75 older_bid=66 older_rid=66 younger_slot=19 older_slot=18
+[C:1043069][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=251 younger_rid=251 older_bid=242 older_rid=242 younger_slot=19 older_slot=20
+[C:1043097][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=5 younger_rid=5 older_bid=252 older_rid=252 younger_slot=27 older_slot=26
+[C:1043149][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=12 younger_rid=12 older_bid=3 older_rid=3 younger_slot=35 older_slot=1
+[C:1043203][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=18 younger_rid=18 older_bid=9 older_rid=9 younger_slot=20 older_slot=10
+[C:1044299][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=194 younger_rid=194 older_bid=185 older_rid=185 younger_slot=17 older_slot=2
+[C:1044353][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=204 younger_rid=204 older_bid=195 older_rid=195 younger_slot=28 older_slot=26
+[C:1044419][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=211 younger_rid=211 older_bid=202 older_rid=202 younger_slot=17 older_slot=2
+[C:1044475][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=217 younger_rid=217 older_bid=208 older_rid=208 younger_slot=19 older_slot=18
+[C:1045582][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=137 younger_rid=137 older_bid=128 older_rid=128 younger_slot=21 older_slot=19
+[C:1045611][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=147 younger_rid=147 older_bid=138 older_rid=138 younger_slot=27 older_slot=26
+[C:1045664][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=154 younger_rid=154 older_bid=145 older_rid=145 younger_slot=35 older_slot=17
+[C:1045717][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=160 younger_rid=160 older_bid=151 older_rid=151 younger_slot=10 older_slot=9
+[C:1046817][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=80 younger_rid=80 older_bid=71 older_rid=71 younger_slot=17 older_slot=2
+[C:1046867][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=90 younger_rid=90 older_bid=81 older_rid=81 younger_slot=27 older_slot=26
+[C:1046933][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=97 younger_rid=97 older_bid=88 older_rid=88 younger_slot=17 older_slot=2
+[C:1046973][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=103 younger_rid=103 older_bid=94 older_rid=94 younger_slot=18 older_slot=9
+[C:1048097][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=23 younger_rid=23 older_bid=14 older_rid=14 younger_slot=21 older_slot=20
+[C:1048127][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=33 younger_rid=33 older_bid=24 older_rid=24 younger_slot=27 older_slot=26
+[C:1048177][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=40 younger_rid=40 older_bid=31 older_rid=31 younger_slot=35 older_slot=1
+[C:1048231][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=46 younger_rid=46 older_bid=37 older_rid=37 younger_slot=21 older_slot=10
+[C:1049327][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=222 younger_rid=222 older_bid=213 older_rid=213 younger_slot=17 older_slot=2
+[C:1049379][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=232 younger_rid=232 older_bid=223 older_rid=223 younger_slot=26 older_slot=25
+[C:1049445][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=239 younger_rid=239 older_bid=230 older_rid=230 younger_slot=17 older_slot=2
+[C:1049487][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=245 younger_rid=245 older_bid=236 older_rid=236 younger_slot=19 older_slot=18
+[C:1050609][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=165 younger_rid=165 older_bid=156 older_rid=156 younger_slot=22 older_slot=19
+[C:1050637][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=175 younger_rid=175 older_bid=166 older_rid=166 younger_slot=27 older_slot=26
+[C:1050692][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=182 younger_rid=182 older_bid=173 older_rid=173 younger_slot=35 older_slot=17
+[C:1050745][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=188 younger_rid=188 older_bid=179 older_rid=179 younger_slot=10 older_slot=9
+[C:1051841][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=108 younger_rid=108 older_bid=99 older_rid=99 younger_slot=17 older_slot=2
+[C:1051895][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=118 younger_rid=118 older_bid=109 older_rid=109 younger_slot=26 older_slot=27
+[C:1051961][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=125 younger_rid=125 older_bid=116 older_rid=116 younger_slot=17 older_slot=2
+[C:1052001][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=131 younger_rid=131 older_bid=122 older_rid=122 younger_slot=18 older_slot=9
+[C:1053125][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=51 younger_rid=51 older_bid=42 older_rid=42 younger_slot=22 older_slot=19
+[C:1053153][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=61 younger_rid=61 older_bid=52 older_rid=52 younger_slot=27 older_slot=26
+[C:1053207][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=68 younger_rid=68 older_bid=59 older_rid=59 younger_slot=35 older_slot=17
+[C:1053259][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=74 younger_rid=74 older_bid=65 older_rid=65 younger_slot=22 older_slot=9
+[C:1054355][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=250 younger_rid=250 older_bid=241 older_rid=241 younger_slot=17 older_slot=2
+[C:1054409][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=4 younger_rid=4 older_bid=251 older_rid=251 younger_slot=27 older_slot=25
+[C:1054475][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=11 younger_rid=11 older_bid=2 older_rid=2 younger_slot=17 older_slot=2
+[C:1054517][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=17 younger_rid=17 older_bid=8 older_rid=8 younger_slot=19 older_slot=18
+[C:1055640][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=193 younger_rid=193 older_bid=184 older_rid=184 younger_slot=21 older_slot=20
+[C:1055669][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=203 younger_rid=203 older_bid=194 older_rid=194 younger_slot=27 older_slot=26
+[C:1055721][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=210 younger_rid=210 older_bid=201 older_rid=201 younger_slot=35 older_slot=1
+[C:1055773][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=216 younger_rid=216 older_bid=207 older_rid=207 younger_slot=21 older_slot=10
+[C:1056869][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=136 younger_rid=136 older_bid=127 older_rid=127 younger_slot=17 older_slot=2
+[C:1056924][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=146 younger_rid=146 older_bid=137 older_rid=137 younger_slot=28 older_slot=26
+[C:1056989][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=153 younger_rid=153 older_bid=144 older_rid=144 younger_slot=34 older_slot=17
+[C:1057047][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=159 younger_rid=159 older_bid=150 older_rid=150 younger_slot=18 older_slot=10
+[C:1058153][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=79 younger_rid=79 older_bid=70 older_rid=70 younger_slot=21 older_slot=19
+[C:1058183][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=89 younger_rid=89 older_bid=80 older_rid=80 younger_slot=27 older_slot=26
+[C:1058235][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=96 younger_rid=96 older_bid=87 older_rid=87 younger_slot=35 older_slot=1
+[C:1058289][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=102 younger_rid=102 older_bid=93 older_rid=93 younger_slot=21 older_slot=10
+[C:1059383][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=22 younger_rid=22 older_bid=13 older_rid=13 younger_slot=17 older_slot=2
+[C:1059437][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=32 younger_rid=32 older_bid=23 older_rid=23 younger_slot=26 older_slot=27
+[C:1059503][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=39 younger_rid=39 older_bid=30 older_rid=30 younger_slot=17 older_slot=2
+[C:1059559][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=45 younger_rid=45 older_bid=36 older_rid=36 younger_slot=18 older_slot=10
+[C:1060665][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=221 younger_rid=221 older_bid=212 older_rid=212 younger_slot=21 older_slot=19
+[C:1060695][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=231 younger_rid=231 older_bid=222 older_rid=222 younger_slot=27 older_slot=26
+[C:1060747][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=238 younger_rid=238 older_bid=229 older_rid=229 younger_slot=35 older_slot=17
+[C:1060801][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=244 younger_rid=244 older_bid=235 older_rid=235 younger_slot=10 older_slot=9
+[C:1076041][DFX.NA    ]: Deadlock detected at thread 1, cycles=1076042, waitCycles exceeded threshold, verified blocks=136671, verified minsts=0
+[C:1076041][BCC.STAGE ]: ==================================================
+[C:1076041][BCC.STAGE ]: size: 6 commitPtr: 191 nonFlushBid: 196 allocPtr: 197
+[C:1076041][BCC.STAGE ]: 	|--B191 STID0 BPC 0x12c34 [STD FALL] STD completed<- oldest/commitPtr
+[C:1076041][BCC.STAGE ]: 	|--B192 STID0 BPC 0x12c4e [STD COND] STD allocated
+[C:1076041][BCC.STAGE ]: 	|--B193 STID0 BPC 0x12c26 [STD COND] STD allocated
+[C:1076041][BCC.STAGE ]: 	|--B194 STID0 BPC 0x12c34 [STD FALL] STD allocated
+[C:1076041][BCC.STAGE ]: 	|--B195 STID0 BPC 0x12c4e [STD COND] STD allocated
+[C:1076041][BCC.STAGE ]: 	|--B196 STID0 BPC 0x12c26 [STD COND] STD allocated<- nonFlushBid
+[C:1076041][BCC.STAGE ]: ==================================================
+B191 STID0 BPC 0x12c34 [STD FALL] STD completed
+EMPTY BROB ENTRY
+[C:1076041][BCC.STAGE ]: ==================================================
+[C:1076041][BCC.STAGE ]: size: 5 commitPtr: 252 nonFlushBid: 0 allocPtr: 1
+[C:1076041][BCC.STAGE ]: 	|--B252 STID2 BPC 0x12c26 [STD COND] STD completed<- oldest/commitPtr
+[C:1076041][BCC.STAGE ]: 	|--B253 STID2 BPC 0x12c34 [STD FALL] STD allocated
+[C:1076041][BCC.STAGE ]: 	|--B254 STID2 BPC 0x12c4e [STD COND] STD allocated
+[C:1076041][BCC.STAGE ]: 	|--B255 STID2 BPC 0x12c26 [STD COND] STD allocated
+[C:1076041][BCC.STAGE ]: 	|--B0 STID2 BPC 0x12c34 [STD FALL] STD allocated<- nonFlushBid
+[C:1076041][BCC.STAGE ]: ==================================================
+B252 STID2 BPC 0x12c26 [STD COND] STD completed
+[C:1076041][BCC.STAGE ]: ==================================================
+[C:1076041][BCC.STAGE ]: size: 4 commitPtr: 250 nonFlushBid: 253 allocPtr: 254
+[C:1076041][BCC.STAGE ]: 	|--B250 STID3 BPC 0x12c34 [STD FALL] STD allocated<- oldest/commitPtr
+[C:1076041][BCC.STAGE ]: 	|--B251 STID3 BPC 0x12c4e [STD COND] STD allocated
+[C:1076041][BCC.STAGE ]: 	|--B252 STID3 BPC 0x12c26 [STD COND] STD allocated
+[C:1076041][BCC.STAGE ]: 	|--B253 STID3 BPC 0x12c34 [STD FALL] STD allocated<- nonFlushBid
+[C:1076041][BCC.STAGE ]: ==================================================
+B250 STID3 BPC 0x12c34 [STD FALL] STD allocated
+[C:1076041][SPE.STAGE ]: ==================================================
+[C:1076041][SPE.STAGE ]: PEID:0 tid:0, size 23 osdSize 22
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c4e P0-L0-(B192-)-G0-T0-I68-ST0  TR31-UR11 sid:0 lsid:0|C.BSTART.STD COND, 0x12c26 last: false retired top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c50 P0-L0-(B192-)-G0-T0-I69-ST0  TR31-UR11 sid:0 lsid:0 src0:a3-P(1)-rdy data=0xcfe235db07b33a46,src1:63,|setc.andi a3, 63 last: false completed top:free<- oldest
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c54 P0-L0-(B192-)-G0-T0-I70-ST0  TR31-UR11 sid:0 lsid:0 |BSTOP last: true completed top:free<- stop of B192
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c26 P0-L0-(B193-)-G0-T0-I71-ST0  TR31-UR11 sid:0 lsid:0|C.BSTART.STD COND, 0x12c9c last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c28 P0-L0-(B193-)-G0-T0-I72-ST0  TR31-UR11 sid:0 lsid:0 src0:356352,->dst0:t-P(31) data=0x69c28,|addtpc 356352 -> t last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c2c P0-L0-(B193-)-G0-T0-I73-ST0  TR32-UR11 sid:0 lsid:0 src0:t#1-P(31)-rdy data=0x69c28,src1:-1764,->dst0:t-P(32) data=0xb,|lwi.u t#1, -1764 -> t last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c30 P0-L0-(B193-)-G0-T0-I74-ST0  TR33-UR11 sid:0 lsid:1 src0:t#1-P(32)-rdy,src1:a0-P(33)-rdy,|setc.geu t#1, a0 last: false issued top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c34 P0-L0-(B193-)-G0-T0-I75-ST0  TR33-UR11 sid:0 lsid:1 |BSTOP last: true completed top:free<- stop of B193
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c34 P0-L0-(B194-)-G0-T0-I76-ST0  TR33-UR11 sid:0 lsid:0|C.BSTART.STD last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c36 P0-L0-(B194-)-G0-T0-I77-ST0  TR33-UR11 sid:0 lsid:0 src0:1586122752,->dst0:t-P(33) data=0x5e8a5000,|lui 1586122752 -> t last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c3a P0-L0-(B194-)-G0-T0-I78-ST0  TR34-UR11 sid:0 lsid:0 src0:t#1-P(33)-rdy data=0x5e8a5000,src1:0x301,->dst0:t-P(34) data=0x5e8a5301,|addi t#1, 0x301 -> t last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c3e P0-L0-(B194-)-G0-T0-I79-ST0  TR35-UR11 sid:0 lsid:0 src0:a3-P(1)-rdy,src1:t#1-P(34)-rdy,->dst0:t-P(35),|mul a3, t#1 -> t last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c42 P0-L0-(B194-)-G0-T0-I80-ST0  TR36-UR11 sid:0 lsid:0 src0:929501184,->dst0:t-P(36) data=0x37671000,|lui 929501184 -> t last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c46 P0-L0-(B194-)-G0-T0-I81-ST0  TR37-UR11 sid:0 lsid:0 src0:t#1-P(36)-rdy,src1:0x908,->dst0:t-P(37),|addi t#1, 0x908 -> t last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c4a P0-L0-(B194-)-G0-T0-I82-ST0  TR38-UR11 sid:0 lsid:0 src0:t#3-P(35)-not_rdy,src1:t#1-P(37)-not_rdy,->dst0:a3-P(6),|add t#3, t#1 -> a3 last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c4e P0-L0-(B194-)-G0-T0-I83-ST0  TR38-UR11 sid:0 lsid:0 |BSTOP last: true completed top:free<- stop of B194
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c4e P0-L0-(B195-)-G0-T0-I84-ST0  TR38-UR11 sid:0 lsid:0|C.BSTART.STD COND, 0x12c26 last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c50 P0-L0-(B195-)-G0-T0-I85-ST0  TR38-UR11 sid:0 lsid:0 src0:a3-P(6)-not_rdy,src1:63,|setc.andi a3, 63 last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c54 P0-L0-(B195-)-G0-T0-I86-ST0  TR38-UR11 sid:0 lsid:0 |BSTOP last: true completed top:free<- stop of B195
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c26 P0-L0-(B196-)-G0-T0-I87-ST0  TR38-UR11 sid:0 lsid:0|C.BSTART.STD COND, 0x12c9c last: false alloc top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c28 P0-L0-(B196-)-G0-T0-I88-ST0  TR38-UR11 sid:0 lsid:0 src0:356352,->dst0:t-P(38),|addtpc 356352 -> t last: false alloc top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c2c P0-L0-(B196-)-G0-T0-I89-ST0  TR39-UR11 sid:0 lsid:0 src0:t#1-P(38)-not_rdy,src1:-1764,->dst0:t-P(39),|lwi.u t#1, -1764 -> t last: false alloc top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c30 P0-L0-(B196-)-G0-T0-I90-ST0  TR40-UR11 sid:0 lsid:1 src0:t#1-P(39)-not_rdy,src1:a0-P(33)-not_rdy,|setc.geu t#1, a0 last: false alloc top:free
+[C:1076041][SPE.STAGE ]: ==================================================
+[C:1076041][SPE.STAGE ]: ==================================================
+[C:1076041][SPE.STAGE ]: PEID:0 tid:1, size 0 osdSize 0
+[C:1076041][SPE.STAGE ]: ==================================================
+[C:1076041][SPE.STAGE ]: ==================================================
+[C:1076041][SPE.STAGE ]: PEID:0 tid:2, size 23 osdSize 20
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c34 P0-L0-(B253-)-G0-T0-I8-ST2  TR69-UR23 sid:0 lsid:0|C.BSTART.STD last: false retired top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c36 P0-L0-(B253-)-G0-T0-I9-ST2  TR69-UR23 sid:0 lsid:0 src0:1586122752,->dst0:t-P(69) data=0x5e8a5000,|lui 1586122752 -> t last: false retired top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c3a P0-L0-(B253-)-G0-T0-I10-ST2  TR70-UR23 sid:0 lsid:0 src0:t#1-P(69)-rdy data=0x5e8a5000,src1:0x301,->dst0:t-P(70) data=0x5e8a5301,|addi t#1, 0x301 -> t last: false retired top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c3e P0-L0-(B253-)-G0-T0-I11-ST2  TR71-UR23 sid:0 lsid:0 src0:a3-P(260)-rdy data=0xfd22de180c14d0e,src1:t#1-P(70)-rdy data=0x5e8a5301,->dst0:t-P(71),|mul a3, t#1 -> t last: false in_queue top:free<- oldest
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c42 P0-L0-(B253-)-G0-T0-I12-ST2  TR72-UR23 sid:0 lsid:0 src0:929501184,->dst0:t-P(72) data=0x37671000,|lui 929501184 -> t last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c46 P0-L0-(B253-)-G0-T0-I13-ST2  TR73-UR23 sid:0 lsid:0 src0:t#1-P(72)-rdy data=0x37671000,src1:0x908,->dst0:t-P(73) data=0x37671908,|addi t#1, 0x908 -> t last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c4a P0-L0-(B253-)-G0-T0-I14-ST2  TR74-UR23 sid:0 lsid:0 src0:t#3-P(71)-not_rdy,src1:t#1-P(73)-rdy,->dst0:a3-P(261),|add t#3, t#1 -> a3 last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c4e P0-L0-(B253-)-G0-T0-I15-ST2  TR74-UR23 sid:0 lsid:0 |BSTOP last: true completed top:free<- stop of B253
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c4e P0-L0-(B254-)-G0-T0-I16-ST2  TR74-UR23 sid:0 lsid:0|C.BSTART.STD COND, 0x12c26 last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c50 P0-L0-(B254-)-G0-T0-I17-ST2  TR74-UR23 sid:0 lsid:0 src0:a3-P(261)-not_rdy,src1:63,|setc.andi a3, 63 last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c54 P0-L0-(B254-)-G0-T0-I18-ST2  TR74-UR23 sid:0 lsid:0 |BSTOP last: true completed top:free<- stop of B254
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c26 P0-L0-(B255-)-G0-T0-I19-ST2  TR74-UR23 sid:0 lsid:0|C.BSTART.STD COND, 0x12c9c last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c28 P0-L0-(B255-)-G0-T0-I20-ST2  TR74-UR23 sid:0 lsid:0 src0:356352,->dst0:t-P(74) data=0x69c28,|addtpc 356352 -> t last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c2c P0-L0-(B255-)-G0-T0-I21-ST2  TR75-UR23 sid:0 lsid:0 src0:t#1-P(74)-rdy,src1:-1764,->dst0:t-P(75),|lwi.u t#1, -1764 -> t last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c30 P0-L0-(B255-)-G0-T0-I22-ST2  TR76-UR23 sid:0 lsid:1 src0:t#1-P(75)-not_rdy,src1:a0-P(302)-rdy,|setc.geu t#1, a0 last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c34 P0-L0-(B255-)-G0-T0-I23-ST2  TR76-UR23 sid:0 lsid:1 |BSTOP last: true alloc top:free<- stop of B255
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c34 P0-L0-(B0+)-G0-T0-I24-ST2  TR76-UR23 sid:0 lsid:0|C.BSTART.STD last: false alloc top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c36 P0-L0-(B0+)-G0-T0-I25-ST2  TR76-UR23 sid:0 lsid:0 src0:1586122752,->dst0:t-P(76),|lui 1586122752 -> t last: false alloc top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c3a P0-L0-(B0+)-G0-T0-I26-ST2  TR77-UR23 sid:0 lsid:0 src0:t#1-P(76)-not_rdy,src1:0x301,->dst0:t-P(77),|addi t#1, 0x301 -> t last: false alloc top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c3e P0-L0-(B0+)-G0-T0-I27-ST2  TR0-UR0 sid:0 lsid:0 src0:a3(!renamed),src1:t#1(!renamed),->dst0:t(!renamed),|mul a3, t#1 -> t last: false alloc top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c42 P0-L0-(B0+)-G0-T0-I28-ST2  TR0-UR0 sid:0 lsid:0 src0:929501184,->dst0:t(!renamed),|lui 929501184 -> t last: false alloc top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c46 P0-L0-(B0+)-G0-T0-I29-ST2  TR0-UR0 sid:0 lsid:0 src0:t#1(!renamed),src1:0x908,->dst0:t(!renamed),|addi t#1, 0x908 -> t last: false alloc top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c4a P0-L0-(B0+)-G0-T0-I30-ST2  TR0-UR0 sid:0 lsid:0 src0:t#3(!renamed),src1:t#1(!renamed),->dst0:a3(!renamed),|add t#3, t#1 -> a3 last: false alloc top:free
+[C:1076041][SPE.STAGE ]: ==================================================
+[C:1076041][SPE.STAGE ]: ==================================================
+[C:1076041][SPE.STAGE ]: PEID:0 tid:3, size 20 osdSize 17
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c3e P0-L0-(B250-)-G0-T0-I102-ST3  TR43-UR23 sid:0 lsid:0 src0:a3-P(393)-rdy data=0xfd22de180c14d0e,src1:t#1-P(42)-rdy data=0x5e8a5301,->dst0:t-P(43) data=0xbd88ad1eda48d70e,|mul a3, t#1 -> t last: false retired top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c42 P0-L0-(B250-)-G0-T0-I103-ST3  TR44-UR23 sid:0 lsid:0 src0:929501184,->dst0:t-P(44) data=0x37671000,|lui 929501184 -> t last: false retired top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c46 P0-L0-(B250-)-G0-T0-I104-ST3  TR45-UR23 sid:0 lsid:0 src0:t#1-P(44)-rdy data=0x37671000,src1:0x908,->dst0:t-P(45) data=0x37671908,|addi t#1, 0x908 -> t last: false retired top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c4a P0-L0-(B250-)-G0-T0-I105-ST3  TR46-UR23 sid:0 lsid:0 src0:t#3-P(43)-rdy,src1:t#1-P(45)-rdy,->dst0:a3-P(385),|add t#3, t#1 -> a3 last: false in_queue top:free<- oldest
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c4e P0-L0-(B250-)-G0-T0-I106-ST3  TR46-UR23 sid:0 lsid:0 |BSTOP last: true completed top:free<- stop of B250
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c4e P0-L0-(B251-)-G0-T0-I107-ST3  TR46-UR23 sid:0 lsid:0|C.BSTART.STD COND, 0x12c26 last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c50 P0-L0-(B251-)-G0-T0-I108-ST3  TR46-UR23 sid:0 lsid:0 src0:a3-P(385)-not_rdy,src1:63,|setc.andi a3, 63 last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c4e TPC:0x12c54 P0-L0-(B251-)-G0-T0-I109-ST3  TR46-UR23 sid:0 lsid:0 |BSTOP last: true completed top:free<- stop of B251
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c26 P0-L0-(B252-)-G0-T0-I110-ST3  TR46-UR23 sid:0 lsid:0|C.BSTART.STD COND, 0x12c9c last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c28 P0-L0-(B252-)-G0-T0-I111-ST3  TR46-UR23 sid:0 lsid:0 src0:356352,->dst0:t-P(46) data=0x69c28,|addtpc 356352 -> t last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c2c P0-L0-(B252-)-G0-T0-I112-ST3  TR47-UR23 sid:0 lsid:0 src0:t#1-P(46)-rdy,src1:-1764,->dst0:t-P(47),|lwi.u t#1, -1764 -> t last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c30 P0-L0-(B252-)-G0-T0-I113-ST3  TR48-UR23 sid:0 lsid:1 src0:t#1-P(47)-not_rdy,src1:a0-P(416)-rdy,|setc.geu t#1, a0 last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c26 TPC:0x12c34 P0-L0-(B252-)-G0-T0-I114-ST3  TR48-UR23 sid:0 lsid:1 |BSTOP last: true completed top:free<- stop of B252
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c34 P0-L0-(B253-)-G0-T0-I115-ST3  TR48-UR23 sid:0 lsid:0|C.BSTART.STD last: false completed top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c36 P0-L0-(B253-)-G0-T0-I116-ST3  TR48-UR23 sid:0 lsid:0 src0:1586122752,->dst0:t-P(48) data=0x5e8a5000,|lui 1586122752 -> t last: false writeback top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c3a P0-L0-(B253-)-G0-T0-I117-ST3  TR49-UR23 sid:0 lsid:0 src0:t#1-P(48)-not_rdy,src1:0x301,->dst0:t-P(49),|addi t#1, 0x301 -> t last: false in_queue top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c3e P0-L0-(B253-)-G0-T0-I118-ST3  TR50-UR23 sid:0 lsid:0 src0:a3-P(385)-not_rdy,src1:t#1-P(49)-not_rdy,->dst0:t-P(50),|mul a3, t#1 -> t last: false dispatched top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c42 P0-L0-(B253-)-G0-T0-I119-ST3  TR51-UR23 sid:0 lsid:0 src0:929501184,->dst0:t-P(51),|lui 929501184 -> t last: false dispatched top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c46 P0-L0-(B253-)-G0-T0-I120-ST3  TR52-UR23 sid:0 lsid:0 src0:t#1-P(51)-not_rdy,src1:0x908,->dst0:t-P(52),|addi t#1, 0x908 -> t last: false dispatched top:free
+[C:1076041][SPE.STAGE ]: 	|-- BPC:0x12c34 TPC:0x12c4a P0-L0-(B253-)-G0-T0-I121-ST3  TR53-UR23 sid:0 lsid:0 src0:t#3-P(50)-not_rdy,src1:t#1-P(52)-not_rdy,->dst0:a3-P(386),|add t#3, t#1 -> a3 last: false dispatched top:free
+[C:1076041][SPE.STAGE ]: ==================================================
+[C:1076042  ][VEC.TOP  ]: ==================================================
+[C:1076042  ][VEC.TOP  ]: VecTop pe=0 uopQ[INT] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: VecTop pe=0 uopQ[FMA] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: VecTop pe=0 uopQ[LNEXP] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: splitSlots N=4 pendingAdmit=0
+[C:1076042  ][VEC.TOP  ]: vecEntries=0
+[C:1076042  ][VEC.TOP  ]: srcBuf[INT] size=0 []
+[C:1076042  ][VEC.TOP  ]: srcBuf[FMA] size=0 []
+[C:1076042  ][VEC.TOP  ]: srcBuf[LNEXP] size=0 []
+[C:1076042  ][VEC.TOP  ]: pipes alu=0 fma=0 lnexp=0 nextIssue[ALU0,ALU1,FPU,LNEXP,SHARED]=1060708,1060869,0,0,0
+[C:1076042  ][VEC.TOP  ]: dstBuf[INT] size=0
+[C:1076042  ][VEC.TOP  ]: dstBuf[FMA] size=0
+[C:1076042  ][VEC.TOP  ]: dstBuf[LNEXP] size=0
+[C:1076042  ][VEC.TOP  ]: pendingWrites=0
+[C:1076042  ][VEC.TOP  ]: uopQ empty -- 卡点不在 uopQ ready 选择，可能块未切分（VecTop 未 ReceiveTileOp）或 SrcBuf/pipe 反压。
+[C:1076042  ][VEC.TOP  ]: ==================================================
+[C:1076042  ][VEC.TOP  ]: VecTop pe=1 uopQ[INT] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: VecTop pe=1 uopQ[FMA] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: VecTop pe=1 uopQ[LNEXP] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: splitSlots N=4 pendingAdmit=0
+[C:1076042  ][VEC.TOP  ]: vecEntries=0
+[C:1076042  ][VEC.TOP  ]: srcBuf[INT] size=0 []
+[C:1076042  ][VEC.TOP  ]: srcBuf[FMA] size=0 []
+[C:1076042  ][VEC.TOP  ]: srcBuf[LNEXP] size=0 []
+[C:1076042  ][VEC.TOP  ]: pipes alu=0 fma=0 lnexp=0 nextIssue[ALU0,ALU1,FPU,LNEXP,SHARED]=1060789,1061035,0,0,0
+[C:1076042  ][VEC.TOP  ]: dstBuf[INT] size=0
+[C:1076042  ][VEC.TOP  ]: dstBuf[FMA] size=0
+[C:1076042  ][VEC.TOP  ]: dstBuf[LNEXP] size=0
+[C:1076042  ][VEC.TOP  ]: pendingWrites=0
+[C:1076042  ][VEC.TOP  ]: uopQ empty -- 卡点不在 uopQ ready 选择，可能块未切分（VecTop 未 ReceiveTileOp）或 SrcBuf/pipe 反压。
+[C:1076042  ][VEC.TOP  ]: ==================================================
+[C:1076042  ][VEC.TOP  ]: VecTop pe=2 uopQ[INT] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: VecTop pe=2 uopQ[FMA] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: VecTop pe=2 uopQ[LNEXP] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: splitSlots N=4 pendingAdmit=0
+[C:1076042  ][VEC.TOP  ]: vecEntries=0
+[C:1076042  ][VEC.TOP  ]: srcBuf[INT] size=0 []
+[C:1076042  ][VEC.TOP  ]: srcBuf[FMA] size=0 []
+[C:1076042  ][VEC.TOP  ]: srcBuf[LNEXP] size=0 []
+[C:1076042  ][VEC.TOP  ]: pipes alu=0 fma=0 lnexp=0 nextIssue[ALU0,ALU1,FPU,LNEXP,SHARED]=1060736,1060987,0,0,0
+[C:1076042  ][VEC.TOP  ]: dstBuf[INT] size=0
+[C:1076042  ][VEC.TOP  ]: dstBuf[FMA] size=0
+[C:1076042  ][VEC.TOP  ]: dstBuf[LNEXP] size=0
+[C:1076042  ][VEC.TOP  ]: pendingWrites=0
+[C:1076042  ][VEC.TOP  ]: uopQ empty -- 卡点不在 uopQ ready 选择，可能块未切分（VecTop 未 ReceiveTileOp）或 SrcBuf/pipe 反压。
+[C:1076042  ][VEC.TOP  ]: ==================================================
+[C:1076042  ][VEC.TOP  ]: VecTop pe=3 uopQ[INT] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: VecTop pe=3 uopQ[FMA] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: VecTop pe=3 uopQ[LNEXP] Size=0 Full=0 Empty=1 (headIsReady=-1)
+[C:1076042  ][VEC.TOP  ]: splitSlots N=4 pendingAdmit=0
+[C:1076042  ][VEC.TOP  ]: vecEntries=0
+[C:1076042  ][VEC.TOP  ]: srcBuf[INT] size=0 []
+[C:1076042  ][VEC.TOP  ]: srcBuf[FMA] size=0 []
+[C:1076042  ][VEC.TOP  ]: srcBuf[LNEXP] size=0 []
+[C:1076042  ][VEC.TOP  ]: pipes alu=0 fma=0 lnexp=0 nextIssue[ALU0,ALU1,FPU,LNEXP,SHARED]=1060913,1061081,0,0,0
+[C:1076042  ][VEC.TOP  ]: dstBuf[INT] size=0
+[C:1076042  ][VEC.TOP  ]: dstBuf[FMA] size=0
+[C:1076042  ][VEC.TOP  ]: dstBuf[LNEXP] size=0
+[C:1076042  ][VEC.TOP  ]: pendingWrites=0
+[C:1076042  ][VEC.TOP  ]: uopQ empty -- 卡点不在 uopQ ready 选择，可能块未切分（VecTop 未 ReceiveTileOp）或 SrcBuf/pipe 反压。
+[CUBE.DB] stid=1 CubeUopFifo empty tileLdUopFifo=0
+[CUBE.DB] stid=1 thr=0 tileLoadReqBuffer=0 shareTregLoadReqBuffer=0 TileCubeLdResQ=0 shareTRegLdResQ=0 CubeUopBuffer bids=0 uops=0
+[CUBE.DB] stid=1 CubeUopFifo empty tileLdUopFifo=0
+[CUBE.DB] stid=1 thr=0 tileLoadReqBuffer=0 shareTregLoadReqBuffer=0 TileCubeLdResQ=0 shareTRegLdResQ=0 CubeUopBuffer bids=0 uops=0
+[CUBE.DB] stid=1 CubeUopFifo empty tileLdUopFifo=0
+[CUBE.DB] stid=1 thr=0 tileLoadReqBuffer=0 shareTregLoadReqBuffer=0 TileCubeLdResQ=0 shareTRegLdResQ=0 CubeUopBuffer bids=0 uops=0
+[CUBE.DB] stid=1 CubeUopFifo empty tileLdUopFifo=0
+[CUBE.DB] stid=1 thr=0 tileLoadReqBuffer=0 shareTregLoadReqBuffer=0 TileCubeLdResQ=0 shareTRegLdResQ=0 CubeUopBuffer bids=0 uops=0
+hand T deallocPtr:64 retirePtr:80 lastAllocPtr:80 allocPtr:80 size 240
+ Index 64 Entry vtag:64 ptag:20 occuiped size:2 addr:a00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 65 Entry vtag:65 ptag:8 occuiped size:2 addr:400 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 66 Entry vtag:66 ptag:12 occuiped size:2 addr:600 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 67 Entry vtag:67 ptag:26 occuiped size:2 addr:d00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 68 Entry vtag:68 ptag:36 occuiped size:2 addr:1200 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 69 Entry vtag:69 ptag:38 occuiped size:2 addr:1300 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 70 Entry vtag:70 ptag:14 occuiped size:2 addr:700 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 71 Entry vtag:71 ptag:4 occuiped size:2 addr:200 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 72 Entry vtag:72 ptag:6 occuiped size:2 addr:300 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 73 Entry vtag:73 ptag:40 occuiped size:2 addr:1400 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 74 Entry vtag:74 ptag:30 occuiped size:2 addr:f00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 75 Entry vtag:75 ptag:2 occuiped size:2 addr:100 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 76 Entry vtag:76 ptag:10 occuiped size:2 addr:500 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 77 Entry vtag:77 ptag:22 occuiped size:2 addr:b00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 78 Entry vtag:78 ptag:32 occuiped size:2 addr:1000 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 79 Entry vtag:79 ptag:24 occuiped size:2 addr:c00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+hand U deallocPtr:160 retirePtr:176 lastAllocPtr:176 allocPtr:176 size 240
+ Index 160 Entry vtag:160 ptag:20 occuiped size:1 addr:a00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 161 Entry vtag:161 ptag:21 occuiped size:1 addr:a80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 162 Entry vtag:162 ptag:22 occuiped size:1 addr:b00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 163 Entry vtag:163 ptag:23 occuiped size:1 addr:b80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 164 Entry vtag:164 ptag:25 occuiped size:1 addr:c80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 165 Entry vtag:165 ptag:28 occuiped size:1 addr:e00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 166 Entry vtag:166 ptag:29 occuiped size:1 addr:e80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 167 Entry vtag:167 ptag:30 occuiped size:1 addr:f00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 168 Entry vtag:168 ptag:1 occuiped size:1 addr:80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 169 Entry vtag:169 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 170 Entry vtag:170 ptag:33 occuiped size:1 addr:1080 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 171 Entry vtag:171 ptag:39 occuiped size:1 addr:1380 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 172 Entry vtag:172 ptag:44 occuiped size:1 addr:1600 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 173 Entry vtag:173 ptag:13 occuiped size:1 addr:680 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 174 Entry vtag:174 ptag:17 occuiped size:1 addr:880 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 175 Entry vtag:175 ptag:54 occuiped size:1 addr:1b00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+hand M deallocPtr:144 retirePtr:160 lastAllocPtr:160 allocPtr:160 size 240
+ Index 144 Entry vtag:144 ptag:2 occuiped size:1 addr:100 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 145 Entry vtag:145 ptag:3 occuiped size:1 addr:180 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 146 Entry vtag:146 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 147 Entry vtag:147 ptag:9 occuiped size:1 addr:480 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 148 Entry vtag:148 ptag:34 occuiped size:1 addr:1100 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 149 Entry vtag:149 ptag:35 occuiped size:1 addr:1180 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 150 Entry vtag:150 ptag:40 occuiped size:1 addr:1400 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 151 Entry vtag:151 ptag:27 occuiped size:1 addr:d80 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 152 Entry vtag:152 ptag:45 occuiped size:1 addr:1680 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 153 Entry vtag:153 ptag:11 occuiped size:1 addr:580 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 154 Entry vtag:154 ptag:14 occuiped size:1 addr:700 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 155 Entry vtag:155 ptag:47 occuiped size:1 addr:1780 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 156 Entry vtag:156 ptag:18 occuiped size:1 addr:900 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 157 Entry vtag:157 ptag:50 occuiped size:1 addr:1900 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 158 Entry vtag:158 ptag:20 occuiped size:1 addr:a00 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 159 Entry vtag:159 ptag:21 occuiped size:1 addr:a80 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+hand N deallocPtr:16 retirePtr:32 lastAllocPtr:32 allocPtr:32 size 240
+ Index 16 Entry vtag:16 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 17 Entry vtag:17 ptag:24 occuiped size:2 addr:c00 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 18 Entry vtag:18 ptag:6 occuiped size:1 addr:300 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 19 Entry vtag:19 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 20 Entry vtag:20 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 21 Entry vtag:21 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 22 Entry vtag:22 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 23 Entry vtag:23 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 24 Entry vtag:24 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 25 Entry vtag:25 ptag:72 occuiped size:2 addr:2400 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 26 Entry vtag:26 ptag:6 occuiped size:1 addr:300 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 27 Entry vtag:27 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 28 Entry vtag:28 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 29 Entry vtag:29 ptag:72 occuiped size:2 addr:2400 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 30 Entry vtag:30 ptag:6 occuiped size:1 addr:300 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 31 Entry vtag:31 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+hand STK deallocPtr:0 retirePtr:0 lastAllocPtr:0 allocPtr:0 size 256
+tileRegSize: 256
+totalTileSize: 262144
+allocatorFreeSize: 262144
+allocatorLargestFreeExtent: 262144
+T used size: 18446744073709551360
+U used size: 0
+M used size: 0
+N used size: 256
+STK used size: 0
+hand T deallocPtr:112 retirePtr:128 lastAllocPtr:128 allocPtr:128 size 240
+ Index 112 Entry vtag:112 ptag:36 occuiped size:2 addr:1200 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 113 Entry vtag:113 ptag:26 occuiped size:2 addr:d00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 114 Entry vtag:114 ptag:6 occuiped size:2 addr:300 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 115 Entry vtag:115 ptag:10 occuiped size:2 addr:500 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 116 Entry vtag:116 ptag:30 occuiped size:2 addr:f00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 117 Entry vtag:117 ptag:38 occuiped size:2 addr:1300 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 118 Entry vtag:118 ptag:40 occuiped size:2 addr:1400 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 119 Entry vtag:119 ptag:42 occuiped size:2 addr:1500 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 120 Entry vtag:120 ptag:0 occuiped size:2 addr:0 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 121 Entry vtag:121 ptag:2 occuiped size:2 addr:100 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 122 Entry vtag:122 ptag:4 occuiped size:2 addr:200 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 123 Entry vtag:123 ptag:8 occuiped size:2 addr:400 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 124 Entry vtag:124 ptag:16 occuiped size:2 addr:800 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 125 Entry vtag:125 ptag:18 occuiped size:2 addr:900 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 126 Entry vtag:126 ptag:24 occuiped size:2 addr:c00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 127 Entry vtag:127 ptag:28 occuiped size:2 addr:e00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+hand U deallocPtr:176 retirePtr:192 lastAllocPtr:192 allocPtr:192 size 240
+ Index 176 Entry vtag:176 ptag:21 occuiped size:1 addr:a80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 177 Entry vtag:177 ptag:23 occuiped size:1 addr:b80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 178 Entry vtag:178 ptag:26 occuiped size:1 addr:d00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 179 Entry vtag:179 ptag:0 occuiped size:1 addr:0 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 180 Entry vtag:180 ptag:2 occuiped size:1 addr:100 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 181 Entry vtag:181 ptag:3 occuiped size:1 addr:180 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 182 Entry vtag:182 ptag:4 occuiped size:1 addr:200 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 183 Entry vtag:183 ptag:5 occuiped size:1 addr:280 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 184 Entry vtag:184 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 185 Entry vtag:185 ptag:30 occuiped size:1 addr:f00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 186 Entry vtag:186 ptag:35 occuiped size:1 addr:1180 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 187 Entry vtag:187 ptag:40 occuiped size:1 addr:1400 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 188 Entry vtag:188 ptag:45 occuiped size:1 addr:1680 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 189 Entry vtag:189 ptag:47 occuiped size:1 addr:1780 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 190 Entry vtag:190 ptag:52 occuiped size:1 addr:1a00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 191 Entry vtag:191 ptag:56 occuiped size:1 addr:1c00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+hand M deallocPtr:112 retirePtr:128 lastAllocPtr:128 allocPtr:128 size 240
+ Index 112 Entry vtag:112 ptag:9 occuiped size:1 addr:480 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 113 Entry vtag:113 ptag:27 occuiped size:1 addr:d80 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 114 Entry vtag:114 ptag:31 occuiped size:1 addr:f80 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 115 Entry vtag:115 ptag:32 occuiped size:1 addr:1000 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 116 Entry vtag:116 ptag:36 occuiped size:1 addr:1200 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 117 Entry vtag:117 ptag:37 occuiped size:1 addr:1280 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 118 Entry vtag:118 ptag:41 occuiped size:1 addr:1480 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 119 Entry vtag:119 ptag:42 occuiped size:1 addr:1500 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 120 Entry vtag:120 ptag:13 occuiped size:1 addr:680 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 121 Entry vtag:121 ptag:11 occuiped size:1 addr:580 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 122 Entry vtag:122 ptag:17 occuiped size:1 addr:880 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 123 Entry vtag:123 ptag:48 occuiped size:1 addr:1800 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 124 Entry vtag:124 ptag:18 occuiped size:1 addr:900 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 125 Entry vtag:125 ptag:19 occuiped size:1 addr:980 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 126 Entry vtag:126 ptag:57 occuiped size:1 addr:1c80 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 127 Entry vtag:127 ptag:21 occuiped size:1 addr:a80 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+hand N deallocPtr:240 retirePtr:0 lastAllocPtr:0 allocPtr:0 size 240
+ Index 240 Entry vtag:240 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 241 Entry vtag:241 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 242 Entry vtag:242 ptag:6 occuiped size:1 addr:300 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 243 Entry vtag:243 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 244 Entry vtag:244 ptag:28 occuiped size:2 addr:e00 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 245 Entry vtag:245 ptag:66 occuiped size:2 addr:2100 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 246 Entry vtag:246 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 247 Entry vtag:247 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 248 Entry vtag:248 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 249 Entry vtag:249 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 250 Entry vtag:250 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 251 Entry vtag:251 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 252 Entry vtag:252 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 253 Entry vtag:253 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 254 Entry vtag:254 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 255 Entry vtag:255 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+hand STK deallocPtr:0 retirePtr:0 lastAllocPtr:0 allocPtr:0 size 256
+tileRegSize: 256
+totalTileSize: 262144
+allocatorFreeSize: 262144
+allocatorLargestFreeExtent: 262144
+T used size: 18446744073709551360
+U used size: 0
+M used size: 0
+N used size: 256
+STK used size: 0
+hand T deallocPtr:112 retirePtr:128 lastAllocPtr:128 allocPtr:128 size 240
+ Index 112 Entry vtag:112 ptag:16 occuiped size:2 addr:800 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 113 Entry vtag:113 ptag:24 occuiped size:2 addr:c00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 114 Entry vtag:114 ptag:32 occuiped size:2 addr:1000 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 115 Entry vtag:115 ptag:34 occuiped size:2 addr:1100 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 116 Entry vtag:116 ptag:36 occuiped size:2 addr:1200 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 117 Entry vtag:117 ptag:38 occuiped size:2 addr:1300 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 118 Entry vtag:118 ptag:40 occuiped size:2 addr:1400 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 119 Entry vtag:119 ptag:10 occuiped size:2 addr:500 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 120 Entry vtag:120 ptag:0 occuiped size:2 addr:0 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 121 Entry vtag:121 ptag:14 occuiped size:2 addr:700 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 122 Entry vtag:122 ptag:4 occuiped size:2 addr:200 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 123 Entry vtag:123 ptag:18 occuiped size:2 addr:900 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 124 Entry vtag:124 ptag:22 occuiped size:2 addr:b00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 125 Entry vtag:125 ptag:28 occuiped size:2 addr:e00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 126 Entry vtag:126 ptag:6 occuiped size:2 addr:300 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 127 Entry vtag:127 ptag:30 occuiped size:2 addr:f00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+hand U deallocPtr:176 retirePtr:192 lastAllocPtr:192 allocPtr:192 size 240
+ Index 176 Entry vtag:176 ptag:21 occuiped size:1 addr:a80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 177 Entry vtag:177 ptag:22 occuiped size:1 addr:b00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 178 Entry vtag:178 ptag:23 occuiped size:1 addr:b80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 179 Entry vtag:179 ptag:24 occuiped size:1 addr:c00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 180 Entry vtag:180 ptag:1 occuiped size:1 addr:80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 181 Entry vtag:181 ptag:2 occuiped size:1 addr:100 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 182 Entry vtag:182 ptag:3 occuiped size:1 addr:180 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 183 Entry vtag:183 ptag:4 occuiped size:1 addr:200 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 184 Entry vtag:184 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 185 Entry vtag:185 ptag:27 occuiped size:1 addr:d80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 186 Entry vtag:186 ptag:32 occuiped size:1 addr:1000 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 187 Entry vtag:187 ptag:38 occuiped size:1 addr:1300 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 188 Entry vtag:188 ptag:5 occuiped size:1 addr:280 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 189 Entry vtag:189 ptag:45 occuiped size:1 addr:1680 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 190 Entry vtag:190 ptag:50 occuiped size:1 addr:1900 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 191 Entry vtag:191 ptag:54 occuiped size:1 addr:1b00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+hand M deallocPtr:112 retirePtr:128 lastAllocPtr:128 allocPtr:128 size 240
+ Index 112 Entry vtag:112 ptag:9 occuiped size:1 addr:480 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 113 Entry vtag:113 ptag:13 occuiped size:1 addr:680 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 114 Entry vtag:114 ptag:28 occuiped size:1 addr:e00 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 115 Entry vtag:115 ptag:10 occuiped size:1 addr:500 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 116 Entry vtag:116 ptag:33 occuiped size:1 addr:1080 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 117 Entry vtag:117 ptag:34 occuiped size:1 addr:1100 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 118 Entry vtag:118 ptag:39 occuiped size:1 addr:1380 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 119 Entry vtag:119 ptag:40 occuiped size:1 addr:1400 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 120 Entry vtag:120 ptag:12 occuiped size:1 addr:600 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 121 Entry vtag:121 ptag:11 occuiped size:1 addr:580 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 122 Entry vtag:122 ptag:16 occuiped size:1 addr:800 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 123 Entry vtag:123 ptag:46 occuiped size:1 addr:1700 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 124 Entry vtag:124 ptag:17 occuiped size:1 addr:880 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 125 Entry vtag:125 ptag:18 occuiped size:1 addr:900 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 126 Entry vtag:126 ptag:21 occuiped size:1 addr:a80 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 127 Entry vtag:127 ptag:22 occuiped size:1 addr:b00 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+hand N deallocPtr:240 retirePtr:0 lastAllocPtr:0 allocPtr:0 size 240
+ Index 240 Entry vtag:240 ptag:24 occuiped size:2 addr:c00 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 241 Entry vtag:241 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 242 Entry vtag:242 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 243 Entry vtag:243 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 244 Entry vtag:244 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 245 Entry vtag:245 ptag:26 occuiped size:2 addr:d00 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 246 Entry vtag:246 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 247 Entry vtag:247 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 248 Entry vtag:248 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 249 Entry vtag:249 ptag:72 occuiped size:2 addr:2400 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 250 Entry vtag:250 ptag:6 occuiped size:1 addr:300 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 251 Entry vtag:251 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 252 Entry vtag:252 ptag:28 occuiped size:2 addr:e00 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 253 Entry vtag:253 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 254 Entry vtag:254 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 255 Entry vtag:255 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+hand STK deallocPtr:0 retirePtr:0 lastAllocPtr:0 allocPtr:0 size 256
+tileRegSize: 256
+totalTileSize: 262144
+allocatorFreeSize: 262144
+allocatorLargestFreeExtent: 262144
+T used size: 0
+U used size: 0
+M used size: 0
+N used size: 0
+STK used size: 0
+hand T deallocPtr:112 retirePtr:128 lastAllocPtr:128 allocPtr:128 size 240
+ Index 112 Entry vtag:112 ptag:6 occuiped size:2 addr:300 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 113 Entry vtag:113 ptag:34 occuiped size:2 addr:1100 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 114 Entry vtag:114 ptag:16 occuiped size:2 addr:800 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 115 Entry vtag:115 ptag:36 occuiped size:2 addr:1200 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 116 Entry vtag:116 ptag:8 occuiped size:2 addr:400 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 117 Entry vtag:117 ptag:20 occuiped size:2 addr:a00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 118 Entry vtag:118 ptag:38 occuiped size:2 addr:1300 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 119 Entry vtag:119 ptag:40 occuiped size:2 addr:1400 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 120 Entry vtag:120 ptag:0 occuiped size:2 addr:0 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 121 Entry vtag:121 ptag:22 occuiped size:2 addr:b00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 122 Entry vtag:122 ptag:4 occuiped size:2 addr:200 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 123 Entry vtag:123 ptag:12 occuiped size:2 addr:600 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 124 Entry vtag:124 ptag:26 occuiped size:2 addr:d00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 125 Entry vtag:125 ptag:24 occuiped size:2 addr:c00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 126 Entry vtag:126 ptag:28 occuiped size:2 addr:e00 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+ Index 127 Entry vtag:127 ptag:42 occuiped size:2 addr:1500 regCat:0 size:256 hand:T retired:1 ready:1 kill:1
+hand U deallocPtr:176 retirePtr:192 lastAllocPtr:192 allocPtr:192 size 240
+ Index 176 Entry vtag:176 ptag:21 occuiped size:1 addr:a80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 177 Entry vtag:177 ptag:22 occuiped size:1 addr:b00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 178 Entry vtag:178 ptag:23 occuiped size:1 addr:b80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 179 Entry vtag:179 ptag:0 occuiped size:1 addr:0 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 180 Entry vtag:180 ptag:2 occuiped size:1 addr:100 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 181 Entry vtag:181 ptag:3 occuiped size:1 addr:180 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 182 Entry vtag:182 ptag:4 occuiped size:1 addr:200 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 183 Entry vtag:183 ptag:5 occuiped size:1 addr:280 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 184 Entry vtag:184 ptag:15 occuiped size:1 addr:780 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 185 Entry vtag:185 ptag:27 occuiped size:1 addr:d80 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 186 Entry vtag:186 ptag:32 occuiped size:1 addr:1000 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 187 Entry vtag:187 ptag:38 occuiped size:1 addr:1300 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 188 Entry vtag:188 ptag:43 occuiped size:1 addr:1580 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 189 Entry vtag:189 ptag:45 occuiped size:1 addr:1680 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 190 Entry vtag:190 ptag:50 occuiped size:1 addr:1900 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+ Index 191 Entry vtag:191 ptag:54 occuiped size:1 addr:1b00 regCat:0 size:128 hand:U retired:1 ready:1 kill:1
+hand M deallocPtr:112 retirePtr:128 lastAllocPtr:128 allocPtr:128 size 240
+ Index 112 Entry vtag:112 ptag:9 occuiped size:1 addr:480 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 113 Entry vtag:113 ptag:24 occuiped size:1 addr:c00 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 114 Entry vtag:114 ptag:28 occuiped size:1 addr:e00 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 115 Entry vtag:115 ptag:29 occuiped size:1 addr:e80 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 116 Entry vtag:116 ptag:33 occuiped size:1 addr:1080 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 117 Entry vtag:117 ptag:34 occuiped size:1 addr:1100 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 118 Entry vtag:118 ptag:39 occuiped size:1 addr:1380 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 119 Entry vtag:119 ptag:40 occuiped size:1 addr:1400 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 120 Entry vtag:120 ptag:14 occuiped size:1 addr:700 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 121 Entry vtag:121 ptag:12 occuiped size:1 addr:600 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 122 Entry vtag:122 ptag:46 occuiped size:1 addr:1700 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 123 Entry vtag:123 ptag:47 occuiped size:1 addr:1780 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 124 Entry vtag:124 ptag:51 occuiped size:1 addr:1980 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 125 Entry vtag:125 ptag:6 occuiped size:1 addr:300 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 126 Entry vtag:126 ptag:55 occuiped size:1 addr:1b80 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+ Index 127 Entry vtag:127 ptag:56 occuiped size:1 addr:1c00 regCat:0 size:128 hand:M retired:1 ready:1 kill:1
+hand N deallocPtr:240 retirePtr:0 lastAllocPtr:0 allocPtr:0 size 240
+ Index 240 Entry vtag:240 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 241 Entry vtag:241 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 242 Entry vtag:242 ptag:6 occuiped size:1 addr:300 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 243 Entry vtag:243 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 244 Entry vtag:244 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 245 Entry vtag:245 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 246 Entry vtag:246 ptag:6 occuiped size:1 addr:300 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 247 Entry vtag:247 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 248 Entry vtag:248 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 249 Entry vtag:249 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 250 Entry vtag:250 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 251 Entry vtag:251 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 252 Entry vtag:252 ptag:68 occuiped size:2 addr:2200 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 253 Entry vtag:253 ptag:70 occuiped size:2 addr:2300 regCat:0 size:256 hand:N retired:1 ready:1 kill:1
+ Index 254 Entry vtag:254 ptag:7 occuiped size:1 addr:380 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+ Index 255 Entry vtag:255 ptag:8 occuiped size:1 addr:400 regCat:0 size:128 hand:N retired:1 ready:1 kill:1
+hand STK deallocPtr:0 retirePtr:0 lastAllocPtr:0 allocPtr:0 size 256
+tileRegSize: 256
+totalTileSize: 262144
+allocatorFreeSize: 262144
+allocatorLargestFreeExtent: 262144
+T used size: 18446744073709551360
+U used size: 0
+M used size: 0
+N used size: 256
+STK used size: 0
+=== IACC dump core=0 cycle=1076042
+  pool used=0/128
+=== IACC dump core=1 cycle=1076042
+  pool used=0/128
+=== IACC dump core=2 cycle=1076042
+  pool used=0/128
+=== IACC dump core=3 cycle=1076042
+  pool used=0/128
+================ fetchThQ Dump ====================
+stid=0
+empty
+stid=1
+empty
+stid=2
+empty
+stid=3
+empty
+================ fetchThQ Dump End ================
+================ deliver gates ====================
+stid=0 be_q=4096+w44/4096 beOverflow=1 brq=261 brqStall=0 brob=6/256
+stid=1 be_q=0+w0/4096 beOverflow=0 brq=1 brqStall=0 brob=0/256
+stid=2 be_q=4092+w8/4096 beOverflow=1 brq=259 brqStall=0 brob=5/256
+stid=3 be_q=4096+w4/4096 beOverflow=1 brq=258 brqStall=0 brob=4/256
+F4[tid=0] state=1 slots=652092/P1,-1/P0,-1/P0,652091/P1
+F4[tid=1] state=0 slots=-1/P0,-1/P0,-1/P0,-1/P0
+F4[tid=2] state=1 slots=652084/P1,652085/P1,652083/P1,652094/P1
+F4[tid=3] state=1 slots=652087/P1,652088/P1,652086/P1,652093/P1
+global[tid=0] F0=0/-1,-1,-1,-1, F1=2/652105,652107,652108,652109, F2=0/-1,-1,-1,-1, F3=1/652101,652102,652103,652104, 
+  F2 fetchDone=0000
+  F3 decodeDone=0000
+global[tid=1] F0=0/-1,-1,-1,-1, F1=2/648672,648678,648679,648680, F2=2/648667,648668,648669,648670, F3=0/-1,-1,-1,-1, 
+  F2 fetchDone=0000
+  F3 decodeDone=0000
+global[tid=2] F0=0/-1,-1,-1,-1, F1=2/652117,652119,652120,652121, F2=1/652110,652114,652115,652116, F3=2/652098,652099,652100,-1, 
+  F2 fetchDone=1111
+  F3 decodeDone=1000
+global[tid=3] F0=0/-1,-1,-1,-1, F1=2/652118,652122,652123,652124, F2=1/652106,652111,652112,652113, F3=2/652095,652096,652097,-1, 
+  F2 fetchDone=1111
+  F3 decodeDone=1000
+bhcStallGlobal=-1,-1,-1,-1 bhcStallLocal=-1,-1,-1,-1 stageGrants=-1/rr0,3/rr0,0/rr1,2/rr3
+deliverRrTid=1 localFetchRrTid=3 lastDeliverTid=-1 localSelectVld=0 localSelectPipe=0 localSelectTid=4294967295 localSelectFbid=0 localSelectStall=0 localSelectFetched=0
+localFetchState[0] vld=0 stall=0 fetched=0 pipe=0 fbid=0 fbid_local=0
+localFetchState[1] vld=0 stall=0 fetched=0 pipe=0 fbid=0 fbid_local=0
+localFetchState[2] vld=0 stall=0 fetched=0 pipe=0 fbid=0 fbid_local=0
+localFetchState[3] vld=0 stall=0 fetched=0 pipe=0 fbid=0 fbid_local=0
+================ deliver gates End ================
+========================== DUMP BFU STATUS ==========================
+T0 F0, state: INVALID
+T0 F1, state: STALL
+	fb[0] = { stid: 0, fbid: 652105, va: 0x12c26 }
+	fb[1] = { stid: 0, fbid: 652107, va: 0x12c26 }
+	fb[2] = { stid: 0, fbid: 652108, va: 0x12c26 }
+	fb[3] = { stid: 0, fbid: 652109, va: 0x12c26 }
+T0 F2, state: INVALID
+T0 F3, state: VALID
+	fb[0] = { stid: 0, fbid: 652101, va: 0x12c26 }
+	fb[1] = { stid: 0, fbid: 652102, va: 0x12c26 }
+	fb[2] = { stid: 0, fbid: 652103, va: 0x12c26 }
+	fb[3] = { stid: 0, fbid: 652104, va: 0x12c26 }
+T1 F0, state: INVALID
+T1 F1, state: STALL
+	fb[0] = { stid: 1, fbid: 648672, va: 0x1207a }
+	fb[1] = { stid: 1, fbid: 648678, va: 0x1207a }
+	fb[2] = { stid: 1, fbid: 648679, va: 0x1207a }
+	fb[3] = { stid: 1, fbid: 648680, va: 0x1207a }
+T1 F2, state: STALL
+	fb[0] = { stid: 1, fbid: 648667, va: 0x12072 }
+	fb[1] = { stid: 1, fbid: 648668, va: 0x12084 }
+	fb[2] = { stid: 1, fbid: 648669, va: 0x1207a }
+	fb[3] = { stid: 1, fbid: 648670, va: 0x1207a }
+T1 F3, state: INVALID
+T2 F0, state: INVALID
+T2 F1, state: STALL
+	fb[0] = { stid: 2, fbid: 652117, va: 0x12c26 }
+	fb[1] = { stid: 2, fbid: 652119, va: 0x12c26 }
+	fb[2] = { stid: 2, fbid: 652120, va: 0x12c26 }
+	fb[3] = { stid: 2, fbid: 652121, va: 0x12c26 }
+T2 F2, state: VALID
+	fb[0] = { stid: 2, fbid: 652110, va: 0x12c26 }
+	fb[1] = { stid: 2, fbid: 652114, va: 0x12c26 }
+	fb[2] = { stid: 2, fbid: 652115, va: 0x12c26 }
+	fb[3] = { stid: 2, fbid: 652116, va: 0x12c26 }
+T2 F3, state: STALL
+	fb[0] = { stid: 2, fbid: 652098, va: 0x12c26 }
+	fb[1] = { stid: 2, fbid: 652099, va: 0x12c26 }
+	fb[2] = { stid: 2, fbid: 652100, va: 0x12c26 }
+	fb[3] = nullptr
+T3 F0, state: INVALID
+T3 F1, state: STALL
+	fb[0] = { stid: 3, fbid: 652118, va: 0x12c26 }
+	fb[1] = { stid: 3, fbid: 652122, va: 0x12c26 }
+	fb[2] = { stid: 3, fbid: 652123, va: 0x12c26 }
+	fb[3] = { stid: 3, fbid: 652124, va: 0x12c26 }
+T3 F2, state: VALID
+	fb[0] = { stid: 3, fbid: 652106, va: 0x12c26 }
+	fb[1] = { stid: 3, fbid: 652111, va: 0x12c26 }
+	fb[2] = { stid: 3, fbid: 652112, va: 0x12c26 }
+	fb[3] = { stid: 3, fbid: 652113, va: 0x12c26 }
+T3 F3, state: STALL
+	fb[0] = { stid: 3, fbid: 652095, va: 0x12c26 }
+	fb[1] = { stid: 3, fbid: 652096, va: 0x12c26 }
+	fb[2] = { stid: 3, fbid: 652097, va: 0x12c26 }
+	fb[3] = nullptr
+========================== DUMP BFU END =============================
+================ local BFU lanes ==================
+local[0] ready=0 F0=empty F2=empty F3=empty
+local[1] ready=0 F0=empty F2=empty F3=empty
+local[2] ready=0 F0=empty F2=empty F3=empty
+local[3] ready=0 F0=empty F2=empty F3=empty
+local[4] ready=0 F0=empty F2=empty F3=empty
+local[5] ready=0 F0=empty F2=empty F3=empty
+local[6] ready=0 F0=empty F2=empty F3=empty
+local[7] ready=0 F0=empty F2=empty F3=empty
+local[8] ready=0 F0=T1/648651/15/S2 F2=T1/648651/14/S2 F3=empty
+local[9] ready=0 F0=empty F2=empty F3=empty
+local[10] ready=0 F0=empty F2=empty F3=empty
+local[11] ready=0 F0=empty F2=empty F3=empty
+local[12] ready=0 F0=empty F2=empty F3=empty
+local[13] ready=0 F0=empty F2=empty F3=empty
+local[14] ready=0 F0=empty F2=empty F3=empty
+local[15] ready=0 F0=empty F2=empty F3=empty
+local[16] ready=0 F0=empty F2=empty F3=empty
+local[17] ready=0 F0=empty F2=empty F3=empty
+local[18] ready=0 F0=empty F2=empty F3=empty
+local[19] ready=0 F0=empty F2=empty F3=empty
+local[20] ready=0 F0=empty F2=empty F3=empty
+local[21] ready=0 F0=empty F2=empty F3=empty
+local[22] ready=0 F0=empty F2=empty F3=empty
+local[23] ready=0 F0=empty F2=empty F3=empty
+local[24] ready=0 F0=empty F2=empty F3=empty
+local[25] ready=0 F0=empty F2=empty F3=empty
+local[26] ready=0 F0=empty F2=empty F3=empty
+local[27] ready=0 F0=empty F2=empty F3=empty
+local[28] ready=0 F0=empty F2=empty F3=empty
+local[29] ready=0 F0=empty F2=empty F3=empty
+local[30] ready=0 F0=empty F2=empty F3=empty
+local[31] ready=0 F0=empty F2=empty F3=empty
+================ local BFU lanes End ==============
+============== DUMP cmdIqPark ==============
+stid=0 size=0 (empty)
+stid=1 size=0 (empty)
+stid=2 size=0 (empty)
+stid=3 size=0 (empty)
+cmdIqParkRr=2
+BIQ type=1 occ=0/8
+BIQ type=1 occ=0/8
+BIQ type=1 occ=0/8
+BIQ type=1 occ=0/8
+BIQ type=0 occ=0/32
+BIQ type=0 occ=0/32
+BIQ type=0 occ=0/32
+BIQ type=0 occ=0/32
+BIQ type=5 occ=0/64
+BIQ type=7 occ=0/8
+============== DUMP cmdIqPark END ==============
+============== DUMP TLSU FRONTEND peId=0 cycle=1076042 ==============
+LIQ 1/64  LHQ 0/128  STQ 0/256  SCB 0/64  liqFullCycles=0 stqFullCycles=0
+windows: stid0{ld=52273,st=35475,ldSlides=52257,stSlides=35411,blockedLoadId=0,blockedCnt=0} stid1{ld=45400,st=23628,ldSlides=45384,stSlides=23564,blockedLoadId=0,blockedCnt=0} stid2{ld=46077,st=23612,ldSlides=46061,stSlides=23548,blockedLoadId=0,blockedCnt=0} stid3{ld=46068,st=23612,ldSlides=46052,stSlides=23548,blockedLoadId=0,blockedCnt=0}
+per-stid: stid0{liq=0/16,stq=0/64,ldNum=52092,stNum=35411} stid1{liq=0/16,stq=0/64,ldNum=45242,stNum=23564} stid2{liq=0/16,stq=0/64,ldNum=45864,stNum=23548} stid3{liq=1/16,stq=0/64,ldNum=45860,stNum=23548}
+  LIQ[0] asleep sleep=unknown kind=scalar_load stid=3 bid=252 rid=112 addr=0x0 size=0 tileRdy=1 priv=0 alloc=1076041 issue=0 age=1
+============== DUMP TLSU FRONTEND END ==============
+[C:1076041][DFX.NA    ]: 
+---------------------------------------------------------------------
+ERROR:Deadlock execution at:
+ thread: 0B191 STID0 BPC 0x12c34 [STD FALL] STD completed
+ thread: 1EMPTY BROB ENTRY
+ thread: 2B252 STID2 BPC 0x12c26 [STD COND] STD completed
+ thread: 3B250 STID3 BPC 0x12c34 [STD FALL] STD allocated
+    Cycle:1076042
+    Error BlockID:64
+    Wait cycles:9999
+    Reference queue depth:256
+    Ref BPC: 0x12b8e isPar: 0
+    Model BPC: 0x0 isPar: 0 completed: false
+    Model Execute Minst:
+            Model inst list empty
+    Reference Execute Minst:
+            TPC 0x12b8e, opcode: BSTART, data: 0x0
+    Please check function model log at line: B136671 M0
+    0 instructions correctly executed so far
+---------------------------------------------------------------------
+
+[gfsim] caught std::exception: ASSERTION FAILED: false && "Deadlock detected: simulation stalled, no new blocks committed for too long"
+, func ResVerify, file /mnt/workspace/projects/1009_SuperScalarModel/SuperScalarModel/TimingSim/infra/SimSys.cpp:1655
+stack:
+bin/gfsim(+0x54ad20) [0xaaaaae86ad20]
+bin/gfsim(+0x3612c) [0xaaaaae35612c]
+/lib/aarch64-linux-gnu/libc.so.6(+0x284c4) [0xffffb77e84c4]
+/lib/aarch64-linux-gnu/libc.so.6(__libc_start_main+0x98) [0xffffb77e8598]
+bin/gfsim(+0x14e2f0) [0xaaaaae46e2f0]
+
+std::terminate called (unhandled exception or exception during unwinding)
+
+FATAL: gfsim received signal 6
+bin/gfsim(+0x14e41c)[0xaaaaae46e41c]
+linux-vdso.so.1(__kernel_rt_sigreturn+0x0)[0xffffb7df88dc]
+/lib/aarch64-linux-gnu/libc.so.6(+0x87608)[0xffffb7847608]
+/lib/aarch64-linux-gnu/libc.so.6(gsignal+0x1c)[0xffffb77fcb3c]
+/lib/aarch64-linux-gnu/libc.so.6(abort+0xf4)[0xffffb77e7e00]
+bin/gfsim(+0x14e4c8)[0xaaaaae46e4c8]
+/lib/aarch64-linux-gnu/libstdc++.so.6(+0xaa570)[0xffffb7b1a570]
+/lib/aarch64-linux-gnu/libstdc++.so.6(_ZSt10unexpectedv+0x0)[0xffffb7b10e04]
+/lib/aarch64-linux-gnu/libstdc++.so.6(__cxa_rethrow+0x64)[0xffffb7b1a984]
+bin/gfsim(+0x3787c)[0xaaaaae35787c]
+/lib/aarch64-linux-gnu/libc.so.6(+0x284c4)[0xffffb77e84c4]
+/lib/aarch64-linux-gnu/libc.so.6(__libc_start_main+0x98)[0xffffb77e8598]
+bin/gfsim(+0x14e2f0)[0xaaaaae46e2f0]

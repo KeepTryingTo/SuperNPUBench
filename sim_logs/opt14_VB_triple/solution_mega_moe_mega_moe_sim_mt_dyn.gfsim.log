@@ -1,0 +1,223 @@
+./bin/gfsim -f /tmp/opencode/elf_VB_triple.elf --conf fourpe --pto-v02 true -s tlsu.fake_l2_enable=false 
+[gfsim] explicit PE config present; skipping ELF auto-detection
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Override configurations:
+tlsu.fake_l2_enable=false
+core.threadCount=4
+core.stdPeCount=1
+core.cube_core_num=4
+core.cube_thread_num=1
+core.vec_core_num=4
+fourpe.pe_cluster_enable=true
+fourpe.pe_cluster_count=4
+fourpe.pe_cluster_frontend_thread_count=4
+fourpe.pe_cluster_aggregate_decode_width=8
+fourpe.pe_cluster_gpr_rename_partition_entries=128
+fourpe.pe_cluster_scalar_rob_partition_entries=128
+fourpe.pe_cluster_scalar_iq_partition_entries=128
+fourpe.pe_cluster_block_rob_partition_entries=256
+fourpe.pe_cluster_block_iq_partition_entries=88
+fourpe.pe_cluster_local_reg_partition_entries=88
+bfu.brq_depth=1024
+fourpe.pe_cluster_partition_borrow_enable=false
+fourpe.pe_cluster_eligible_rr_fairness_check=true
+fourpe.pe_cluster_group_contract_fatal=false
+dfx.swimCounterSampleInterval=8
+Memory: 0x10200 - 0x102e8 (Size=0KB) [.rodata]
+Memory: 0x102ec - 0x10307 (Size=0KB) [.eh_frame_hdr]
+Memory: 0x10308 - 0x10373 (Size=0KB) [.eh_frame]
+Memory: 0x11374 - 0x13df3 (Size=10KB) [.text]
+Memory: 0x14df8 - 0x14eb7 (Size=0KB) [.init_array]
+Memory: 0x14eb8 - 0x14ecf (Size=0KB) [.data.rel.ro]
+Memory: 0x18000 - 0x7423b (Size=368KB) [.bss]
+Memory: 0x75000 - 0x760c7 (Size=4KB) [.sbss]
+Memory: 0x760d0 - 0x80860d0 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+[C:62803  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=69 younger_rid=69 older_bid=57 older_rid=57 younger_slot=1 older_slot=5
+[C:62826  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=246 younger_rid=246 older_bid=234 older_rid=234 younger_slot=2 older_slot=7
+[C:62837  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=74 younger_rid=74 older_bid=62 older_rid=62 younger_slot=12 older_slot=6
+[C:62892  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=79 younger_rid=79 older_bid=67 older_rid=67 younger_slot=10 older_slot=9
+[C:63467  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=152 younger_rid=152 older_bid=140 older_rid=140 younger_slot=7 older_slot=6
+[C:63509  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=157 younger_rid=157 older_bid=145 older_rid=145 younger_slot=3 older_slot=14
+[C:63513  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=73 younger_rid=73 older_bid=61 older_rid=61 younger_slot=9 older_slot=8
+[C:63569  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=162 younger_rid=162 older_bid=150 older_rid=150 younger_slot=11 older_slot=10
+[C:64062  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=235 younger_rid=235 older_bid=223 older_rid=223 younger_slot=6 older_slot=1
+[C:64212  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=156 younger_rid=156 older_bid=144 older_rid=144 younger_slot=6 older_slot=5
+[C:64228  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=240 younger_rid=240 older_bid=228 older_rid=228 younger_slot=10 older_slot=9
+[C:64233  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=245 younger_rid=245 older_bid=233 older_rid=233 younger_slot=15 older_slot=14
+[C:64601  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=54 younger_rid=54 older_bid=40 older_rid=40 younger_slot=3 older_slot=2
+[C:64602  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=68 younger_rid=68 older_bid=54 older_rid=54 younger_slot=4 older_slot=3
+[C:64616  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=82 younger_rid=82 older_bid=68 older_rid=68 younger_slot=5 older_slot=4
+[C:64767  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=87 younger_rid=87 older_bid=73 older_rid=73 younger_slot=2 older_slot=10
+[C:64768  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=231 younger_rid=231 older_bid=217 older_rid=217 younger_slot=4 older_slot=3
+[C:64769  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=245 younger_rid=245 older_bid=231 older_rid=231 younger_slot=5 older_slot=4
+[C:64770  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=3 younger_rid=3 older_bid=245 older_rid=245 younger_slot=6 older_slot=5
+[C:64773  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=59 younger_rid=59 older_bid=45 older_rid=45 younger_slot=9 older_slot=8
+[C:64774  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=73 younger_rid=73 older_bid=59 older_rid=59 younger_slot=10 older_slot=9
+[C:64778  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=64 younger_rid=64 older_bid=50 older_rid=50 younger_slot=14 older_slot=13
+[C:64779  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=78 younger_rid=78 older_bid=64 older_rid=64 younger_slot=15 older_slot=14
+[C:64780  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=92 younger_rid=92 older_bid=78 older_rid=78 younger_slot=16 older_slot=15
+[C:65135  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=42 younger_rid=42 older_bid=30 older_rid=30 younger_slot=2 older_slot=0
+[C:65223  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=126 younger_rid=126 older_bid=114 older_rid=114 younger_slot=2 older_slot=3
+[C:65245  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=131 younger_rid=131 older_bid=119 older_rid=119 younger_slot=3 older_slot=0
+[C:65689  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=125 younger_rid=125 older_bid=113 older_rid=113 younger_slot=9 older_slot=8
+[C:65790  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=204 younger_rid=204 older_bid=192 older_rid=192 younger_slot=2 older_slot=0
+[C:65801  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=209 younger_rid=209 older_bid=197 older_rid=197 younger_slot=13 older_slot=12
+[C:65865  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=214 younger_rid=214 older_bid=202 older_rid=202 younger_slot=8 older_slot=7
+[C:66330  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=208 younger_rid=208 older_bid=196 older_rid=196 younger_slot=6 older_slot=5
+[C:66492  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=41 younger_rid=41 older_bid=29 older_rid=29 younger_slot=3 older_slot=16
+[C:66495  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=31 younger_rid=31 older_bid=19 older_rid=19 younger_slot=6 older_slot=5
+[C:66501  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=36 younger_rid=36 older_bid=24 older_rid=24 younger_slot=12 older_slot=11
+[C:66974  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=35 younger_rid=35 older_bid=23 older_rid=23 younger_slot=7 older_slot=6
+[C:67078  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=114 younger_rid=114 older_bid=102 older_rid=102 younger_slot=8 older_slot=7
+[C:67197  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=119 younger_rid=119 older_bid=107 older_rid=107 younger_slot=8 older_slot=7
+[C:67201  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=124 younger_rid=124 older_bid=112 older_rid=112 younger_slot=12 older_slot=3
+[C:67406  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=110 younger_rid=110 older_bid=96 older_rid=96 younger_slot=2 older_slot=1
+[C:67407  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=124 younger_rid=124 older_bid=110 older_rid=110 younger_slot=3 older_slot=2
+[C:67408  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=138 younger_rid=138 older_bid=124 older_rid=124 younger_slot=4 older_slot=3
+[C:67592  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=189 younger_rid=189 older_bid=175 older_rid=175 younger_slot=2 older_slot=1
+[C:67593  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=203 younger_rid=203 older_bid=189 older_rid=189 younger_slot=3 older_slot=2
+[C:67594  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=217 younger_rid=217 older_bid=203 older_rid=203 younger_slot=4 older_slot=3
+[C:67788  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=208 younger_rid=208 older_bid=194 older_rid=194 younger_slot=1 older_slot=3
+[C:67789  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=194 younger_rid=194 older_bid=180 older_rid=180 younger_slot=3 older_slot=2
+[C:67790  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=222 younger_rid=222 older_bid=208 older_rid=208 younger_slot=4 older_slot=1
+[C:67794  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=199 younger_rid=199 older_bid=185 older_rid=185 younger_slot=8 older_slot=7
+[C:67795  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=213 younger_rid=213 older_bid=199 older_rid=199 younger_slot=9 older_slot=8
+[C:67796  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=227 younger_rid=227 older_bid=213 older_rid=213 younger_slot=10 older_slot=9
+[C:68671  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=83 younger_rid=83 older_bid=71 older_rid=71 younger_slot=7 older_slot=2
+[C:68690  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=88 younger_rid=88 older_bid=76 older_rid=76 younger_slot=3 older_slot=9
+[C:68792  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=93 younger_rid=93 older_bid=81 older_rid=81 younger_slot=7 older_slot=2
+[C:68964  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=87 younger_rid=87 older_bid=75 older_rid=75 younger_slot=1 older_slot=6
+[C:69349  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=166 younger_rid=166 older_bid=154 older_rid=154 younger_slot=0 older_slot=6
+[C:69412  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=171 younger_rid=171 older_bid=159 older_rid=159 younger_slot=2 older_slot=1
+[C:69454  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=176 younger_rid=176 older_bid=164 older_rid=164 younger_slot=0 older_slot=5
+[C:69613  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=170 younger_rid=170 older_bid=158 older_rid=158 younger_slot=7 older_slot=6
+[C:69940  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=249 younger_rid=249 older_bid=237 older_rid=237 younger_slot=6 older_slot=5
+[C:70088  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=254 younger_rid=254 older_bid=242 older_rid=242 younger_slot=7 older_slot=6
+[C:70093  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=3 younger_rid=3 older_bid=247 older_rid=247 younger_slot=12 older_slot=11
+tid: 0 Core@100000: Retired blocks 35781. BROB head info: B254 STID0 BPC 0x128c8 [FP COND]
+tid: 1 Core@100000: Retired blocks 35781. BROB head info: B4 STID1 BPC 0x123a0 [STD COND]
+tid: 2 Core@100000: Retired blocks 35781. BROB head info: B4 STID2 BPC 0x123a0 [STD COND]
+tid: 3 Core@100000: Retired blocks 35781. BROB head info: B191 STID3 BPC 0x123a0 [STD COND]
+tid: 0 Core@200000: Retired blocks 99621. BROB head info: B44 STID0 BPC 0x1298a [FP COND]
+tid: 1 Core@200000: Retired blocks 99621. BROB head info: B13 STID1 BPC 0x123a0 [STD COND]
+tid: 2 Core@200000: Retired blocks 99621. BROB head info: B13 STID2 BPC 0x123a0 [STD COND]
+tid: 3 Core@200000: Retired blocks 99621. BROB head info: B223 STID3 BPC 0x123a0 [STD COND]
+tid: 0 Core@300000: Retired blocks 163974. BROB head info: B5 STID0 BPC 0x13202 [FP COND]
+tid: 1 Core@300000: Retired blocks 163974. BROB head info: B65 STID1 BPC 0x123a0 [STD COND]
+tid: 2 Core@300000: Retired blocks 163974. BROB head info: B64 STID2 BPC 0x123a0 [STD COND]
+tid: 3 Core@300000: Retired blocks 163974. BROB head info: B0 STID3 BPC 0x123a0 [STD COND]
+tid: 0 Core@400000: Retired blocks 225782. BROB head info: B10 STID0 BPC 0x12d84 [FP COND]
+tid: 1 Core@400000: Retired blocks 225782. BROB head info: B103 STID1 BPC 0x123a0 [STD COND]
+tid: 2 Core@400000: Retired blocks 225782. BROB head info: B101 STID2 BPC 0x123a0 [STD COND]
+tid: 3 Core@400000: Retired blocks 225782. BROB head info: B32 STID3 BPC 0x123a0 [STD COND]
+tid: 0 Core@500000: Retired blocks 288049. BROB head info: B240 STID0 BPC 0x12d84 [FP COND]
+tid: 1 Core@500000: Retired blocks 288049. BROB head info: B129 STID1 BPC 0x123a0 [STD COND]
+tid: 2 Core@500000: Retired blocks 288049. BROB head info: B128 STID2 BPC 0x123a0 [STD COND]
+tid: 3 Core@500000: Retired blocks 288049. BROB head info: B64 STID3 BPC 0x123a0 [STD COND]
+tid: 1 Core@600000: Retired blocks 350247. BROB head info: B161 STID1 BPC 0x123a0 [STD COND]
+tid: 2 Core@600000: Retired blocks 350247. BROB head info: B159 STID2 BPC 0x123a0 [STD COND]
+tid: 3 Core@600000: Retired blocks 350247. BROB head info: B96 STID3 BPC 0x123a0 [STD COND]
+tid: 0 Core@700000: Retired blocks 384613. BROB head info: B150 STID0 BPC 0x11626 [STD COND]
+tid: 1 Core@700000: Retired blocks 384613. BROB head info: B203 STID1 BPC 0x11626 [STD COND]
+tid: 2 Core@700000: Retired blocks 384613. BROB head info: B172 STID2 BPC 0x11626 [STD COND]
+tid: 3 Core@700000: Retired blocks 384613. BROB head info: B88 STID3 BPC 0x11626 [STD COND]
+[C:750530 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=57 younger_rid=57 older_bid=46 older_rid=46 younger_slot=0 older_slot=1
+[C:750538 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=58 younger_rid=58 older_bid=47 older_rid=47 younger_slot=1 older_slot=2
+[C:751500 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=171 younger_rid=171 older_bid=159 older_rid=159 younger_slot=0 older_slot=1
+[C:751542 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=183 younger_rid=183 older_bid=171 older_rid=171 younger_slot=3 older_slot=0
+[C:751561 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=184 younger_rid=184 older_bid=172 older_rid=172 younger_slot=4 older_slot=2
+[C:751647 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=195 younger_rid=195 older_bid=183 older_rid=183 younger_slot=0 older_slot=3
+[C:751676 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=196 younger_rid=196 older_bid=184 older_rid=184 younger_slot=1 older_slot=4
+[C:752162 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=173 younger_rid=173 older_bid=161 older_rid=161 younger_slot=2 older_slot=6
+[C:752165 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=161 younger_rid=161 older_bid=149 older_rid=149 younger_slot=6 older_slot=3
+[C:752166 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=185 younger_rid=185 older_bid=173 older_rid=173 younger_slot=7 older_slot=2
+fbid=477554 fbid_local=1 pc start:0x1209a pc end:0x1209a
+gfsim: /mnt/workspace/projects/1009_SuperScalarModel/SuperScalarModel/TimingSim/frontend/bctrl/bfu/bfu_ras.cpp:213: void superScalar::NS_CORE::RAS::RunAtCommit(const superScalar::NS_CORE::PtrMachineInst&, const superScalar::NS_CORE::PtrFB&): Assertion `e.vld && "spec table valid should be true at commit!"' failed.
+
+FATAL: gfsim received signal 6
+./bin/gfsim(+0x14e41c)[0xaaaae170e41c]
+linux-vdso.so.1(__kernel_rt_sigreturn+0x0)[0xffffa60168dc]
+/lib/aarch64-linux-gnu/libc.so.6(+0x87608)[0xffffa5a67608]
+/lib/aarch64-linux-gnu/libc.so.6(gsignal+0x1c)[0xffffa5a1cb3c]
+/lib/aarch64-linux-gnu/libc.so.6(abort+0xf4)[0xffffa5a07e00]
+/lib/aarch64-linux-gnu/libc.so.6(+0x35cc0)[0xffffa5a15cc0]
+/lib/aarch64-linux-gnu/libc.so.6(__assert_perror_fail+0x0)[0xffffa5a15d30]
+./bin/gfsim(+0x421c88)[0xaaaae19e1c88]
+./bin/gfsim(+0x3e6b78)[0xaaaae19a6b78]
+./bin/gfsim(+0x3e887c)[0xaaaae19a887c]
+./bin/gfsim(+0x325720)[0xaaaae18e5720]
+./bin/gfsim(+0x31660c)[0xaaaae18d660c]
+./bin/gfsim(+0x546b80)[0xaaaae1b06b80]
+./bin/gfsim(+0x356cc)[0xaaaae15f56cc]
+/lib/aarch64-linux-gnu/libc.so.6(+0x284c4)[0xffffa5a084c4]
+/lib/aarch64-linux-gnu/libc.so.6(__libc_start_main+0x98)[0xffffa5a08598]
+./bin/gfsim(+0x14e2f0)[0xaaaae170e2f0]

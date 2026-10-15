@@ -1,0 +1,25 @@
+./bin/gfrun -s softcore.multiThreadNum=4 -f /tmp/opencode/elf_VB_triple.elf 
+Memory: 0x10200 - 0x102e8 (Size=0KB) [.rodata]
+Memory: 0x102ec - 0x10307 (Size=0KB) [.eh_frame_hdr]
+Memory: 0x10308 - 0x10373 (Size=0KB) [.eh_frame]
+Memory: 0x11374 - 0x13df3 (Size=10KB) [.text]
+Memory: 0x14df8 - 0x14eb7 (Size=0KB) [.init_array]
+Memory: 0x14eb8 - 0x14ecf (Size=0KB) [.data.rel.ro]
+Memory: 0x18000 - 0x7423b (Size=368KB) [.bss]
+Memory: 0x75000 - 0x760c7 (Size=4KB) [.sbss]
+Memory: 0x760d0 - 0x80860d0 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+Starting PE0 from 0x11374
+
+Thread:0Total Block number = 91629
+Thread:0Total Inst number = 1345175
+Thread:1Total Block number = 91627
+Thread:1Total Inst number = 587158
+Thread:2Total Block number = 91628
+Thread:2Total Inst number = 588620
+Thread:3Total Block number = 91629
+Thread:3Total Inst number = 589467
+
+Total Block number = 366513
+Total Inst number = 3110420
+Suaccelss to Reach the End of Benchmark! R2 = 0

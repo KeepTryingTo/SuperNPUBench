@@ -1,0 +1,205 @@
+bin/gfsim -f /mnt/workspace/projects/1011_SuperNPUBench_v3/SuperNPUBench/benchmark/one-level-arch/output/solution/mega_moe/elf/solution_mega_moe_mega_moe_sim_mt_dyn.elf --conf fourpe --pto-v02 true -s tlsu.fake_l2_enable=false 
+[gfsim] explicit PE config present; skipping ELF auto-detection
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Override configurations:
+tlsu.fake_l2_enable=false
+core.threadCount=4
+core.stdPeCount=1
+core.cube_core_num=4
+core.cube_thread_num=1
+core.vec_core_num=4
+fourpe.pe_cluster_enable=true
+fourpe.pe_cluster_count=4
+fourpe.pe_cluster_frontend_thread_count=4
+fourpe.pe_cluster_aggregate_decode_width=8
+fourpe.pe_cluster_gpr_rename_partition_entries=128
+fourpe.pe_cluster_scalar_rob_partition_entries=128
+fourpe.pe_cluster_scalar_iq_partition_entries=128
+fourpe.pe_cluster_block_rob_partition_entries=256
+fourpe.pe_cluster_block_iq_partition_entries=88
+fourpe.pe_cluster_local_reg_partition_entries=88
+bfu.brq_depth=1024
+fourpe.pe_cluster_partition_borrow_enable=false
+fourpe.pe_cluster_eligible_rr_fairness_check=true
+fourpe.pe_cluster_group_contract_fatal=false
+dfx.swimCounterSampleInterval=8
+Memory: 0x10200 - 0x102e8 (Size=0KB) [.rodata]
+Memory: 0x102ec - 0x10307 (Size=0KB) [.eh_frame_hdr]
+Memory: 0x10308 - 0x10373 (Size=0KB) [.eh_frame]
+Memory: 0x11374 - 0x13e27 (Size=10KB) [.text]
+Memory: 0x14e28 - 0x14ee7 (Size=0KB) [.init_array]
+Memory: 0x14ee8 - 0x14eff (Size=0KB) [.data.rel.ro]
+Memory: 0x18000 - 0x7423b (Size=368KB) [.bss]
+Memory: 0x75000 - 0x760c7 (Size=4KB) [.sbss]
+Memory: 0x760d0 - 0x80860d0 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+[C:61851  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=74 younger_rid=74 older_bid=62 older_rid=62 younger_slot=0 older_slot=2
+[C:62463  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=88 younger_rid=88 older_bid=76 older_rid=76 younger_slot=3 older_slot=1
+[C:62466  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=157 younger_rid=157 older_bid=145 older_rid=145 younger_slot=6 older_slot=5
+[C:62815  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=221 younger_rid=221 older_bid=209 older_rid=209 younger_slot=4 older_slot=3
+[C:63147  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=171 younger_rid=171 older_bid=159 older_rid=159 younger_slot=6 older_slot=3
+[C:63173  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=240 younger_rid=240 older_bid=228 older_rid=228 younger_slot=11 older_slot=10
+[C:63321  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=29 younger_rid=29 older_bid=17 older_rid=17 younger_slot=2 older_slot=7
+[C:63418  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=48 younger_rid=48 older_bid=36 older_rid=36 younger_slot=2 older_slot=6
+[C:63780  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=254 younger_rid=254 older_bid=242 older_rid=242 younger_slot=6 older_slot=5
+[C:63804  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=67 younger_rid=67 older_bid=55 older_rid=55 younger_slot=8 older_slot=7
+[C:63810  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=112 younger_rid=112 older_bid=100 older_rid=100 younger_slot=11 older_slot=10
+[C:64090  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=131 younger_rid=131 older_bid=119 older_rid=119 younger_slot=0 older_slot=6
+[C:64284  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=73 younger_rid=73 older_bid=59 older_rid=59 younger_slot=2 older_slot=1
+[C:64285  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=87 younger_rid=87 older_bid=73 older_rid=73 younger_slot=3 older_slot=2
+[C:64286  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=101 younger_rid=101 older_bid=87 older_rid=87 younger_slot=4 older_slot=3
+[C:64456  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=142 younger_rid=142 older_bid=128 older_rid=128 younger_slot=2 older_slot=1
+[C:64457  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=156 younger_rid=156 older_bid=142 older_rid=142 younger_slot=3 older_slot=2
+[C:64458  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=170 younger_rid=170 older_bid=156 older_rid=156 younger_slot=4 older_slot=3
+[C:64667  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=201 younger_rid=201 older_bid=187 older_rid=187 younger_slot=1 older_slot=0
+[C:64695  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=206 younger_rid=206 older_bid=192 older_rid=192 younger_slot=0 older_slot=4
+[C:64768  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=209 younger_rid=209 older_bid=197 older_rid=197 younger_slot=2 older_slot=1
+[C:65202  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=223 younger_rid=223 older_bid=211 older_rid=211 younger_slot=8 older_slot=7
+[C:65329  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=36 younger_rid=36 older_bid=24 older_rid=24 younger_slot=7 older_slot=6
+[C:65640  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=81 younger_rid=81 older_bid=69 older_rid=69 younger_slot=1 older_slot=6
+[C:65841  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=100 younger_rid=100 older_bid=88 older_rid=88 younger_slot=8 older_slot=6
+[C:65846  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=50 younger_rid=50 older_bid=38 older_rid=38 younger_slot=13 older_slot=12
+[C:65875  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=119 younger_rid=119 older_bid=107 older_rid=107 younger_slot=0 older_slot=3
+[C:66343  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=164 younger_rid=164 older_bid=152 older_rid=152 younger_slot=7 older_slot=2
+[C:66451  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=183 younger_rid=183 older_bid=171 older_rid=171 younger_slot=8 older_slot=7
+[C:66456  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=133 younger_rid=133 older_bid=121 older_rid=121 younger_slot=13 older_slot=12
+[C:66529  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=202 younger_rid=202 older_bid=190 older_rid=190 younger_slot=7 older_slot=6
+[C:66901  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=247 younger_rid=247 older_bid=235 older_rid=235 younger_slot=8 older_slot=7
+[C:67020  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=10 younger_rid=10 older_bid=254 older_rid=254 younger_slot=8 older_slot=7
+tid: 0 Core@100000: Retired blocks 32201. BROB head info: B74 STID0 BPC 0x12c9c [FP FALL]
+tid: 1 Core@100000: Retired blocks 32201. BROB head info: B189 STID1 BPC 0x1277a [STD FALL]
+tid: 2 Core@100000: Retired blocks 32201. BROB head info: B222 STID2 BPC 0x1277a [STD FALL]
+tid: 3 Core@100000: Retired blocks 32201. BROB head info: B228 STID3 BPC 0x1277a [STD FALL]
+tid: 0 Core@200000: Retired blocks 86267. BROB head info: B52 STID0 BPC 0x12d9e [FP COND]
+tid: 1 Core@200000: Retired blocks 86267. BROB head info: B215 STID1 BPC 0x1277a [STD FALL]
+tid: 2 Core@200000: Retired blocks 86267. BROB head info: B246 STID2 BPC 0x1277a [STD FALL]
+tid: 3 Core@200000: Retired blocks 86267. BROB head info: B250 STID3 BPC 0x1277a [STD FALL]
+tid: 0 Core@300000: Retired blocks 139935. BROB head info: B139 STID0 BPC 0x1322c [FP COND]
+tid: 1 Core@300000: Retired blocks 139935. BROB head info: B239 STID1 BPC 0x1277a [STD FALL]
+tid: 2 Core@300000: Retired blocks 139935. BROB head info: B16 STID2 BPC 0x1277a [STD FALL]
+tid: 3 Core@300000: Retired blocks 139935. BROB head info: B21 STID3 BPC 0x12794 [STD COND]
+tid: 0 Core@400000: Retired blocks 194359. BROB head info: B218 STID0 BPC 0x12f2c [FP COND]
+tid: 1 Core@400000: Retired blocks 194359. BROB head info: B7 STID1 BPC 0x1277a [STD FALL]
+tid: 2 Core@400000: Retired blocks 194359. BROB head info: B40 STID2 BPC 0x1277a [STD FALL]
+tid: 3 Core@400000: Retired blocks 194359. BROB head info: B46 STID3 BPC 0x1277a [STD FALL]
+tid: 0 Core@500000: Retired blocks 248911. BROB head info: B172 STID0 BPC 0x12f2c [FP COND]
+tid: 1 Core@500000: Retired blocks 248911. BROB head info: B31 STID1 BPC 0x1277a [STD FALL]
+tid: 2 Core@500000: Retired blocks 248911. BROB head info: B64 STID2 BPC 0x1277a [STD FALL]
+tid: 3 Core@500000: Retired blocks 248911. BROB head info: B68 STID3 BPC 0x1277a [STD FALL]
+tid: 0 Core@600000: Retired blocks 303407. BROB head info: B64 STID0 BPC 0x12f2c [FP COND]
+tid: 1 Core@600000: Retired blocks 303407. BROB head info: B57 STID1 BPC 0x1277a [STD FALL]
+tid: 2 Core@600000: Retired blocks 303407. BROB head info: B90 STID2 BPC 0x1277a [STD FALL]
+tid: 3 Core@600000: Retired blocks 303407. BROB head info: B92 STID3 BPC 0x1277a [STD FALL]
+tid: 0 Core@700000: Retired blocks 358204. BROB head info: B3 STID0 BPC 0x12f2c [FP COND]
+tid: 1 Core@700000: Retired blocks 358204. BROB head info: B81 STID1 BPC 0x1277a [STD FALL]
+tid: 2 Core@700000: Retired blocks 358204. BROB head info: B114 STID2 BPC 0x1277a [STD FALL]
+tid: 3 Core@700000: Retired blocks 358204. BROB head info: B118 STID3 BPC 0x1277a [STD FALL]
+tid: 0 Core@800000: Retired blocks 412659. BROB head info: B114 STID0 BPC 0x12f00 [STD COND]
+tid: 1 Core@800000: Retired blocks 412659. BROB head info: B105 STID1 BPC 0x1277a [STD FALL]
+tid: 2 Core@800000: Retired blocks 412659. BROB head info: B138 STID2 BPC 0x1277a [STD FALL]
+tid: 3 Core@800000: Retired blocks 412659. BROB head info: B142 STID3 BPC 0x1277a [STD FALL]
+tid: 0 Core@900000: Retired blocks 467212. BROB head info: B61 STID0 BPC 0x12f2c [FP COND]
+tid: 1 Core@900000: Retired blocks 467212. BROB head info: B131 STID1 BPC 0x1277a [STD FALL]
+tid: 2 Core@900000: Retired blocks 467212. BROB head info: B164 STID2 BPC 0x1277a [STD FALL]
+tid: 3 Core@900000: Retired blocks 467212. BROB head info: B168 STID3 BPC 0x1277a [STD FALL]
+tid: 0 Core@1000000: Retired blocks 521957. BROB head info: B204 STID0 BPC 0x12fda [FP COND]
+tid: 1 Core@1000000: Retired blocks 521957. BROB head info: B155 STID1 BPC 0x1277a [STD FALL]
+tid: 2 Core@1000000: Retired blocks 521957. BROB head info: B188 STID2 BPC 0x1277a [STD FALL]
+tid: 3 Core@1000000: Retired blocks 521957. BROB head info: B194 STID3 BPC 0x1277a [STD FALL]
+tid: 0 Core@1100000: Retired blocks 544499. BROB head info: B167 STID0 BPC 0x116cc [STD COND]
+tid: 1 Core@1100000: Retired blocks 544499. BROB head info: B114 STID1 BPC 0x116cc [STD COND]
+tid: 2 Core@1100000: Retired blocks 544499. BROB head info: B118 STID2 BPC 0x116cc [STD COND]
+tid: 3 Core@1100000: Retired blocks 544499. BROB head info: B100 STID3 BPC 0x116cc [STD COND]
+[C:1131709][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=43 younger_rid=43 older_bid=31 older_rid=31 younger_slot=1 older_slot=0
+[C:1132083][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=194 younger_rid=194 older_bid=182 older_rid=182 younger_slot=1 older_slot=7
+[C:1132087][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=170 younger_rid=170 older_bid=158 older_rid=158 younger_slot=6 older_slot=5
+[C:1132088][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=182 younger_rid=182 older_bid=170 older_rid=170 younger_slot=7 older_slot=6
+fbid=515121 fbid_local=1 pc start:0x1235a pc end:0x1235a
+gfsim: /mnt/workspace/projects/1009_SuperScalarModel/SuperScalarModel/TimingSim/frontend/bctrl/bfu/bfu_ras.cpp:213: void superScalar::NS_CORE::RAS::RunAtCommit(const superScalar::NS_CORE::PtrMachineInst&, const superScalar::NS_CORE::PtrFB&): Assertion `e.vld && "spec table valid should be true at commit!"' failed.
+
+FATAL: gfsim received signal 6
+bin/gfsim(+0x14e41c)[0xaaaad9dbe41c]
+linux-vdso.so.1(__kernel_rt_sigreturn+0x0)[0xffff858618dc]
+/lib/aarch64-linux-gnu/libc.so.6(+0x87608)[0xffff852b7608]
+/lib/aarch64-linux-gnu/libc.so.6(gsignal+0x1c)[0xffff8526cb3c]
+/lib/aarch64-linux-gnu/libc.so.6(abort+0xf4)[0xffff85257e00]
+/lib/aarch64-linux-gnu/libc.so.6(+0x35cc0)[0xffff85265cc0]
+/lib/aarch64-linux-gnu/libc.so.6(__assert_perror_fail+0x0)[0xffff85265d30]
+bin/gfsim(+0x421c88)[0xaaaada091c88]
+bin/gfsim(+0x3e6b78)[0xaaaada056b78]
+bin/gfsim(+0x3e887c)[0xaaaada05887c]
+bin/gfsim(+0x325720)[0xaaaad9f95720]
+bin/gfsim(+0x31660c)[0xaaaad9f8660c]
+bin/gfsim(+0x546b80)[0xaaaada1b6b80]
+bin/gfsim(+0x356cc)[0xaaaad9ca56cc]
+/lib/aarch64-linux-gnu/libc.so.6(+0x284c4)[0xffff852584c4]
+/lib/aarch64-linux-gnu/libc.so.6(__libc_start_main+0x98)[0xffff85258598]
+bin/gfsim(+0x14e2f0)[0xaaaad9dbe2f0]
