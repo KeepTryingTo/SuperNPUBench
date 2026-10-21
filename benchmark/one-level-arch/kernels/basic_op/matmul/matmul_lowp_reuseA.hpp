@@ -9,8 +9,11 @@ using namespace pto;
 
 namespace matmul_lowp_reuse_a_detail {
 
-// Schedule: M block -> cache ALL A/ScaleA K slices -> N group -> K -> N.
-// Cached A survives every N group. Only the resident C outputs are replaced.
+// Schedule: M block -> N group -> K -> N.  During the first N group, each
+// A/ScaleA K slice is loaded immediately before its first consumer instead of
+// preloading the whole K axis.  Later N groups reuse the cached A tiles.
+// This keeps the same one-load-per-A-slice contract while allowing later A
+// loads to overlap earlier TMATMUL work.
 // Each C output keeps its partial sum in internal acc across the entire K
 // axis. Only the final K step materializes C for store_output.
 // Timing simulation requires cube.enable_internal_acc=true.
@@ -101,32 +104,6 @@ struct ReuseAKernel {
         typename FullA::ScaleTile a_scale[FullKBlocks ? FullKBlocks : 1];
         typename LastA::Tile last_a;
         typename LastA::ScaleTile last_scale;
-        const int tid = static_cast<int>(get_thread_idx());
-        // Load the entire A K axis ONCE, before entering any N group.
-#pragma clang loop unroll(full)
-        for (int k = 0; k < FullKBlocks; ++k) {
-            const int row = m_begin + (FullA::Shared ? 0 : tid * FullA::PeRows);
-            GlobalA global_a(buffers.a + row * StoredK + k * tK / PackedFactor);
-            if constexpr (FullA::Shared) TLOAD<typename FullA::Matrix, 1>(a[k], global_a);
-            else TLOAD_CUBE(a[k], global_a);
-            if constexpr (UseMx) {
-                GlobalAScale global_scale(buffers.a_scale + row * GlobalScaleCols + k * tK / ScaleGroup);
-                if constexpr (FullA::Shared) TLOAD<typename FullA::ScaleMatrix, 1>(a_scale[k], global_scale);
-                else TLOAD_CUBE(a_scale[k], global_scale);
-            }
-        }
-        if constexpr (TailK != 0) {
-            const int row = m_begin + (LastA::Shared ? 0 : tid * LastA::PeRows);
-            GlobalA global_a(buffers.a + row * StoredK + FullKBlocks * tK / PackedFactor);
-            if constexpr (LastA::Shared) TLOAD<typename LastA::Matrix, 1>(last_a, global_a);
-            else TLOAD_CUBE(last_a, global_a);
-            if constexpr (UseMx) {
-                GlobalAScale global_scale(buffers.a_scale + row * GlobalScaleCols + FullKBlocks * tK / ScaleGroup);
-                if constexpr (LastA::Shared) TLOAD<typename LastA::ScaleMatrix, 1>(last_scale, global_scale);
-                else TLOAD_CUBE(last_scale, global_scale);
-            }
-        }
-
         constexpr int FullNBlocks = gN / tN;
         // Fully unroll N groups; the final-group mask removes unused slots.
         // Every expanded group still reuses the same full-K A cache.
@@ -166,10 +143,11 @@ struct ReuseAKernel {
         int m_begin, int n_begin, std::integer_sequence<int, Ks...>) {
         (compute_cached_k_step<ValidM, FullN, TailN, tK, Ks == 0,
                                TailK == 0 && Ks + 1 == FullKBlocks>(
-            buffers, c, c_tail, a[Ks], a_scale[Ks], n_begin, Ks * tK), ...);
+            buffers, c, c_tail, a[Ks], a_scale[Ks], m_begin, n_begin, Ks * tK), ...);
         if constexpr (TailK != 0) {
             compute_cached_k_step<ValidM, FullN, TailN, TailK, FullKBlocks == 0, true>(
-                buffers, c, c_tail, last_a, last_scale, n_begin, FullKBlocks * tK);
+                buffers, c, c_tail, last_a, last_scale, m_begin, n_begin,
+                FullKBlocks * tK);
         }
 #pragma clang loop unroll(full)
         for (int n = 0; n < FullN; ++n) {
@@ -184,7 +162,30 @@ struct ReuseAKernel {
               typename CTile, typename TailCTile, typename ATile, typename AScale>
     static PTO_SHARED_INLINE void compute_cached_k_step(
         const Buffers &buffers, CTile *c, TailCTile &c_tail,
-        ATile &a, AScale &a_scale, int n_begin, int k_begin) {
+        ATile &a, AScale &a_scale, int m_begin, int n_begin, int k_begin) {
+        // Cache A[k]/ScaleA[k] on first use only.  Because the K steps are
+        // statically unrolled, placing these loads beside their first TMATMUL
+        // lets the tile pipeline overlap A[k+1] with the preceding MAD while
+        // all later N groups continue to reuse the same resident A tile.
+        if (n_begin == 0) {
+            using ADesc = CachedA<ValidM, ValidK>;
+            const int tid = static_cast<int>(get_thread_idx());
+            const int row = m_begin + (ADesc::Shared ? 0 : tid * ADesc::PeRows);
+            GlobalA global_a(buffers.a + row * StoredK + k_begin / PackedFactor);
+            if constexpr (ADesc::Shared)
+                TLOAD<typename ADesc::Matrix, 1>(a, global_a);
+            else
+                TLOAD_CUBE(a, global_a);
+            if constexpr (UseMx) {
+                GlobalAScale global_scale(
+                    buffers.a_scale + row * GlobalScaleCols + k_begin / ScaleGroup);
+                if constexpr (ADesc::Shared)
+                    TLOAD<typename ADesc::ScaleMatrix, 1>(a_scale, global_scale);
+                else
+                    TLOAD_CUBE(a_scale, global_scale);
+            }
+        }
+
         // Each N slot is an independent K-chain. Keep intermediate C raw;
         // the last full/tail K step alone writes a CellReg result for TSTORE.
 #pragma clang loop unroll(full)
