@@ -1,0 +1,1277 @@
+bin/gfsim -f /mnt/workspace/projects/1026_SuperNPUBench/SuperNPUBench/benchmark/one-level-arch/output/solution/mega_moe/elf/solution_mega_moe_mega_moe_sim_mt_dyn.elf --conf fourpe --pto-v02 true -s tlsu.fake_l2_enable=false 
+[gfsim] explicit PE config present; skipping ELF auto-detection
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Override configurations:
+tlsu.fake_l2_enable=false
+core.threadCount=4
+core.stdPeCount=1
+core.cube_core_num=4
+core.cube_thread_num=1
+core.vec_core_num=4
+fourpe.pe_cluster_enable=true
+fourpe.pe_cluster_count=4
+fourpe.pe_cluster_frontend_thread_count=4
+fourpe.pe_cluster_aggregate_decode_width=8
+fourpe.pe_cluster_gpr_rename_partition_entries=128
+fourpe.pe_cluster_scalar_rob_partition_entries=128
+fourpe.pe_cluster_scalar_iq_partition_entries=128
+fourpe.pe_cluster_block_rob_partition_entries=256
+fourpe.pe_cluster_block_iq_partition_entries=88
+fourpe.pe_cluster_local_reg_partition_entries=88
+bfu.brq_depth=1024
+fourpe.pe_cluster_partition_borrow_enable=false
+fourpe.pe_cluster_eligible_rr_fairness_check=true
+fourpe.pe_cluster_group_contract_fatal=false
+dfx.swimCounterSampleInterval=8
+Memory: 0x10200 - 0x102e8 (Size=0KB) [.rodata]
+Memory: 0x102ec - 0x10307 (Size=0KB) [.eh_frame_hdr]
+Memory: 0x10308 - 0x1037b (Size=0KB) [.eh_frame]
+Memory: 0x1137c - 0x1516b (Size=15KB) [.text]
+Memory: 0x16170 - 0x1621f (Size=0KB) [.init_array]
+Memory: 0x16220 - 0x16237 (Size=0KB) [.data.rel.ro]
+Memory: 0x18000 - 0x66e73 (Size=315KB) [.bss]
+Memory: 0x67000 - 0x680c0 (Size=4KB) [.sbss]
+Memory: 0x680d0 - 0x80780d0 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+[C:61015  ][TMA.NA    ]: nuke_pair_diag ld_stid=0 ld_bid=151/w0 ld_rid=87 st_stid=0 st_bid=149/w0 st_rid=79
+[C:61730  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=219 younger_rid=219 older_bid=191 older_rid=191 younger_slot=1 older_slot=3
+[C:61761  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=134 younger_rid=134 older_bid=106 older_rid=106 younger_slot=15 older_slot=2
+[C:61823  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=136 younger_rid=136 older_bid=108 older_rid=108 younger_slot=2 older_slot=10
+[C:61825  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=221 younger_rid=221 older_bid=193 older_rid=193 younger_slot=3 older_slot=5
+[C:61847  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=138 younger_rid=138 older_bid=108 older_rid=108 younger_slot=16 older_slot=10
+[C:61847  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=138 younger_rid=138 older_bid=110 older_rid=110 younger_slot=16 older_slot=13
+[C:61849  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=223 younger_rid=223 older_bid=195 older_rid=195 younger_slot=17 older_slot=0
+[C:61849  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=223 younger_rid=223 older_bid=193 older_rid=193 younger_slot=17 older_slot=5
+[C:61989  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=140 younger_rid=140 older_bid=110 older_rid=110 younger_slot=4 older_slot=13
+[C:61992  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=225 younger_rid=225 older_bid=195 older_rid=195 younger_slot=5 older_slot=0
+[C:62265  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=0 younger_rid=0 older_bid=228 older_rid=228 younger_slot=7 older_slot=11
+[C:63216  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=179 younger_rid=179 older_bid=159 older_rid=159 younger_slot=2 older_slot=1
+[C:63249  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=8 younger_rid=8 older_bid=244 older_rid=244 younger_slot=3 older_slot=0
+[C:63345  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=199 younger_rid=199 older_bid=179 older_rid=179 younger_slot=0 older_slot=2
+[C:63353  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=28 younger_rid=28 older_bid=8 older_rid=8 younger_slot=1 older_slot=3
+[C:63434  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=41 younger_rid=41 older_bid=21 older_rid=21 younger_slot=3 older_slot=2
+[C:63435  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=61 younger_rid=61 older_bid=41 older_rid=41 younger_slot=4 older_slot=3
+[C:63458  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=50 younger_rid=50 older_bid=30 older_rid=30 younger_slot=1 older_slot=0
+[C:63459  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=70 younger_rid=70 older_bid=50 older_rid=50 younger_slot=5 older_slot=1
+[C:63532  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=249 younger_rid=249 older_bid=247 older_rid=247 younger_slot=0 older_slot=2
+[C:63536  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=78 younger_rid=78 older_bid=76 older_rid=76 younger_slot=1 older_slot=3
+[C:63641  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=80 younger_rid=80 older_bid=78 older_rid=78 younger_slot=2 older_slot=1
+[C:63648  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=109 younger_rid=109 older_bid=81 older_rid=81 younger_slot=3 older_slot=4
+[C:63662  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=251 younger_rid=251 older_bid=249 older_rid=249 younger_slot=5 older_slot=0
+[C:63666  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=82 younger_rid=82 older_bid=80 older_rid=80 younger_slot=6 older_slot=2
+[C:63672  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=111 younger_rid=111 older_bid=109 older_rid=109 younger_slot=7 older_slot=3
+[C:63687  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=253 younger_rid=253 older_bid=251 older_rid=251 younger_slot=9 older_slot=5
+[C:63749  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=118 younger_rid=118 older_bid=90 older_rid=90 younger_slot=0 older_slot=8
+[C:63842  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=120 younger_rid=120 older_bid=118 older_rid=118 younger_slot=1 older_slot=0
+[C:64158  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=99 younger_rid=99 older_bid=90 older_rid=90 younger_slot=0 older_slot=3
+[C:64212  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=115 younger_rid=115 older_bid=113 older_rid=113 younger_slot=1 older_slot=4
+[C:64213  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=14 younger_rid=14 older_bid=5 older_rid=5 younger_slot=5 older_slot=2
+[C:64218  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=108 younger_rid=108 older_bid=99 older_rid=99 younger_slot=6 older_slot=0
+[C:64222  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=117 younger_rid=117 older_bid=108 older_rid=108 younger_slot=7 older_slot=6
+[C:64248  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=23 younger_rid=23 older_bid=14 older_rid=14 younger_slot=9 older_slot=5
+[C:64317  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=32 younger_rid=32 older_bid=23 older_rid=23 younger_slot=10 older_slot=9
+[C:64355  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=124 younger_rid=124 older_bid=122 older_rid=122 younger_slot=12 older_slot=22
+[C:64403  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=192 younger_rid=192 older_bid=162 older_rid=162 younger_slot=16 older_slot=2
+[C:64403  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=192 younger_rid=192 older_bid=164 older_rid=164 younger_slot=16 older_slot=3
+[C:64426  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=194 younger_rid=194 older_bid=164 older_rid=164 younger_slot=18 older_slot=3
+[C:64426  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=194 younger_rid=194 older_bid=166 older_rid=166 younger_slot=18 older_slot=11
+[C:64446  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=107 younger_rid=107 older_bid=77 older_rid=77 younger_slot=1 older_slot=0
+[C:64446  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=107 younger_rid=107 older_bid=79 older_rid=79 younger_slot=1 older_slot=14
+[C:64494  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=109 younger_rid=109 older_bid=81 older_rid=81 younger_slot=5 older_slot=4
+[C:64494  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=109 younger_rid=109 older_bid=79 older_rid=79 younger_slot=5 older_slot=14
+[C:64684  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=111 younger_rid=111 older_bid=81 older_rid=81 younger_slot=2 older_slot=4
+[C:64684  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=111 younger_rid=111 older_bid=83 older_rid=83 younger_slot=2 older_slot=17
+[C:64691  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=196 younger_rid=196 older_bid=166 older_rid=166 younger_slot=3 older_slot=11
+[C:64691  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=196 younger_rid=196 older_bid=168 older_rid=168 younger_slot=3 older_slot=13
+[C:64709  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=113 younger_rid=113 older_bid=83 older_rid=83 younger_slot=0 older_slot=17
+[C:64716  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=198 younger_rid=198 older_bid=168 older_rid=168 younger_slot=6 older_slot=13
+[C:65155  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=141 younger_rid=141 older_bid=132 older_rid=132 younger_slot=4 older_slot=7
+[C:65159  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=150 younger_rid=150 older_bid=141 older_rid=141 younger_slot=8 older_slot=4
+[C:65370  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=225 younger_rid=225 older_bid=197 older_rid=197 younger_slot=9 older_slot=1
+[C:65370  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=225 younger_rid=225 older_bid=195 older_rid=195 younger_slot=9 older_slot=11
+[C:65394  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=227 younger_rid=227 older_bid=197 older_rid=197 younger_slot=3 older_slot=1
+[C:65394  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=227 younger_rid=227 older_bid=199 older_rid=199 younger_slot=3 older_slot=5
+[C:65418  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=229 younger_rid=229 older_bid=201 older_rid=201 younger_slot=0 older_slot=2
+[C:65418  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=229 younger_rid=229 older_bid=199 older_rid=199 younger_slot=0 older_slot=5
+[C:65443  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=231 younger_rid=231 older_bid=201 older_rid=201 younger_slot=10 older_slot=2
+[C:65478  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=150 younger_rid=150 older_bid=141 older_rid=141 younger_slot=12 older_slot=6
+[C:65482  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=159 younger_rid=159 older_bid=150 older_rid=150 younger_slot=13 older_slot=12
+[C:65661  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=234 younger_rid=234 older_bid=204 older_rid=204 younger_slot=15 older_slot=7
+[C:65661  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=234 younger_rid=234 older_bid=206 older_rid=206 younger_slot=15 older_slot=14
+[C:65684  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=236 younger_rid=236 older_bid=208 older_rid=208 younger_slot=16 older_slot=4
+[C:65684  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=236 younger_rid=236 older_bid=206 older_rid=206 younger_slot=16 older_slot=14
+[C:65687  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=237 younger_rid=237 older_bid=217 older_rid=217 younger_slot=17 older_slot=11
+[C:65708  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=238 younger_rid=238 older_bid=208 older_rid=208 younger_slot=18 older_slot=4
+[C:65708  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=238 younger_rid=238 older_bid=210 older_rid=210 younger_slot=18 older_slot=8
+[C:65733  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=240 younger_rid=240 older_bid=210 older_rid=210 younger_slot=1 older_slot=8
+[C:65776  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=152 younger_rid=152 older_bid=132 older_rid=132 younger_slot=19 older_slot=5
+[C:65871  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=172 younger_rid=172 older_bid=152 older_rid=152 younger_slot=2 older_slot=19
+[C:65967  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=1 younger_rid=1 older_bid=237 older_rid=237 younger_slot=0 older_slot=17
+[C:66587  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=14 younger_rid=14 older_bid=250 older_rid=250 younger_slot=2 older_slot=0
+[C:66596  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=34 younger_rid=34 older_bid=14 older_rid=14 younger_slot=3 older_slot=2
+[C:66657  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=23 younger_rid=23 older_bid=3 older_rid=3 younger_slot=2 older_slot=0
+[C:66666  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=43 younger_rid=43 older_bid=23 older_rid=23 younger_slot=3 older_slot=2
+[C:66694  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=222 younger_rid=222 older_bid=220 older_rid=220 younger_slot=0 older_slot=4
+[C:66696  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=51 younger_rid=51 older_bid=49 older_rid=49 younger_slot=5 older_slot=1
+[C:66770  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=53 younger_rid=53 older_bid=51 older_rid=51 younger_slot=1 older_slot=5
+[C:66777  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=82 younger_rid=82 older_bid=54 older_rid=54 younger_slot=2 older_slot=6
+[C:66795  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=55 younger_rid=55 older_bid=53 older_rid=53 younger_slot=3 older_slot=1
+[C:66839  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=84 younger_rid=84 older_bid=82 older_rid=82 younger_slot=4 older_slot=2
+[C:66855  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=224 younger_rid=224 older_bid=222 older_rid=222 younger_slot=7 older_slot=0
+[C:66880  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=226 younger_rid=226 older_bid=224 older_rid=224 younger_slot=0 older_slot=7
+[C:67025  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=91 younger_rid=91 older_bid=63 older_rid=63 younger_slot=1 older_slot=8
+[C:67073  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=93 younger_rid=93 older_bid=91 older_rid=91 younger_slot=2 older_slot=1
+[C:67234  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=72 younger_rid=72 older_bid=63 older_rid=63 younger_slot=4 older_slot=0
+[C:67282  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=81 younger_rid=81 older_bid=72 older_rid=72 younger_slot=1 older_slot=4
+[C:67286  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=90 younger_rid=90 older_bid=81 older_rid=81 younger_slot=5 older_slot=1
+[C:67339  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=243 younger_rid=243 older_bid=234 older_rid=234 younger_slot=2 older_slot=3
+[C:67342  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=88 younger_rid=88 older_bid=86 older_rid=86 younger_slot=7 older_slot=6
+[C:67364  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=252 younger_rid=252 older_bid=243 older_rid=243 younger_slot=3 older_slot=2
+[C:67367  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=5 younger_rid=5 older_bid=252 older_rid=252 younger_slot=9 older_slot=3
+[C:67457  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=97 younger_rid=97 older_bid=95 older_rid=95 younger_slot=1 older_slot=0
+[C:67681  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=114 younger_rid=114 older_bid=105 older_rid=105 younger_slot=1 older_slot=0
+[C:67685  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=123 younger_rid=123 older_bid=114 older_rid=114 younger_slot=2 older_slot=1
+[C:67693  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=123 younger_rid=123 older_bid=114 older_rid=114 younger_slot=4 older_slot=3
+[C:67697  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=132 younger_rid=132 older_bid=123 older_rid=123 younger_slot=5 older_slot=4
+tid: 0 Core@100000: Retired blocks 40134. BROB head info: B10 STID0 BPC 0x12a82 [STD COND]
+tid: 1 Core@100000: Retired blocks 40134. BROB head info: B161 STID1 BPC 0x13338 [STD COND]
+tid: 2 Core@100000: Retired blocks 40134. BROB head info: B161 STID2 BPC 0x13338 [STD COND]
+tid: 3 Core@100000: Retired blocks 40134. BROB head info: B122 STID3 BPC 0x13338 [STD COND]
+tid: 0 Core@200000: Retired blocks 104823. BROB head info: B88 STID0 BPC 0x12ec4 [FP COND]
+tid: 1 Core@200000: Retired blocks 104823. BROB head info: B196 STID1 BPC 0x13338 [STD COND]
+tid: 2 Core@200000: Retired blocks 104823. BROB head info: B193 STID2 BPC 0x13338 [STD COND]
+tid: 3 Core@200000: Retired blocks 104823. BROB head info: B154 STID3 BPC 0x13338 [STD COND]
+tid: 0 Core@300000: Retired blocks 171194. BROB head info: B112 STID0 BPC 0x12dbc [STD COND]
+tid: 1 Core@300000: Retired blocks 171194. BROB head info: B200 STID1 BPC 0x13338 [STD COND]
+tid: 2 Core@300000: Retired blocks 171194. BROB head info: B200 STID2 BPC 0x13338 [STD COND]
+tid: 3 Core@300000: Retired blocks 171194. BROB head info: B186 STID3 BPC 0x13338 [STD COND]
+tid: 0 Core@400000: Retired blocks 235069. BROB head info: B133 STID0 BPC 0x12d3e [STD COND]
+tid: 1 Core@400000: Retired blocks 235069. BROB head info: B239 STID1 BPC 0x13338 [STD COND]
+tid: 2 Core@400000: Retired blocks 235069. BROB head info: B240 STID2 BPC 0x13338 [STD COND]
+tid: 3 Core@400000: Retired blocks 235069. BROB head info: B217 STID3 BPC 0x13338 [STD COND]
+tid: 0 Core@500000: Retired blocks 298853. BROB head info: B115 STID0 BPC 0x12d5c [FP COND]
+tid: 1 Core@500000: Retired blocks 298853. BROB head info: B252 STID1 BPC 0x13338 [STD COND]
+tid: 2 Core@500000: Retired blocks 298853. BROB head info: B252 STID2 BPC 0x13338 [STD COND]
+tid: 3 Core@500000: Retired blocks 298853. BROB head info: B250 STID3 BPC 0x13338 [STD COND]
+tid: 0 Core@600000: Retired blocks 364716. BROB head info: B33 STID0 BPC 0x12d5c [FP COND]
+tid: 1 Core@600000: Retired blocks 364716. BROB head info: B57 STID1 BPC 0x13338 [STD COND]
+tid: 2 Core@600000: Retired blocks 364716. BROB head info: B56 STID2 BPC 0x13338 [STD COND]
+tid: 3 Core@600000: Retired blocks 364716. BROB head info: B26 STID3 BPC 0x13338 [STD COND]
+tid: 0 Core@700000: Retired blocks 429680. BROB head info: B124 STID0 BPC 0x12e46 [FP COND]
+tid: 1 Core@700000: Retired blocks 429680. BROB head info: B94 STID1 BPC 0x13338 [STD COND]
+tid: 2 Core@700000: Retired blocks 429680. BROB head info: B93 STID2 BPC 0x13338 [STD COND]
+tid: 3 Core@700000: Retired blocks 429680. BROB head info: B57 STID3 BPC 0x13338 [STD COND]
+tid: 0 Core@800000: Retired blocks 494179. BROB head info: B51 STID0 BPC 0x12dda [FP COND]
+tid: 1 Core@800000: Retired blocks 494179. BROB head info: B107 STID1 BPC 0x13338 [STD COND]
+tid: 2 Core@800000: Retired blocks 494179. BROB head info: B107 STID2 BPC 0x13338 [STD COND]
+tid: 3 Core@800000: Retired blocks 494179. BROB head info: B90 STID3 BPC 0x13338 [STD COND]
+tid: 0 Core@900000: Retired blocks 558719. BROB head info: B192 STID0 BPC 0x131ac [FP COND]
+tid: 1 Core@900000: Retired blocks 558719. BROB head info: B164 STID1 BPC 0x13338 [STD COND]
+tid: 2 Core@900000: Retired blocks 558719. BROB head info: B161 STID2 BPC 0x13338 [STD COND]
+tid: 3 Core@900000: Retired blocks 558719. BROB head info: B122 STID3 BPC 0x13338 [STD COND]
+[C:992646 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=227 younger_rid=227 older_bid=197 older_rid=197 younger_slot=1 older_slot=4
+[C:992694 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=229 younger_rid=229 older_bid=199 older_rid=199 younger_slot=0 older_slot=7
+[C:992718 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=231 younger_rid=231 older_bid=201 older_rid=201 younger_slot=2 older_slot=9
+[C:992856 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=233 younger_rid=233 older_bid=203 older_rid=203 younger_slot=4 older_slot=10
+[C:993224 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=5 younger_rid=5 older_bid=231 older_rid=231 younger_slot=8 older_slot=2
+[C:993246 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=50 younger_rid=50 older_bid=20 older_rid=20 younger_slot=2 older_slot=3
+[C:993249 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=7 younger_rid=7 older_bid=233 older_rid=233 younger_slot=9 older_slot=4
+[C:993293 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=52 younger_rid=52 older_bid=22 older_rid=22 younger_slot=10 older_slot=5
+[C:993341 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=54 younger_rid=54 older_bid=24 older_rid=24 younger_slot=3 older_slot=1
+[C:993366 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=56 younger_rid=56 older_bid=26 older_rid=26 younger_slot=11 older_slot=6
+[C:993383 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=31 younger_rid=31 older_bid=1 older_rid=1 younger_slot=12 older_slot=7
+[C:993431 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=33 younger_rid=33 older_bid=3 older_rid=3 younger_slot=4 older_slot=0
+[C:993455 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=35 younger_rid=35 older_bid=5 older_rid=5 younger_slot=5 older_slot=8
+[C:993480 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=37 younger_rid=37 older_bid=7 older_rid=7 younger_slot=13 older_slot=9
+[C:993504 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=80 younger_rid=80 older_bid=50 older_rid=50 younger_slot=1 older_slot=2
+[C:993555 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=82 younger_rid=82 older_bid=52 older_rid=52 younger_slot=6 older_slot=10
+[C:993647 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=84 younger_rid=84 older_bid=54 older_rid=54 younger_slot=0 older_slot=3
+[C:993695 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=86 younger_rid=86 older_bid=56 older_rid=56 younger_slot=7 older_slot=11
+[C:994041 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=110 younger_rid=110 older_bid=80 older_rid=80 younger_slot=2 older_slot=1
+[C:994088 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=112 younger_rid=112 older_bid=82 older_rid=82 younger_slot=3 older_slot=6
+[C:994136 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=114 younger_rid=114 older_bid=84 older_rid=84 younger_slot=4 older_slot=0
+[C:994184 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=116 younger_rid=116 older_bid=86 older_rid=86 younger_slot=1 older_slot=7
+[C:994369 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=72 younger_rid=72 older_bid=56 older_rid=56 younger_slot=5 older_slot=0
+[C:994444 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=92 younger_rid=92 older_bid=72 older_rid=72 younger_slot=2 older_slot=5
+[C:994445 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=108 younger_rid=108 older_bid=92 older_rid=92 younger_slot=6 older_slot=2
+[C:994455 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=128 younger_rid=128 older_bid=108 older_rid=108 younger_slot=3 older_slot=6
+[C:994456 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=144 younger_rid=144 older_bid=128 older_rid=128 younger_slot=7 older_slot=3
+[C:994511 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=164 younger_rid=164 older_bid=144 older_rid=144 younger_slot=4 older_slot=7
+[C:994662 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=151 younger_rid=151 older_bid=135 older_rid=135 younger_slot=1 older_slot=0
+[C:994737 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=171 younger_rid=171 older_bid=151 older_rid=151 younger_slot=2 older_slot=1
+[C:994738 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=187 younger_rid=187 older_bid=171 older_rid=171 younger_slot=3 older_slot=2
+[C:994784 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=207 younger_rid=207 older_bid=187 older_rid=187 younger_slot=0 older_slot=3
+[C:994785 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=223 younger_rid=223 older_bid=207 older_rid=207 younger_slot=4 older_slot=0
+[C:994817 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=243 younger_rid=243 older_bid=223 older_rid=223 younger_slot=1 older_slot=4
+[C:994886 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=3 younger_rid=3 older_bid=243 older_rid=243 younger_slot=0 older_slot=1
+[C:995000 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=232 younger_rid=232 older_bid=230 older_rid=230 younger_slot=1 older_slot=0
+[C:995040 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=234 younger_rid=234 older_bid=232 older_rid=232 younger_slot=0 older_slot=1
+[C:995146 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=55 younger_rid=55 older_bid=53 older_rid=53 younger_slot=1 older_slot=0
+[C:995174 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=253 younger_rid=253 older_bid=244 older_rid=244 younger_slot=3 older_slot=2
+[C:995186 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=57 younger_rid=57 older_bid=55 older_rid=55 younger_slot=4 older_slot=1
+[C:995225 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=59 younger_rid=59 older_bid=57 older_rid=57 younger_slot=1 older_slot=4
+[C:995379 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=15 younger_rid=15 older_bid=6 older_rid=6 younger_slot=2 older_slot=1
+[C:995383 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=76 younger_rid=76 older_bid=67 older_rid=67 younger_slot=3 older_slot=0
+[C:995424 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=85 younger_rid=85 older_bid=76 older_rid=76 younger_slot=0 older_slot=3
+[C:995428 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=94 younger_rid=94 older_bid=85 older_rid=85 younger_slot=4 older_slot=0
+[C:995718 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=83 younger_rid=83 older_bid=53 older_rid=53 younger_slot=4 older_slot=2
+[C:996149 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=166 younger_rid=166 older_bid=136 older_rid=136 younger_slot=8 older_slot=5
+[C:996180 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=168 younger_rid=168 older_bid=138 older_rid=138 younger_slot=9 older_slot=3
+[C:996274 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=139 younger_rid=139 older_bid=109 older_rid=109 younger_slot=3 older_slot=4
+[C:996308 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=141 younger_rid=141 older_bid=111 older_rid=111 younger_slot=5 older_slot=6
+[C:996356 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=143 younger_rid=143 older_bid=113 older_rid=113 younger_slot=4 older_slot=0
+[C:996380 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=192 younger_rid=192 older_bid=162 older_rid=162 younger_slot=10 older_slot=7
+[C:996383 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=145 younger_rid=145 older_bid=115 older_rid=115 younger_slot=11 older_slot=2
+[C:996404 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=194 younger_rid=194 older_bid=164 older_rid=164 younger_slot=6 older_slot=1
+[C:996436 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=196 younger_rid=196 older_bid=166 older_rid=166 younger_slot=0 older_slot=8
+[C:996461 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=198 younger_rid=198 older_bid=168 older_rid=168 younger_slot=12 older_slot=9
+[C:996571 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=222 younger_rid=222 older_bid=192 older_rid=192 younger_slot=2 older_slot=10
+[C:996618 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=224 younger_rid=224 older_bid=194 older_rid=194 younger_slot=1 older_slot=6
+[C:996666 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=226 younger_rid=226 older_bid=196 older_rid=196 younger_slot=7 older_slot=0
+[C:996715 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=228 younger_rid=228 older_bid=198 older_rid=198 younger_slot=8 older_slot=12
+[C:997292 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=180 younger_rid=180 older_bid=164 older_rid=164 younger_slot=1 older_slot=0
+[C:997365 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=200 younger_rid=200 older_bid=180 older_rid=180 younger_slot=2 older_slot=1
+[C:997366 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=216 younger_rid=216 older_bid=200 older_rid=200 younger_slot=3 older_slot=2
+[C:997385 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=236 younger_rid=236 older_bid=216 older_rid=216 younger_slot=5 older_slot=3
+[C:997386 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=252 younger_rid=252 older_bid=236 older_rid=236 younger_slot=6 older_slot=5
+[C:997395 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=16 younger_rid=16 older_bid=252 older_rid=252 younger_slot=7 older_slot=6
+[C:997399 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=7 younger_rid=7 older_bid=247 older_rid=247 younger_slot=8 older_slot=4
+[C:997445 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=27 younger_rid=27 older_bid=7 older_rid=7 younger_slot=0 older_slot=8
+[C:997446 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=43 younger_rid=43 older_bid=27 older_rid=27 younger_slot=1 older_slot=0
+[C:997465 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=63 younger_rid=63 older_bid=43 older_rid=43 younger_slot=2 older_slot=1
+[C:997466 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=79 younger_rid=79 older_bid=63 older_rid=63 younger_slot=3 older_slot=2
+[C:997471 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=99 younger_rid=99 older_bid=79 older_rid=79 younger_slot=9 older_slot=3
+[C:998020 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=84 younger_rid=84 older_bid=82 older_rid=82 younger_slot=1 older_slot=0
+[C:998077 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=86 younger_rid=86 older_bid=84 older_rid=84 younger_slot=0 older_slot=1
+[C:998118 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=88 younger_rid=88 older_bid=86 older_rid=86 younger_slot=1 older_slot=0
+[C:998422 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=167 younger_rid=167 older_bid=165 older_rid=165 younger_slot=1 older_slot=0
+[C:998428 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=169 younger_rid=169 older_bid=167 older_rid=167 younger_slot=2 older_slot=1
+[C:998473 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=171 younger_rid=171 older_bid=169 older_rid=169 younger_slot=0 older_slot=2
+[C:999439 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=4 younger_rid=4 older_bid=230 older_rid=230 younger_slot=1 older_slot=4
+[C:999497 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=6 younger_rid=6 older_bid=232 older_rid=232 younger_slot=4 older_slot=2
+[C:999540 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=8 younger_rid=8 older_bid=234 older_rid=234 younger_slot=8 older_slot=3
+[C:999610 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=25 younger_rid=25 older_bid=251 older_rid=251 younger_slot=9 older_slot=6
+[C:999682 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=27 younger_rid=27 older_bid=253 older_rid=253 younger_slot=3 older_slot=7
+[C:999836 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=51 younger_rid=51 older_bid=21 older_rid=21 younger_slot=0 older_slot=2
+[C:999860 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=53 younger_rid=53 older_bid=23 older_rid=23 younger_slot=1 older_slot=5
+[C:999884 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=55 younger_rid=55 older_bid=25 older_rid=25 younger_slot=6 older_slot=9
+[C:999909 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=57 younger_rid=57 older_bid=27 older_rid=27 younger_slot=7 older_slot=3
+[C:999981 ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=81 younger_rid=81 older_bid=51 older_rid=51 younger_slot=2 older_slot=0
+tid: 0 Core@1000000: Retired blocks 599375. BROB head info: B8 STID0 BPC 0x14b5a [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:1, lb2:1 FP32 DR, M162ND.normal, INVALID, none U#1 TileTag:151 generation:1 physValid:1 addr:0xb800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x2a92e stride:128
+tid: 1 Core@1000000: Retired blocks 599375. BROB head info: B23 STID1 BPC 0x14b1a [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:1, lb2:1 FP32 DR, M162ND.normal, INVALID, none U#1 TileTag:138 generation:1 physValid:1 addr:0x6800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x2b02e stride:128
+tid: 2 Core@1000000: Retired blocks 599375. BROB head info: B152 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@1000000: Retired blocks 599375. BROB head info: B152 STID3 BPC 0x14bb8 [STD COND]
+[C:1000028][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=83 younger_rid=83 older_bid=53 older_rid=53 younger_slot=4 older_slot=1
+[C:1000052][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=85 younger_rid=85 older_bid=55 older_rid=55 younger_slot=8 older_slot=6
+[C:1000124][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=87 younger_rid=87 older_bid=57 older_rid=57 younger_slot=5 older_slot=7
+[C:1000205][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=43 younger_rid=43 older_bid=27 older_rid=27 younger_slot=9 older_slot=3
+[C:1000279][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=63 younger_rid=63 older_bid=43 older_rid=43 younger_slot=0 older_slot=9
+[C:1000280][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=79 younger_rid=79 older_bid=63 older_rid=63 younger_slot=1 older_slot=0
+[C:1000405][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=99 younger_rid=99 older_bid=79 older_rid=79 younger_slot=6 older_slot=1
+[C:1000410][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=115 younger_rid=115 older_bid=99 older_rid=99 younger_slot=7 older_slot=6
+[C:1000531][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=135 younger_rid=135 older_bid=115 older_rid=115 younger_slot=2 older_slot=7
+[C:1000744][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=122 younger_rid=122 older_bid=106 older_rid=106 younger_slot=1 older_slot=0
+[C:1000817][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=142 younger_rid=142 older_bid=122 older_rid=122 younger_slot=3 older_slot=1
+[C:1000818][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=158 younger_rid=158 older_bid=142 older_rid=142 younger_slot=4 older_slot=3
+[C:1000832][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=178 younger_rid=178 older_bid=158 older_rid=158 younger_slot=0 older_slot=4
+[C:1000833][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=194 younger_rid=194 older_bid=178 older_rid=178 younger_slot=5 older_slot=0
+[C:1000841][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=214 younger_rid=214 older_bid=194 older_rid=194 younger_slot=1 older_slot=5
+[C:1000926][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=230 younger_rid=230 older_bid=214 older_rid=214 younger_slot=0 older_slot=1
+[C:1001005][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=203 younger_rid=203 older_bid=201 older_rid=201 younger_slot=0 older_slot=1
+[C:1001045][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=205 younger_rid=205 older_bid=203 older_rid=203 younger_slot=1 older_slot=0
+[C:1001177][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=224 younger_rid=224 older_bid=215 older_rid=215 younger_slot=3 older_slot=2
+[C:1001187][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=26 younger_rid=26 older_bid=24 older_rid=24 younger_slot=4 older_slot=0
+[C:1001227][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=28 younger_rid=28 older_bid=26 older_rid=26 younger_slot=0 older_slot=4
+[C:1001270][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=30 younger_rid=30 older_bid=28 older_rid=28 younger_slot=1 older_slot=0
+[C:1001414][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=242 younger_rid=242 older_bid=233 older_rid=233 younger_slot=2 older_slot=0
+[C:1001501][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=47 younger_rid=47 older_bid=38 older_rid=38 younger_slot=3 older_slot=1
+[C:1001515][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=50 younger_rid=50 older_bid=20 older_rid=20 younger_slot=5 older_slot=22
+[C:1001539][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=52 younger_rid=52 older_bid=22 older_rid=22 younger_slot=6 older_slot=4
+[C:1001563][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=54 younger_rid=54 older_bid=24 older_rid=24 younger_slot=0 older_slot=23
+[C:1001589][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=56 younger_rid=56 older_bid=26 older_rid=26 younger_slot=2 older_slot=24
+[C:1001628][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=80 younger_rid=80 older_bid=50 older_rid=50 younger_slot=4 older_slot=5
+[C:1001703][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=82 younger_rid=82 older_bid=52 older_rid=52 younger_slot=7 older_slot=6
+[C:1001753][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=56 younger_rid=56 older_bid=47 older_rid=47 younger_slot=8 older_slot=3
+[C:1001757][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=65 younger_rid=65 older_bid=56 older_rid=56 younger_slot=9 older_slot=8
+[C:1001839][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=84 younger_rid=84 older_bid=54 older_rid=54 younger_slot=3 older_slot=0
+[C:1001864][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=86 younger_rid=86 older_bid=56 older_rid=56 younger_slot=5 older_slot=2
+[C:1001932][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=133 younger_rid=133 older_bid=103 older_rid=103 younger_slot=6 older_slot=1
+[C:1001965][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=135 younger_rid=135 older_bid=105 older_rid=105 younger_slot=0 older_slot=11
+[C:1002013][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=137 younger_rid=137 older_bid=107 older_rid=107 younger_slot=10 older_slot=28
+[C:1002129][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=139 younger_rid=139 older_bid=109 older_rid=109 younger_slot=4 older_slot=29
+[C:1002173][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=114 younger_rid=114 older_bid=84 older_rid=84 younger_slot=8 older_slot=3
+[C:1002201][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=116 younger_rid=116 older_bid=86 older_rid=86 younger_slot=9 older_slot=5
+[C:1002471][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=163 younger_rid=163 older_bid=133 older_rid=133 younger_slot=1 older_slot=6
+[C:1002495][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=165 younger_rid=165 older_bid=135 older_rid=135 younger_slot=3 older_slot=0
+[C:1002519][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=167 younger_rid=167 older_bid=137 older_rid=137 younger_slot=5 older_slot=10
+[C:1002544][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=169 younger_rid=169 older_bid=139 older_rid=139 younger_slot=11 older_slot=4
+[C:1002929][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=193 younger_rid=193 older_bid=163 older_rid=163 younger_slot=0 older_slot=1
+[C:1002953][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=195 younger_rid=195 older_bid=165 older_rid=165 younger_slot=1 older_slot=3
+[C:1002977][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=197 younger_rid=197 older_bid=167 older_rid=167 younger_slot=2 older_slot=5
+[C:1003002][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=199 younger_rid=199 older_bid=169 older_rid=169 younger_slot=3 older_slot=11
+[C:1003119][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=151 younger_rid=151 older_bid=135 older_rid=135 younger_slot=5 older_slot=4
+[C:1003195][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=171 younger_rid=171 older_bid=151 older_rid=151 younger_slot=0 older_slot=5
+[C:1003196][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=187 younger_rid=187 older_bid=171 older_rid=171 younger_slot=6 older_slot=0
+[C:1003208][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=207 younger_rid=207 older_bid=187 older_rid=187 younger_slot=7 older_slot=6
+[C:1003209][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=223 younger_rid=223 older_bid=207 older_rid=207 younger_slot=8 older_slot=7
+[C:1003218][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=243 younger_rid=243 older_bid=223 older_rid=223 younger_slot=9 older_slot=8
+[C:1003416][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=234 younger_rid=234 older_bid=218 older_rid=218 younger_slot=1 older_slot=0
+[C:1003491][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=254 younger_rid=254 older_bid=234 older_rid=234 younger_slot=2 older_slot=1
+[C:1003496][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=14 younger_rid=14 older_bid=254 older_rid=254 younger_slot=3 older_slot=2
+[C:1003570][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=50 younger_rid=50 older_bid=34 older_rid=34 younger_slot=1 older_slot=0
+[C:1003581][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=70 younger_rid=70 older_bid=50 older_rid=50 younger_slot=2 older_slot=1
+[C:1003586][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=86 younger_rid=86 older_bid=70 older_rid=70 younger_slot=3 older_slot=2
+[C:1003753][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=55 younger_rid=55 older_bid=53 older_rid=53 younger_slot=1 older_slot=0
+[C:1003793][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=57 younger_rid=57 older_bid=55 older_rid=55 younger_slot=0 older_slot=1
+[C:1003832][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=59 younger_rid=59 older_bid=57 older_rid=57 younger_slot=1 older_slot=0
+[C:1004153][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=138 younger_rid=138 older_bid=136 older_rid=136 younger_slot=1 older_slot=0
+[C:1004191][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=140 younger_rid=140 older_bid=138 older_rid=138 younger_slot=0 older_slot=1
+[C:1004232][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=142 younger_rid=142 older_bid=140 older_rid=140 younger_slot=1 older_slot=0
+tid: 0 Core@1100000: Retired blocks 679173. BROB head info: B65 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@1100000: Retired blocks 679173. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@1100000: Retired blocks 679173. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@1100000: Retired blocks 679173. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@1200000: Retired blocks 759174. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@1200000: Retired blocks 759174. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@1200000: Retired blocks 759174. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@1200000: Retired blocks 759174. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@1300000: Retired blocks 839175. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@1300000: Retired blocks 839175. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@1300000: Retired blocks 839175. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@1300000: Retired blocks 839175. BROB head info: B131 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@1400000: Retired blocks 919173. BROB head info: B161 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@1400000: Retired blocks 919173. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@1400000: Retired blocks 919173. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@1400000: Retired blocks 919173. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@1500000: Retired blocks 999174. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@1500000: Retired blocks 999174. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@1500000: Retired blocks 999174. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@1500000: Retired blocks 999174. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@1600000: Retired blocks 1079175. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@1600000: Retired blocks 1079175. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@1600000: Retired blocks 1079175. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@1600000: Retired blocks 1079175. BROB head info: B227 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@1700000: Retired blocks 1159173. BROB head info: B1 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@1700000: Retired blocks 1159173. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@1700000: Retired blocks 1159173. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@1700000: Retired blocks 1159173. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@1800000: Retired blocks 1239174. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@1800000: Retired blocks 1239174. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@1800000: Retired blocks 1239174. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@1800000: Retired blocks 1239174. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@1900000: Retired blocks 1319175. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@1900000: Retired blocks 1319175. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@1900000: Retired blocks 1319175. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@1900000: Retired blocks 1319175. BROB head info: B67 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@2000000: Retired blocks 1399173. BROB head info: B97 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@2000000: Retired blocks 1399173. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@2000000: Retired blocks 1399173. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@2000000: Retired blocks 1399173. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@2100000: Retired blocks 1479174. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@2100000: Retired blocks 1479174. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@2100000: Retired blocks 1479174. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@2100000: Retired blocks 1479174. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@2200000: Retired blocks 1559175. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@2200000: Retired blocks 1559175. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@2200000: Retired blocks 1559175. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@2200000: Retired blocks 1559175. BROB head info: B163 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@2300000: Retired blocks 1639173. BROB head info: B193 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@2300000: Retired blocks 1639173. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@2300000: Retired blocks 1639173. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@2300000: Retired blocks 1639173. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@2400000: Retired blocks 1719174. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@2400000: Retired blocks 1719174. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@2400000: Retired blocks 1719174. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@2400000: Retired blocks 1719174. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@2500000: Retired blocks 1799175. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@2500000: Retired blocks 1799175. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@2500000: Retired blocks 1799175. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@2500000: Retired blocks 1799175. BROB head info: B3 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@2600000: Retired blocks 1879173. BROB head info: B33 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@2600000: Retired blocks 1879173. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@2600000: Retired blocks 1879173. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@2600000: Retired blocks 1879173. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@2700000: Retired blocks 1959174. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@2700000: Retired blocks 1959174. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@2700000: Retired blocks 1959174. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@2700000: Retired blocks 1959174. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@2800000: Retired blocks 2039175. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@2800000: Retired blocks 2039175. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@2800000: Retired blocks 2039175. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@2800000: Retired blocks 2039175. BROB head info: B99 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@2900000: Retired blocks 2119173. BROB head info: B129 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@2900000: Retired blocks 2119173. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@2900000: Retired blocks 2119173. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@2900000: Retired blocks 2119173. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@3000000: Retired blocks 2199174. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@3000000: Retired blocks 2199174. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@3000000: Retired blocks 2199174. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@3000000: Retired blocks 2199174. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@3100000: Retired blocks 2279175. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@3100000: Retired blocks 2279175. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@3100000: Retired blocks 2279175. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@3100000: Retired blocks 2279175. BROB head info: B195 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@3200000: Retired blocks 2359173. BROB head info: B225 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@3200000: Retired blocks 2359173. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@3200000: Retired blocks 2359173. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@3200000: Retired blocks 2359173. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@3300000: Retired blocks 2439174. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@3300000: Retired blocks 2439174. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@3300000: Retired blocks 2439174. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@3300000: Retired blocks 2439174. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@3400000: Retired blocks 2519175. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@3400000: Retired blocks 2519175. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@3400000: Retired blocks 2519175. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@3400000: Retired blocks 2519175. BROB head info: B35 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@3500000: Retired blocks 2599173. BROB head info: B65 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@3500000: Retired blocks 2599173. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@3500000: Retired blocks 2599173. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@3500000: Retired blocks 2599173. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@3600000: Retired blocks 2679174. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@3600000: Retired blocks 2679174. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@3600000: Retired blocks 2679174. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@3600000: Retired blocks 2679174. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@3700000: Retired blocks 2759175. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@3700000: Retired blocks 2759175. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@3700000: Retired blocks 2759175. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@3700000: Retired blocks 2759175. BROB head info: B131 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@3800000: Retired blocks 2839173. BROB head info: B161 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@3800000: Retired blocks 2839173. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@3800000: Retired blocks 2839173. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@3800000: Retired blocks 2839173. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@3900000: Retired blocks 2919174. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@3900000: Retired blocks 2919174. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@3900000: Retired blocks 2919174. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@3900000: Retired blocks 2919174. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@4000000: Retired blocks 2999175. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@4000000: Retired blocks 2999175. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@4000000: Retired blocks 2999175. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@4000000: Retired blocks 2999175. BROB head info: B227 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@4100000: Retired blocks 3079173. BROB head info: B1 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@4100000: Retired blocks 3079173. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@4100000: Retired blocks 3079173. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@4100000: Retired blocks 3079173. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@4200000: Retired blocks 3159174. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@4200000: Retired blocks 3159174. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@4200000: Retired blocks 3159174. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@4200000: Retired blocks 3159174. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@4300000: Retired blocks 3239175. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@4300000: Retired blocks 3239175. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@4300000: Retired blocks 3239175. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@4300000: Retired blocks 3239175. BROB head info: B67 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@4400000: Retired blocks 3319173. BROB head info: B97 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@4400000: Retired blocks 3319173. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@4400000: Retired blocks 3319173. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@4400000: Retired blocks 3319173. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@4500000: Retired blocks 3399174. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@4500000: Retired blocks 3399174. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@4500000: Retired blocks 3399174. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@4500000: Retired blocks 3399174. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@4600000: Retired blocks 3479175. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@4600000: Retired blocks 3479175. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@4600000: Retired blocks 3479175. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@4600000: Retired blocks 3479175. BROB head info: B163 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@4700000: Retired blocks 3559173. BROB head info: B193 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@4700000: Retired blocks 3559173. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@4700000: Retired blocks 3559173. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@4700000: Retired blocks 3559173. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@4800000: Retired blocks 3639174. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@4800000: Retired blocks 3639174. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@4800000: Retired blocks 3639174. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@4800000: Retired blocks 3639174. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@4900000: Retired blocks 3719175. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@4900000: Retired blocks 3719175. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@4900000: Retired blocks 3719175. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@4900000: Retired blocks 3719175. BROB head info: B3 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@5000000: Retired blocks 3799173. BROB head info: B33 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@5000000: Retired blocks 3799173. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@5000000: Retired blocks 3799173. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@5000000: Retired blocks 3799173. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@5100000: Retired blocks 3879174. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@5100000: Retired blocks 3879174. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@5100000: Retired blocks 3879174. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@5100000: Retired blocks 3879174. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@5200000: Retired blocks 3959175. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@5200000: Retired blocks 3959175. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@5200000: Retired blocks 3959175. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@5200000: Retired blocks 3959175. BROB head info: B99 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@5300000: Retired blocks 4039173. BROB head info: B129 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@5300000: Retired blocks 4039173. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@5300000: Retired blocks 4039173. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@5300000: Retired blocks 4039173. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@5400000: Retired blocks 4119174. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@5400000: Retired blocks 4119174. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@5400000: Retired blocks 4119174. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@5400000: Retired blocks 4119174. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@5500000: Retired blocks 4199175. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@5500000: Retired blocks 4199175. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@5500000: Retired blocks 4199175. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@5500000: Retired blocks 4199175. BROB head info: B195 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@5600000: Retired blocks 4279173. BROB head info: B225 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@5600000: Retired blocks 4279173. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@5600000: Retired blocks 4279173. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@5600000: Retired blocks 4279173. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@5700000: Retired blocks 4359174. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@5700000: Retired blocks 4359174. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@5700000: Retired blocks 4359174. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@5700000: Retired blocks 4359174. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@5800000: Retired blocks 4439175. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@5800000: Retired blocks 4439175. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@5800000: Retired blocks 4439175. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@5800000: Retired blocks 4439175. BROB head info: B35 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@5900000: Retired blocks 4519173. BROB head info: B65 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@5900000: Retired blocks 4519173. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@5900000: Retired blocks 4519173. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@5900000: Retired blocks 4519173. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@6000000: Retired blocks 4599174. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@6000000: Retired blocks 4599174. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@6000000: Retired blocks 4599174. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@6000000: Retired blocks 4599174. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@6100000: Retired blocks 4679175. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@6100000: Retired blocks 4679175. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@6100000: Retired blocks 4679175. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@6100000: Retired blocks 4679175. BROB head info: B131 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@6200000: Retired blocks 4759173. BROB head info: B161 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@6200000: Retired blocks 4759173. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@6200000: Retired blocks 4759173. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@6200000: Retired blocks 4759173. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@6300000: Retired blocks 4839174. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@6300000: Retired blocks 4839174. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@6300000: Retired blocks 4839174. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@6300000: Retired blocks 4839174. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@6400000: Retired blocks 4919175. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@6400000: Retired blocks 4919175. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@6400000: Retired blocks 4919175. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@6400000: Retired blocks 4919175. BROB head info: B227 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@6500000: Retired blocks 4999173. BROB head info: B1 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@6500000: Retired blocks 4999173. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@6500000: Retired blocks 4999173. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@6500000: Retired blocks 4999173. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@6600000: Retired blocks 5079174. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@6600000: Retired blocks 5079174. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@6600000: Retired blocks 5079174. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@6600000: Retired blocks 5079174. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@6700000: Retired blocks 5159175. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@6700000: Retired blocks 5159175. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@6700000: Retired blocks 5159175. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@6700000: Retired blocks 5159175. BROB head info: B67 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@6800000: Retired blocks 5239173. BROB head info: B97 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@6800000: Retired blocks 5239173. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@6800000: Retired blocks 5239173. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@6800000: Retired blocks 5239173. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@6900000: Retired blocks 5319174. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@6900000: Retired blocks 5319174. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@6900000: Retired blocks 5319174. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@6900000: Retired blocks 5319174. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@7000000: Retired blocks 5399175. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@7000000: Retired blocks 5399175. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@7000000: Retired blocks 5399175. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@7000000: Retired blocks 5399175. BROB head info: B163 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@7100000: Retired blocks 5479173. BROB head info: B193 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@7100000: Retired blocks 5479173. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@7100000: Retired blocks 5479173. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@7100000: Retired blocks 5479173. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@7200000: Retired blocks 5559174. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@7200000: Retired blocks 5559174. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@7200000: Retired blocks 5559174. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@7200000: Retired blocks 5559174. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@7300000: Retired blocks 5639175. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@7300000: Retired blocks 5639175. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@7300000: Retired blocks 5639175. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@7300000: Retired blocks 5639175. BROB head info: B3 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@7400000: Retired blocks 5719173. BROB head info: B33 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@7400000: Retired blocks 5719173. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@7400000: Retired blocks 5719173. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@7400000: Retired blocks 5719173. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@7500000: Retired blocks 5799174. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@7500000: Retired blocks 5799174. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@7500000: Retired blocks 5799174. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@7500000: Retired blocks 5799174. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@7600000: Retired blocks 5879175. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@7600000: Retired blocks 5879175. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@7600000: Retired blocks 5879175. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@7600000: Retired blocks 5879175. BROB head info: B99 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@7700000: Retired blocks 5959173. BROB head info: B129 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@7700000: Retired blocks 5959173. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@7700000: Retired blocks 5959173. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@7700000: Retired blocks 5959173. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@7800000: Retired blocks 6039174. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@7800000: Retired blocks 6039174. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@7800000: Retired blocks 6039174. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@7800000: Retired blocks 6039174. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@7900000: Retired blocks 6119175. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@7900000: Retired blocks 6119175. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@7900000: Retired blocks 6119175. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@7900000: Retired blocks 6119175. BROB head info: B195 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@8000000: Retired blocks 6199173. BROB head info: B225 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@8000000: Retired blocks 6199173. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@8000000: Retired blocks 6199173. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@8000000: Retired blocks 6199173. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@8100000: Retired blocks 6279174. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@8100000: Retired blocks 6279174. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@8100000: Retired blocks 6279174. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@8100000: Retired blocks 6279174. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@8200000: Retired blocks 6359175. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@8200000: Retired blocks 6359175. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@8200000: Retired blocks 6359175. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@8200000: Retired blocks 6359175. BROB head info: B35 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@8300000: Retired blocks 6439173. BROB head info: B65 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@8300000: Retired blocks 6439173. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@8300000: Retired blocks 6439173. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@8300000: Retired blocks 6439173. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@8400000: Retired blocks 6519174. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@8400000: Retired blocks 6519174. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@8400000: Retired blocks 6519174. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@8400000: Retired blocks 6519174. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@8500000: Retired blocks 6599175. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@8500000: Retired blocks 6599175. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@8500000: Retired blocks 6599175. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@8500000: Retired blocks 6599175. BROB head info: B131 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@8600000: Retired blocks 6679173. BROB head info: B161 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@8600000: Retired blocks 6679173. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@8600000: Retired blocks 6679173. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@8600000: Retired blocks 6679173. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@8700000: Retired blocks 6759174. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@8700000: Retired blocks 6759174. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@8700000: Retired blocks 6759174. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@8700000: Retired blocks 6759174. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@8800000: Retired blocks 6839175. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@8800000: Retired blocks 6839175. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@8800000: Retired blocks 6839175. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@8800000: Retired blocks 6839175. BROB head info: B227 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@8900000: Retired blocks 6919173. BROB head info: B1 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@8900000: Retired blocks 6919173. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@8900000: Retired blocks 6919173. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@8900000: Retired blocks 6919173. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@9000000: Retired blocks 6999174. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@9000000: Retired blocks 6999174. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@9000000: Retired blocks 6999174. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@9000000: Retired blocks 6999174. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@9100000: Retired blocks 7079175. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@9100000: Retired blocks 7079175. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@9100000: Retired blocks 7079175. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@9100000: Retired blocks 7079175. BROB head info: B67 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@9200000: Retired blocks 7159173. BROB head info: B97 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@9200000: Retired blocks 7159173. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@9200000: Retired blocks 7159173. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@9200000: Retired blocks 7159173. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@9300000: Retired blocks 7239174. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@9300000: Retired blocks 7239174. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@9300000: Retired blocks 7239174. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@9300000: Retired blocks 7239174. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@9400000: Retired blocks 7319175. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@9400000: Retired blocks 7319175. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@9400000: Retired blocks 7319175. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@9400000: Retired blocks 7319175. BROB head info: B163 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@9500000: Retired blocks 7399173. BROB head info: B193 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@9500000: Retired blocks 7399173. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@9500000: Retired blocks 7399173. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@9500000: Retired blocks 7399173. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@9600000: Retired blocks 7479174. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@9600000: Retired blocks 7479174. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@9600000: Retired blocks 7479174. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@9600000: Retired blocks 7479174. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@9700000: Retired blocks 7559175. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@9700000: Retired blocks 7559175. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@9700000: Retired blocks 7559175. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@9700000: Retired blocks 7559175. BROB head info: B3 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@9800000: Retired blocks 7639173. BROB head info: B33 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@9800000: Retired blocks 7639173. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@9800000: Retired blocks 7639173. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@9800000: Retired blocks 7639173. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@9900000: Retired blocks 7719174. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@9900000: Retired blocks 7719174. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@9900000: Retired blocks 7719174. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@9900000: Retired blocks 7719174. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@10000000: Retired blocks 7799175. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@10000000: Retired blocks 7799175. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@10000000: Retired blocks 7799175. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@10000000: Retired blocks 7799175. BROB head info: B99 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@10100000: Retired blocks 7879173. BROB head info: B129 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@10100000: Retired blocks 7879173. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@10100000: Retired blocks 7879173. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@10100000: Retired blocks 7879173. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@10200000: Retired blocks 7959174. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@10200000: Retired blocks 7959174. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@10200000: Retired blocks 7959174. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@10200000: Retired blocks 7959174. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@10300000: Retired blocks 8039175. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@10300000: Retired blocks 8039175. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@10300000: Retired blocks 8039175. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@10300000: Retired blocks 8039175. BROB head info: B195 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@10400000: Retired blocks 8119173. BROB head info: B225 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@10400000: Retired blocks 8119173. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@10400000: Retired blocks 8119173. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@10400000: Retired blocks 8119173. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@10500000: Retired blocks 8199174. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@10500000: Retired blocks 8199174. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@10500000: Retired blocks 8199174. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@10500000: Retired blocks 8199174. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@10600000: Retired blocks 8279175. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@10600000: Retired blocks 8279175. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@10600000: Retired blocks 8279175. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@10600000: Retired blocks 8279175. BROB head info: B35 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@10700000: Retired blocks 8359173. BROB head info: B65 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@10700000: Retired blocks 8359173. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@10700000: Retired blocks 8359173. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@10700000: Retired blocks 8359173. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@10800000: Retired blocks 8439174. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@10800000: Retired blocks 8439174. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@10800000: Retired blocks 8439174. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@10800000: Retired blocks 8439174. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@10900000: Retired blocks 8519175. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@10900000: Retired blocks 8519175. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@10900000: Retired blocks 8519175. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@10900000: Retired blocks 8519175. BROB head info: B131 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@11000000: Retired blocks 8599173. BROB head info: B161 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@11000000: Retired blocks 8599173. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@11000000: Retired blocks 8599173. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@11000000: Retired blocks 8599173. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@11100000: Retired blocks 8679174. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@11100000: Retired blocks 8679174. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@11100000: Retired blocks 8679174. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@11100000: Retired blocks 8679174. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@11200000: Retired blocks 8759175. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@11200000: Retired blocks 8759175. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@11200000: Retired blocks 8759175. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@11200000: Retired blocks 8759175. BROB head info: B227 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@11300000: Retired blocks 8839173. BROB head info: B1 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@11300000: Retired blocks 8839173. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@11300000: Retired blocks 8839173. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@11300000: Retired blocks 8839173. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@11400000: Retired blocks 8919174. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@11400000: Retired blocks 8919174. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@11400000: Retired blocks 8919174. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@11400000: Retired blocks 8919174. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@11500000: Retired blocks 8999175. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@11500000: Retired blocks 8999175. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@11500000: Retired blocks 8999175. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@11500000: Retired blocks 8999175. BROB head info: B67 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@11600000: Retired blocks 9079173. BROB head info: B97 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@11600000: Retired blocks 9079173. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@11600000: Retired blocks 9079173. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@11600000: Retired blocks 9079173. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@11700000: Retired blocks 9159174. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@11700000: Retired blocks 9159174. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@11700000: Retired blocks 9159174. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@11700000: Retired blocks 9159174. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@11800000: Retired blocks 9239175. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@11800000: Retired blocks 9239175. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@11800000: Retired blocks 9239175. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@11800000: Retired blocks 9239175. BROB head info: B163 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@11900000: Retired blocks 9319173. BROB head info: B193 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@11900000: Retired blocks 9319173. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@11900000: Retired blocks 9319173. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@11900000: Retired blocks 9319173. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@12000000: Retired blocks 9399174. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@12000000: Retired blocks 9399174. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@12000000: Retired blocks 9399174. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@12000000: Retired blocks 9399174. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@12100000: Retired blocks 9479175. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@12100000: Retired blocks 9479175. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@12100000: Retired blocks 9479175. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@12100000: Retired blocks 9479175. BROB head info: B3 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@12200000: Retired blocks 9559173. BROB head info: B33 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@12200000: Retired blocks 9559173. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@12200000: Retired blocks 9559173. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@12200000: Retired blocks 9559173. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@12300000: Retired blocks 9639174. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@12300000: Retired blocks 9639174. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@12300000: Retired blocks 9639174. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@12300000: Retired blocks 9639174. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@12400000: Retired blocks 9719175. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@12400000: Retired blocks 9719175. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@12400000: Retired blocks 9719175. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@12400000: Retired blocks 9719175. BROB head info: B99 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@12500000: Retired blocks 9799173. BROB head info: B129 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@12500000: Retired blocks 9799173. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@12500000: Retired blocks 9799173. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@12500000: Retired blocks 9799173. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@12600000: Retired blocks 9879174. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@12600000: Retired blocks 9879174. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@12600000: Retired blocks 9879174. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@12600000: Retired blocks 9879174. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@12700000: Retired blocks 9959175. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@12700000: Retired blocks 9959175. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@12700000: Retired blocks 9959175. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@12700000: Retired blocks 9959175. BROB head info: B195 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@12800000: Retired blocks 10039173. BROB head info: B225 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@12800000: Retired blocks 10039173. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@12800000: Retired blocks 10039173. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@12800000: Retired blocks 10039173. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@12900000: Retired blocks 10119174. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@12900000: Retired blocks 10119174. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@12900000: Retired blocks 10119174. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@12900000: Retired blocks 10119174. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@13000000: Retired blocks 10199175. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@13000000: Retired blocks 10199175. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@13000000: Retired blocks 10199175. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@13000000: Retired blocks 10199175. BROB head info: B35 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@13100000: Retired blocks 10279173. BROB head info: B65 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@13100000: Retired blocks 10279173. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@13100000: Retired blocks 10279173. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@13100000: Retired blocks 10279173. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@13200000: Retired blocks 10359174. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@13200000: Retired blocks 10359174. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@13200000: Retired blocks 10359174. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@13200000: Retired blocks 10359174. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@13300000: Retired blocks 10439175. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@13300000: Retired blocks 10439175. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@13300000: Retired blocks 10439175. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@13300000: Retired blocks 10439175. BROB head info: B131 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@13400000: Retired blocks 10519173. BROB head info: B161 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@13400000: Retired blocks 10519173. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@13400000: Retired blocks 10519173. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@13400000: Retired blocks 10519173. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@13500000: Retired blocks 10599174. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@13500000: Retired blocks 10599174. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@13500000: Retired blocks 10599174. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@13500000: Retired blocks 10599174. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@13600000: Retired blocks 10679175. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@13600000: Retired blocks 10679175. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@13600000: Retired blocks 10679175. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@13600000: Retired blocks 10679175. BROB head info: B227 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@13700000: Retired blocks 10759173. BROB head info: B1 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@13700000: Retired blocks 10759173. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@13700000: Retired blocks 10759173. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@13700000: Retired blocks 10759173. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@13800000: Retired blocks 10839174. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@13800000: Retired blocks 10839174. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@13800000: Retired blocks 10839174. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@13800000: Retired blocks 10839174. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@13900000: Retired blocks 10919175. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@13900000: Retired blocks 10919175. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@13900000: Retired blocks 10919175. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@13900000: Retired blocks 10919175. BROB head info: B67 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@14000000: Retired blocks 10999173. BROB head info: B97 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@14000000: Retired blocks 10999173. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@14000000: Retired blocks 10999173. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@14000000: Retired blocks 10999173. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@14100000: Retired blocks 11079174. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@14100000: Retired blocks 11079174. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@14100000: Retired blocks 11079174. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@14100000: Retired blocks 11079174. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@14200000: Retired blocks 11159175. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@14200000: Retired blocks 11159175. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@14200000: Retired blocks 11159175. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@14200000: Retired blocks 11159175. BROB head info: B163 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@14300000: Retired blocks 11239173. BROB head info: B193 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@14300000: Retired blocks 11239173. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@14300000: Retired blocks 11239173. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@14300000: Retired blocks 11239173. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@14400000: Retired blocks 11319174. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@14400000: Retired blocks 11319174. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@14400000: Retired blocks 11319174. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@14400000: Retired blocks 11319174. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@14500000: Retired blocks 11399175. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@14500000: Retired blocks 11399175. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@14500000: Retired blocks 11399175. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@14500000: Retired blocks 11399175. BROB head info: B3 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@14600000: Retired blocks 11479173. BROB head info: B33 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@14600000: Retired blocks 11479173. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@14600000: Retired blocks 11479173. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@14600000: Retired blocks 11479173. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@14700000: Retired blocks 11559174. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@14700000: Retired blocks 11559174. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@14700000: Retired blocks 11559174. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@14700000: Retired blocks 11559174. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@14800000: Retired blocks 11639175. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@14800000: Retired blocks 11639175. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@14800000: Retired blocks 11639175. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@14800000: Retired blocks 11639175. BROB head info: B99 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@14900000: Retired blocks 11719173. BROB head info: B129 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@14900000: Retired blocks 11719173. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@14900000: Retired blocks 11719173. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@14900000: Retired blocks 11719173. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@15000000: Retired blocks 11799174. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@15000000: Retired blocks 11799174. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@15000000: Retired blocks 11799174. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@15000000: Retired blocks 11799174. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@15100000: Retired blocks 11879175. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@15100000: Retired blocks 11879175. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@15100000: Retired blocks 11879175. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@15100000: Retired blocks 11879175. BROB head info: B195 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@15200000: Retired blocks 11959173. BROB head info: B225 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@15200000: Retired blocks 11959173. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@15200000: Retired blocks 11959173. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@15200000: Retired blocks 11959173. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@15300000: Retired blocks 12039174. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@15300000: Retired blocks 12039174. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@15300000: Retired blocks 12039174. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@15300000: Retired blocks 12039174. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@15400000: Retired blocks 12119175. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@15400000: Retired blocks 12119175. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@15400000: Retired blocks 12119175. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@15400000: Retired blocks 12119175. BROB head info: B35 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@15500000: Retired blocks 12199173. BROB head info: B65 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@15500000: Retired blocks 12199173. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@15500000: Retired blocks 12199173. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@15500000: Retired blocks 12199173. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@15600000: Retired blocks 12279174. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@15600000: Retired blocks 12279174. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@15600000: Retired blocks 12279174. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@15600000: Retired blocks 12279174. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@15700000: Retired blocks 12359175. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@15700000: Retired blocks 12359175. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@15700000: Retired blocks 12359175. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@15700000: Retired blocks 12359175. BROB head info: B131 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@15800000: Retired blocks 12439173. BROB head info: B161 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@15800000: Retired blocks 12439173. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@15800000: Retired blocks 12439173. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@15800000: Retired blocks 12439173. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@15900000: Retired blocks 12519174. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@15900000: Retired blocks 12519174. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@15900000: Retired blocks 12519174. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@15900000: Retired blocks 12519174. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@16000000: Retired blocks 12599175. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@16000000: Retired blocks 12599175. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@16000000: Retired blocks 12599175. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@16000000: Retired blocks 12599175. BROB head info: B227 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@16100000: Retired blocks 12679173. BROB head info: B1 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@16100000: Retired blocks 12679173. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@16100000: Retired blocks 12679173. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@16100000: Retired blocks 12679173. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@16200000: Retired blocks 12759174. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@16200000: Retired blocks 12759174. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@16200000: Retired blocks 12759174. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@16200000: Retired blocks 12759174. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@16300000: Retired blocks 12839175. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@16300000: Retired blocks 12839175. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@16300000: Retired blocks 12839175. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@16300000: Retired blocks 12839175. BROB head info: B67 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@16400000: Retired blocks 12919173. BROB head info: B97 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@16400000: Retired blocks 12919173. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@16400000: Retired blocks 12919173. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@16400000: Retired blocks 12919173. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@16500000: Retired blocks 12999174. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@16500000: Retired blocks 12999174. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@16500000: Retired blocks 12999174. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@16500000: Retired blocks 12999174. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@16600000: Retired blocks 13079175. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@16600000: Retired blocks 13079175. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@16600000: Retired blocks 13079175. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@16600000: Retired blocks 13079175. BROB head info: B163 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@16700000: Retired blocks 13159173. BROB head info: B193 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@16700000: Retired blocks 13159173. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@16700000: Retired blocks 13159173. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@16700000: Retired blocks 13159173. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@16800000: Retired blocks 13239174. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@16800000: Retired blocks 13239174. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@16800000: Retired blocks 13239174. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@16800000: Retired blocks 13239174. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@16900000: Retired blocks 13319175. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@16900000: Retired blocks 13319175. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@16900000: Retired blocks 13319175. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@16900000: Retired blocks 13319175. BROB head info: B3 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@17000000: Retired blocks 13399173. BROB head info: B33 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@17000000: Retired blocks 13399173. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@17000000: Retired blocks 13399173. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@17000000: Retired blocks 13399173. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@17100000: Retired blocks 13479174. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@17100000: Retired blocks 13479174. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@17100000: Retired blocks 13479174. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@17100000: Retired blocks 13479174. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@17200000: Retired blocks 13559175. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@17200000: Retired blocks 13559175. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@17200000: Retired blocks 13559175. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@17200000: Retired blocks 13559175. BROB head info: B99 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@17300000: Retired blocks 13639173. BROB head info: B129 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@17300000: Retired blocks 13639173. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@17300000: Retired blocks 13639173. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@17300000: Retired blocks 13639173. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@17400000: Retired blocks 13719174. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@17400000: Retired blocks 13719174. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@17400000: Retired blocks 13719174. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@17400000: Retired blocks 13719174. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@17500000: Retired blocks 13799175. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@17500000: Retired blocks 13799175. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@17500000: Retired blocks 13799175. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@17500000: Retired blocks 13799175. BROB head info: B195 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@17600000: Retired blocks 13879173. BROB head info: B225 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@17600000: Retired blocks 13879173. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@17600000: Retired blocks 13879173. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@17600000: Retired blocks 13879173. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@17700000: Retired blocks 13959174. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@17700000: Retired blocks 13959174. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@17700000: Retired blocks 13959174. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@17700000: Retired blocks 13959174. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@17800000: Retired blocks 14039175. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@17800000: Retired blocks 14039175. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@17800000: Retired blocks 14039175. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@17800000: Retired blocks 14039175. BROB head info: B35 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@17900000: Retired blocks 14119173. BROB head info: B65 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@17900000: Retired blocks 14119173. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@17900000: Retired blocks 14119173. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@17900000: Retired blocks 14119173. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@18000000: Retired blocks 14199174. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@18000000: Retired blocks 14199174. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@18000000: Retired blocks 14199174. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@18000000: Retired blocks 14199174. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@18100000: Retired blocks 14279175. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@18100000: Retired blocks 14279175. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@18100000: Retired blocks 14279175. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@18100000: Retired blocks 14279175. BROB head info: B131 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@18200000: Retired blocks 14359173. BROB head info: B161 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@18200000: Retired blocks 14359173. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@18200000: Retired blocks 14359173. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@18200000: Retired blocks 14359173. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@18300000: Retired blocks 14439174. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@18300000: Retired blocks 14439174. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@18300000: Retired blocks 14439174. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@18300000: Retired blocks 14439174. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@18400000: Retired blocks 14519175. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@18400000: Retired blocks 14519175. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@18400000: Retired blocks 14519175. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@18400000: Retired blocks 14519175. BROB head info: B227 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@18500000: Retired blocks 14599173. BROB head info: B1 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@18500000: Retired blocks 14599173. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@18500000: Retired blocks 14599173. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@18500000: Retired blocks 14599173. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@18600000: Retired blocks 14679174. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@18600000: Retired blocks 14679174. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@18600000: Retired blocks 14679174. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@18600000: Retired blocks 14679174. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@18700000: Retired blocks 14759175. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@18700000: Retired blocks 14759175. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@18700000: Retired blocks 14759175. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@18700000: Retired blocks 14759175. BROB head info: B67 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@18800000: Retired blocks 14839173. BROB head info: B97 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@18800000: Retired blocks 14839173. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@18800000: Retired blocks 14839173. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@18800000: Retired blocks 14839173. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@18900000: Retired blocks 14919174. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@18900000: Retired blocks 14919174. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@18900000: Retired blocks 14919174. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@18900000: Retired blocks 14919174. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@19000000: Retired blocks 14999175. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@19000000: Retired blocks 14999175. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@19000000: Retired blocks 14999175. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@19000000: Retired blocks 14999175. BROB head info: B163 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@19100000: Retired blocks 15079173. BROB head info: B193 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@19100000: Retired blocks 15079173. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@19100000: Retired blocks 15079173. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@19100000: Retired blocks 15079173. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@19200000: Retired blocks 15159174. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@19200000: Retired blocks 15159174. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@19200000: Retired blocks 15159174. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@19200000: Retired blocks 15159174. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@19300000: Retired blocks 15239175. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@19300000: Retired blocks 15239175. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@19300000: Retired blocks 15239175. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@19300000: Retired blocks 15239175. BROB head info: B3 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@19400000: Retired blocks 15319173. BROB head info: B33 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@19400000: Retired blocks 15319173. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@19400000: Retired blocks 15319173. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@19400000: Retired blocks 15319173. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@19500000: Retired blocks 15399174. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@19500000: Retired blocks 15399174. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@19500000: Retired blocks 15399174. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@19500000: Retired blocks 15399174. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@19600000: Retired blocks 15479175. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@19600000: Retired blocks 15479175. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@19600000: Retired blocks 15479175. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@19600000: Retired blocks 15479175. BROB head info: B99 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@19700000: Retired blocks 15559173. BROB head info: B129 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@19700000: Retired blocks 15559173. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@19700000: Retired blocks 15559173. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@19700000: Retired blocks 15559173. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@19800000: Retired blocks 15639174. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@19800000: Retired blocks 15639174. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@19800000: Retired blocks 15639174. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@19800000: Retired blocks 15639174. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@19900000: Retired blocks 15719175. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@19900000: Retired blocks 15719175. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@19900000: Retired blocks 15719175. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@19900000: Retired blocks 15719175. BROB head info: B195 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@20000000: Retired blocks 15799173. BROB head info: B225 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@20000000: Retired blocks 15799173. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@20000000: Retired blocks 15799173. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@20000000: Retired blocks 15799173. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@20100000: Retired blocks 15879174. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@20100000: Retired blocks 15879174. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@20100000: Retired blocks 15879174. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@20100000: Retired blocks 15879174. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@20200000: Retired blocks 15959175. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@20200000: Retired blocks 15959175. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@20200000: Retired blocks 15959175. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@20200000: Retired blocks 15959175. BROB head info: B35 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@20300000: Retired blocks 16039173. BROB head info: B65 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@20300000: Retired blocks 16039173. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@20300000: Retired blocks 16039173. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@20300000: Retired blocks 16039173. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@20400000: Retired blocks 16119174. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@20400000: Retired blocks 16119174. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@20400000: Retired blocks 16119174. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@20400000: Retired blocks 16119174. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@20500000: Retired blocks 16199175. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@20500000: Retired blocks 16199175. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@20500000: Retired blocks 16199175. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@20500000: Retired blocks 16199175. BROB head info: B131 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@20600000: Retired blocks 16279173. BROB head info: B161 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@20600000: Retired blocks 16279173. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@20600000: Retired blocks 16279173. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@20600000: Retired blocks 16279173. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@20700000: Retired blocks 16359174. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@20700000: Retired blocks 16359174. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@20700000: Retired blocks 16359174. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@20700000: Retired blocks 16359174. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@20800000: Retired blocks 16439175. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@20800000: Retired blocks 16439175. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@20800000: Retired blocks 16439175. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@20800000: Retired blocks 16439175. BROB head info: B227 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@20900000: Retired blocks 16519173. BROB head info: B1 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@20900000: Retired blocks 16519173. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@20900000: Retired blocks 16519173. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@20900000: Retired blocks 16519173. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@21000000: Retired blocks 16599174. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@21000000: Retired blocks 16599174. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@21000000: Retired blocks 16599174. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@21000000: Retired blocks 16599174. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@21100000: Retired blocks 16679175. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@21100000: Retired blocks 16679175. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@21100000: Retired blocks 16679175. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@21100000: Retired blocks 16679175. BROB head info: B67 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@21200000: Retired blocks 16759173. BROB head info: B97 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@21200000: Retired blocks 16759173. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@21200000: Retired blocks 16759173. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@21200000: Retired blocks 16759173. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@21300000: Retired blocks 16839174. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@21300000: Retired blocks 16839174. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@21300000: Retired blocks 16839174. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@21300000: Retired blocks 16839174. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@21400000: Retired blocks 16919175. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@21400000: Retired blocks 16919175. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@21400000: Retired blocks 16919175. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@21400000: Retired blocks 16919175. BROB head info: B163 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@21500000: Retired blocks 16999173. BROB head info: B193 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@21500000: Retired blocks 16999173. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@21500000: Retired blocks 16999173. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@21500000: Retired blocks 16999173. BROB head info: B194 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@21600000: Retired blocks 17079174. BROB head info: B226 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@21600000: Retired blocks 17079174. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@21600000: Retired blocks 17079174. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@21600000: Retired blocks 17079174. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@21700000: Retired blocks 17159175. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@21700000: Retired blocks 17159175. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@21700000: Retired blocks 17159175. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@21700000: Retired blocks 17159175. BROB head info: B3 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@21800000: Retired blocks 17239173. BROB head info: B33 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@21800000: Retired blocks 17239173. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@21800000: Retired blocks 17239173. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@21800000: Retired blocks 17239173. BROB head info: B34 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@21900000: Retired blocks 17319174. BROB head info: B66 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@21900000: Retired blocks 17319174. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@21900000: Retired blocks 17319174. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@21900000: Retired blocks 17319174. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@22000000: Retired blocks 17399175. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@22000000: Retired blocks 17399175. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@22000000: Retired blocks 17399175. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@22000000: Retired blocks 17399175. BROB head info: B99 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@22100000: Retired blocks 17479173. BROB head info: B129 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@22100000: Retired blocks 17479173. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@22100000: Retired blocks 17479173. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@22100000: Retired blocks 17479173. BROB head info: B130 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@22200000: Retired blocks 17559174. BROB head info: B162 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@22200000: Retired blocks 17559174. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@22200000: Retired blocks 17559174. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@22200000: Retired blocks 17559174. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@22300000: Retired blocks 17639175. BROB head info: B194 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@22300000: Retired blocks 17639175. BROB head info: B192 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@22300000: Retired blocks 17639175. BROB head info: B194 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@22300000: Retired blocks 17639175. BROB head info: B195 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@22400000: Retired blocks 17719173. BROB head info: B225 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@22400000: Retired blocks 17719173. BROB head info: B224 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@22400000: Retired blocks 17719173. BROB head info: B226 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@22400000: Retired blocks 17719173. BROB head info: B226 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@22500000: Retired blocks 17799174. BROB head info: B2 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@22500000: Retired blocks 17799174. BROB head info: B0 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@22500000: Retired blocks 17799174. BROB head info: B2 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@22500000: Retired blocks 17799174. BROB head info: B2 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@22600000: Retired blocks 17879175. BROB head info: B34 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@22600000: Retired blocks 17879175. BROB head info: B32 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@22600000: Retired blocks 17879175. BROB head info: B34 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@22600000: Retired blocks 17879175. BROB head info: B35 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@22700000: Retired blocks 17959173. BROB head info: B65 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@22700000: Retired blocks 17959173. BROB head info: B64 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@22700000: Retired blocks 17959173. BROB head info: B66 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@22700000: Retired blocks 17959173. BROB head info: B66 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@22800000: Retired blocks 18039174. BROB head info: B98 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@22800000: Retired blocks 18039174. BROB head info: B96 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@22800000: Retired blocks 18039174. BROB head info: B98 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@22800000: Retired blocks 18039174. BROB head info: B98 STID3 BPC 0x14bb8 [STD COND]
+tid: 0 Core@22900000: Retired blocks 18119175. BROB head info: B130 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@22900000: Retired blocks 18119175. BROB head info: B128 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@22900000: Retired blocks 18119175. BROB head info: B130 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@22900000: Retired blocks 18119175. BROB head info: B131 STID3 BPC 0x14ba6 [STD COND]
+tid: 0 Core@23000000: Retired blocks 18199173. BROB head info: B161 STID0 BPC 0x125f8 [STD COND]
+tid: 1 Core@23000000: Retired blocks 18199173. BROB head info: B160 STID1 BPC 0x125f8 [STD COND]
+tid: 2 Core@23000000: Retired blocks 18199173. BROB head info: B162 STID2 BPC 0x14bb8 [STD COND]
+tid: 3 Core@23000000: Retired blocks 18199173. BROB head info: B162 STID3 BPC 0x14bb8 [STD COND]

@@ -1,0 +1,4 @@
+tag=megamoe_sim rc=0 seconds=247.2
+tag=megamoe_sim_mt_dyn rc=143 seconds=13443.9
+tag=megamoe_sim_mt rc=143 seconds=15942.3
+ALL_DONE

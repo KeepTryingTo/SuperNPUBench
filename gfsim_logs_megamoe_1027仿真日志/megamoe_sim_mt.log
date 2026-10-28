@@ -1,0 +1,1364 @@
+bin/gfsim -f /mnt/workspace/projects/1026_SuperNPUBench/SuperNPUBench/benchmark/one-level-arch/output/solution/mega_moe/elf/solution_mega_moe_mega_moe_sim_mt_BS16_H32_HD64.elf --conf fourpe --pto-v02 true -s tlsu.fake_l2_enable=false 
+[gfsim] explicit PE config present; skipping ELF auto-detection
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Parse Config File:
+Override configurations:
+tlsu.fake_l2_enable=false
+core.threadCount=4
+core.stdPeCount=1
+core.cube_core_num=4
+core.cube_thread_num=1
+core.vec_core_num=4
+fourpe.pe_cluster_enable=true
+fourpe.pe_cluster_count=4
+fourpe.pe_cluster_frontend_thread_count=4
+fourpe.pe_cluster_aggregate_decode_width=8
+fourpe.pe_cluster_gpr_rename_partition_entries=128
+fourpe.pe_cluster_scalar_rob_partition_entries=128
+fourpe.pe_cluster_scalar_iq_partition_entries=128
+fourpe.pe_cluster_block_rob_partition_entries=256
+fourpe.pe_cluster_block_iq_partition_entries=88
+fourpe.pe_cluster_local_reg_partition_entries=88
+bfu.brq_depth=1024
+fourpe.pe_cluster_partition_borrow_enable=false
+fourpe.pe_cluster_eligible_rr_fairness_check=true
+fourpe.pe_cluster_group_contract_fatal=false
+dfx.swimCounterSampleInterval=8
+Memory: 0x10200 - 0x102e8 (Size=0KB) [.rodata]
+Memory: 0x102ec - 0x10347 (Size=0KB) [.eh_frame_hdr]
+Memory: 0x10348 - 0x104d3 (Size=0KB) [.eh_frame]
+Memory: 0x114d4 - 0x15de7 (Size=18KB) [.text]
+Memory: 0x16de8 - 0x16e97 (Size=0KB) [.init_array]
+Memory: 0x16e98 - 0x16eaf (Size=0KB) [.data.rel.ro]
+Memory: 0x18000 - 0x782e7 (Size=384KB) [.bss]
+Memory: 0x79000 - 0x7a0bf (Size=4KB) [.sbss]
+Memory: 0x7a0c0 - 0x808a0c0 (Size=131136KB) [stack mem]
+Memory: 0x4000802000 - 0x4008803000 (Size=131076KB) [map mem]
+[C:56457  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=95 younger_rid=95 older_bid=45 older_rid=45 younger_slot=8 older_slot=0
+[C:56463  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=239 younger_rid=239 older_bid=189 older_rid=189 younger_slot=16 older_slot=1
+[C:56463  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=239 younger_rid=239 older_bid=171 older_rid=171 younger_slot=16 older_slot=9
+[C:56471  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=241 younger_rid=241 older_bid=191 older_rid=191 younger_slot=17 older_slot=2
+[C:56471  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=241 younger_rid=241 older_bid=173 older_rid=173 younger_slot=17 older_slot=10
+[C:56478  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=244 younger_rid=244 older_bid=194 older_rid=194 younger_slot=18 older_slot=3
+[C:56478  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=244 younger_rid=244 older_bid=176 older_rid=176 younger_slot=18 older_slot=11
+[C:56789  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=114 younger_rid=114 older_bid=77 older_rid=77 younger_slot=0 older_slot=6
+[C:56814  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=2 younger_rid=2 older_bid=221 older_rid=221 younger_slot=1 older_slot=12
+[C:56884  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=4 younger_rid=4 older_bid=223 older_rid=223 younger_slot=2 older_slot=14
+[C:56955  ][TMA.NA    ]: scb_waw_violation peId=0 scalar=0 private=0 younger_bid=7 younger_rid=7 older_bid=226 older_rid=226 younger_slot=3 older_slot=15
+tid: 0 Core@100000: Retired blocks 44123. BROB head info: B8 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@100000: Retired blocks 44123. BROB head info: B9 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@100000: Retired blocks 44123. BROB head info: B9 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@100000: Retired blocks 44123. BROB head info: B65 STID3 BPC 0x139d2 [STD FALL]
+tid: 0 Core@200000: Retired blocks 115372. BROB head info: B192 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@200000: Retired blocks 115372. BROB head info: B191 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@200000: Retired blocks 115372. BROB head info: B194 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@200000: Retired blocks 115372. BROB head info: B107 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:149 generation:9 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@300000: Retired blocks 186720. BROB head info: B138 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@300000: Retired blocks 186720. BROB head info: B138 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@300000: Retired blocks 186720. BROB head info: B139 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@300000: Retired blocks 186720. BROB head info: B193 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:160 generation:15 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@400000: Retired blocks 258146. BROB head info: B126 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@400000: Retired blocks 258146. BROB head info: B128 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@400000: Retired blocks 258146. BROB head info: B128 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@400000: Retired blocks 258146. BROB head info: B228 STID3 BPC 0x139e6 [STD COND]
+tid: 0 Core@500000: Retired blocks 329469. BROB head info: B88 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@500000: Retired blocks 329469. BROB head info: B91 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@500000: Retired blocks 329469. BROB head info: B87 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@500000: Retired blocks 329469. BROB head info: B243 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:164 generation:27 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:165 generation:27 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@600000: Retired blocks 400815. BROB head info: B44 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@600000: Retired blocks 400815. BROB head info: B45 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@600000: Retired blocks 400815. BROB head info: B45 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@600000: Retired blocks 400815. BROB head info: B41 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:170 generation:33 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:171 generation:33 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@700000: Retired blocks 472138. BROB head info: B2 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@700000: Retired blocks 472138. BROB head info: B1 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@700000: Retired blocks 472138. BROB head info: B4 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@700000: Retired blocks 472138. BROB head info: B67 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:173 generation:39 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@800000: Retired blocks 543443. BROB head info: B207 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@800000: Retired blocks 543443. BROB head info: B208 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@800000: Retired blocks 543443. BROB head info: B209 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@800000: Retired blocks 543443. BROB head info: B99 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:178 generation:45 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@900000: Retired blocks 614852. BROB head info: B194 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@900000: Retired blocks 614852. BROB head info: B193 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@900000: Retired blocks 614852. BROB head info: B195 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@900000: Retired blocks 614852. BROB head info: B126 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:181 generation:51 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@1000000: Retired blocks 686276. BROB head info: B133 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@1000000: Retired blocks 686276. BROB head info: B132 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@1000000: Retired blocks 686276. BROB head info: B133 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@1000000: Retired blocks 686276. BROB head info: B54 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:200 generation:57 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@1100000: Retired blocks 757597. BROB head info: B108 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@1100000: Retired blocks 757597. BROB head info: B108 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@1100000: Retired blocks 757597. BROB head info: B106 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@1100000: Retired blocks 757597. BROB head info: B27 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:197 generation:63 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@1200000: Retired blocks 828941. BROB head info: B70 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@1200000: Retired blocks 828941. BROB head info: B70 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@1200000: Retired blocks 828941. BROB head info: B70 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@1200000: Retired blocks 828941. BROB head info: B59 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:202 generation:69 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@1300000: Retired blocks 900284. BROB head info: B72 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@1300000: Retired blocks 900284. BROB head info: B73 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@1300000: Retired blocks 900284. BROB head info: B70 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@1300000: Retired blocks 900284. BROB head info: B229 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:191 generation:75 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@1400000: Retired blocks 971679. BROB head info: B53 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@1400000: Retired blocks 971679. BROB head info: B53 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@1400000: Retired blocks 971679. BROB head info: B53 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@1400000: Retired blocks 971679. BROB head info: B0 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:194 generation:81 physValid:1 addr:0x2400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@1500000: Retired blocks 1043042. BROB head info: B30 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@1500000: Retired blocks 1043042. BROB head info: B31 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@1500000: Retired blocks 1043042. BROB head info: B32 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@1500000: Retired blocks 1043042. BROB head info: B5 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:196 generation:87 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@1600000: Retired blocks 1114333. BROB head info: B224 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@1600000: Retired blocks 1114333. BROB head info: B226 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@1600000: Retired blocks 1114333. BROB head info: B226 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@1600000: Retired blocks 1114333. BROB head info: B57 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:201 generation:93 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:202 generation:93 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@1700000: Retired blocks 1185733. BROB head info: B228 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@1700000: Retired blocks 1185733. BROB head info: B229 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@1700000: Retired blocks 1185733. BROB head info: B228 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@1700000: Retired blocks 1185733. BROB head info: B24 STID3 BPC 0x13b0a [STD COND]
+tid: 0 Core@1800000: Retired blocks 1257139. BROB head info: B229 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@1800000: Retired blocks 1257139. BROB head info: B228 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@1800000: Retired blocks 1257139. BROB head info: B229 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@1800000: Retired blocks 1257139. BROB head info: B5 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:196 generation:105 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@1900000: Retired blocks 1328427. BROB head info: B157 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@1900000: Retired blocks 1328427. BROB head info: B159 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@1900000: Retired blocks 1328427. BROB head info: B158 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@1900000: Retired blocks 1328427. BROB head info: B81 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:203 generation:111 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@2000000: Retired blocks 1399863. BROB head info: B161 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@2000000: Retired blocks 1399863. BROB head info: B161 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@2000000: Retired blocks 1399863. BROB head info: B161 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@2000000: Retired blocks 1399863. BROB head info: B84 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:204 generation:117 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:205 generation:117 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@2100000: Retired blocks 1471174. BROB head info: B97 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@2100000: Retired blocks 1471174. BROB head info: B98 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@2100000: Retired blocks 1471174. BROB head info: B99 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@2100000: Retired blocks 1471174. BROB head info: B160 STID3 BPC 0x13b0e [FP FALL]
+tid: 0 Core@2200000: Retired blocks 1542597. BROB head info: B61 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@2200000: Retired blocks 1542597. BROB head info: B61 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@2200000: Retired blocks 1542597. BROB head info: B61 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@2200000: Retired blocks 1542597. BROB head info: B14 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:224 generation:129 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@2300000: Retired blocks 1613903. BROB head info: B48 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@2300000: Retired blocks 1613903. BROB head info: B48 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@2300000: Retired blocks 1613903. BROB head info: B47 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@2300000: Retired blocks 1613903. BROB head info: B192 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:216 generation:135 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:217 generation:135 physValid:1 addr:0x5000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@2400000: Retired blocks 1685251. BROB head info: B22 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@2400000: Retired blocks 1685251. BROB head info: B23 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@2400000: Retired blocks 1685251. BROB head info: B20 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@2400000: Retired blocks 1685251. BROB head info: B194 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:217 generation:141 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@2500000: Retired blocks 1756599. BROB head info: B252 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@2500000: Retired blocks 1756599. BROB head info: B252 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@2500000: Retired blocks 1756599. BROB head info: B253 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@2500000: Retired blocks 1756599. BROB head info: B194 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:217 generation:147 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@2600000: Retired blocks 1827934. BROB head info: B175 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@2600000: Retired blocks 1827934. BROB head info: B179 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@2600000: Retired blocks 1827934. BROB head info: B179 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@2600000: Retired blocks 1827934. BROB head info: B73 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:232 generation:153 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@2700000: Retired blocks 1899322. BROB head info: B140 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@2700000: Retired blocks 1899322. BROB head info: B139 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@2700000: Retired blocks 1899322. BROB head info: B142 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@2700000: Retired blocks 1899322. BROB head info: B149 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:239 generation:159 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@2800000: Retired blocks 1970653. BROB head info: B126 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@2800000: Retired blocks 1970653. BROB head info: B127 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@2800000: Retired blocks 1970653. BROB head info: B126 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@2800000: Retired blocks 1970653. BROB head info: B98 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:234 generation:165 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:235 generation:165 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@2900000: Retired blocks 2041986. BROB head info: B78 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@2900000: Retired blocks 2041986. BROB head info: B75 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@2900000: Retired blocks 2041986. BROB head info: B79 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@2900000: Retired blocks 2041986. BROB head info: B154 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:241 generation:171 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@3000000: Retired blocks 2113256. BROB head info: B0 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@3000000: Retired blocks 2113256. BROB head info: B255 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@3000000: Retired blocks 2113256. BROB head info: B2 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@3000000: Retired blocks 2113256. BROB head info: B231 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:248 generation:177 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:249 generation:177 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@3100000: Retired blocks 2184642. BROB head info: B242 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@3100000: Retired blocks 2184642. BROB head info: B243 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@3100000: Retired blocks 2184642. BROB head info: B244 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@3100000: Retired blocks 2184642. BROB head info: B233 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:249 generation:183 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:250 generation:183 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@3200000: Retired blocks 2256049. BROB head info: B219 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@3200000: Retired blocks 2256049. BROB head info: B218 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@3200000: Retired blocks 2256049. BROB head info: B219 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@3200000: Retired blocks 2256049. BROB head info: B33 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:0 generation:190 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@3300000: Retired blocks 2327459. BROB head info: B200 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@3300000: Retired blocks 2327459. BROB head info: B201 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@3300000: Retired blocks 2327459. BROB head info: B200 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@3300000: Retired blocks 2327459. BROB head info: B74 STID3 BPC 0x13aa0 [STD DIRECT]
+tid: 0 Core@3400000: Retired blocks 2398791. BROB head info: B176 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@3400000: Retired blocks 2398791. BROB head info: B176 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@3400000: Retired blocks 2398791. BROB head info: B176 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@3400000: Retired blocks 2398791. BROB head info: B55 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:1 generation:202 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@3500000: Retired blocks 2470177. BROB head info: B131 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@3500000: Retired blocks 2470177. BROB head info: B137 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@3500000: Retired blocks 2470177. BROB head info: B140 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@3500000: Retired blocks 2470177. BROB head info: B137 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:10 generation:208 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:11 generation:208 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@3600000: Retired blocks 2541595. BROB head info: B106 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@3600000: Retired blocks 2541595. BROB head info: B105 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@3600000: Retired blocks 2541595. BROB head info: B220 STID3 BPC 0x13b50 [TEPL FALL] rdy:0  TMULS, lb0:32, lb1:32, lb2:32 FP16 
+tid: 0 Core@3700000: Retired blocks 2612868. BROB head info: B66 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@3700000: Retired blocks 2612868. BROB head info: B66 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@3700000: Retired blocks 2612868. BROB head info: B66 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@3700000: Retired blocks 2612868. BROB head info: B190 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:16 generation:220 physValid:1 addr:0xc00 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@3800000: Retired blocks 2684098. BROB head info: B247 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@3800000: Retired blocks 2684098. BROB head info: B246 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@3800000: Retired blocks 2684098. BROB head info: B249 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@3800000: Retired blocks 2684098. BROB head info: B220 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:20 generation:226 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:21 generation:226 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@3900000: Retired blocks 2755538. BROB head info: B23 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@3900000: Retired blocks 2755538. BROB head info: B22 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@3900000: Retired blocks 2755538. BROB head info: B24 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@3900000: Retired blocks 2755538. BROB head info: B141 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:12 generation:232 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@4000000: Retired blocks 2826947. BROB head info: B248 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@4000000: Retired blocks 2826947. BROB head info: B249 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@4000000: Retired blocks 2826947. BROB head info: B249 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@4000000: Retired blocks 2826947. BROB head info: B217 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:19 generation:238 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@4100000: Retired blocks 2898219. BROB head info: B233 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@4100000: Retired blocks 2898219. BROB head info: B234 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@4100000: Retired blocks 2898219. BROB head info: B235 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@4100000: Retired blocks 2898219. BROB head info: B109 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:7 generation:244 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@4200000: Retired blocks 2969542. BROB head info: B172 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@4200000: Retired blocks 2969542. BROB head info: B173 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@4200000: Retired blocks 2969542. BROB head info: B172 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@4200000: Retired blocks 2969542. BROB head info: B193 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:17 generation:250 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:18 generation:250 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@4300000: Retired blocks 3040884. BROB head info: B153 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@4300000: Retired blocks 3040884. BROB head info: B155 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@4300000: Retired blocks 3040884. BROB head info: B155 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@4300000: Retired blocks 3040884. BROB head info: B165 STID3 BPC 0x13b4c [STD FALL]
+tid: 0 Core@4400000: Retired blocks 3112286. BROB head info: B120 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@4400000: Retired blocks 3112286. BROB head info: B121 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@4400000: Retired blocks 3112286. BROB head info: B121 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@4400000: Retired blocks 3112286. BROB head info: B244 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:22 generation:262 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@4500000: Retired blocks 3183675. BROB head info: B91 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@4500000: Retired blocks 3183675. BROB head info: B90 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@4500000: Retired blocks 3183675. BROB head info: B87 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@4500000: Retired blocks 3183675. BROB head info: B47 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:30 generation:268 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@4600000: Retired blocks 3255108. BROB head info: B101 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@4600000: Retired blocks 3255108. BROB head info: B101 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@4600000: Retired blocks 3255108. BROB head info: B102 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@4600000: Retired blocks 3255108. BROB head info: B20 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:27 generation:274 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@4700000: Retired blocks 3326531. BROB head info: B84 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@4700000: Retired blocks 3326531. BROB head info: B85 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@4700000: Retired blocks 3326531. BROB head info: B85 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@4700000: Retired blocks 3326531. BROB head info: B69 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:31 generation:280 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@4800000: Retired blocks 3397841. BROB head info: B62 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@4800000: Retired blocks 3397841. BROB head info: B65 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@4800000: Retired blocks 3397841. BROB head info: B64 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@4800000: Retired blocks 3397841. BROB head info: B18 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:26 generation:286 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:27 generation:286 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@4900000: Retired blocks 3469214. BROB head info: B29 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@4900000: Retired blocks 3469214. BROB head info: B30 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@4900000: Retired blocks 3469214. BROB head info: B30 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@4900000: Retired blocks 3469214. BROB head info: B69 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:31 generation:292 physValid:1 addr:0xc00 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@5000000: Retired blocks 3540485. BROB head info: B1 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@5000000: Retired blocks 3540485. BROB head info: B1 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@5000000: Retired blocks 3540485. BROB head info: B1 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@5000000: Retired blocks 3540485. BROB head info: B2 STID3 BPC 0x139f4 [STD COND]
+tid: 0 Core@5100000: Retired blocks 3611799. BROB head info: B207 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@5100000: Retired blocks 3611799. BROB head info: B204 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@5100000: Retired blocks 3611799. BROB head info: B207 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@5100000: Retired blocks 3611799. BROB head info: B45 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:29 generation:304 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:30 generation:304 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@5200000: Retired blocks 3683146. BROB head info: B173 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@5200000: Retired blocks 3683146. BROB head info: B171 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@5200000: Retired blocks 3683146. BROB head info: B170 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@5200000: Retired blocks 3683146. BROB head info: B72 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:32 generation:310 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:33 generation:310 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@5300000: Retired blocks 3754498. BROB head info: B175 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@5300000: Retired blocks 3754498. BROB head info: B175 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@5300000: Retired blocks 3754498. BROB head info: B176 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@5300000: Retired blocks 3754498. BROB head info: B244 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:22 generation:316 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@5400000: Retired blocks 3825932. BROB head info: B160 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@5400000: Retired blocks 3825932. BROB head info: B159 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@5400000: Retired blocks 3825932. BROB head info: B162 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@5400000: Retired blocks 3825932. BROB head info: B43 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:28 generation:322 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:29 generation:322 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@5500000: Retired blocks 3897248. BROB head info: B123 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@5500000: Retired blocks 3897248. BROB head info: B125 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@5500000: Retired blocks 3897248. BROB head info: B125 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@5500000: Retired blocks 3897248. BROB head info: B43 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:28 generation:328 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:29 generation:328 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@5600000: Retired blocks 3968588. BROB head info: B95 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@5600000: Retired blocks 3968588. BROB head info: B95 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@5600000: Retired blocks 3968588. BROB head info: B97 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@5600000: Retired blocks 3968588. BROB head info: B45 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:29 generation:334 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:30 generation:334 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@5700000: Retired blocks 4039997. BROB head info: B83 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@5700000: Retired blocks 4039997. BROB head info: B83 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@5700000: Retired blocks 4039997. BROB head info: B81 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@5700000: Retired blocks 4039997. BROB head info: B70 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:31 generation:340 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:32 generation:340 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 1 Core@5800000: Retired blocks 4111458. BROB head info: B67 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@5800000: Retired blocks 4111458. BROB head info: B69 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@5800000: Retired blocks 4111458. BROB head info: B150 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:40 generation:346 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@5900000: Retired blocks 4182725. BROB head info: B251 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@5900000: Retired blocks 4182725. BROB head info: B252 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@5900000: Retired blocks 4182725. BROB head info: B253 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@5900000: Retired blocks 4182725. BROB head info: B209 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:48 generation:352 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@6000000: Retired blocks 4254087. BROB head info: B250 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@6000000: Retired blocks 4254087. BROB head info: B251 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@6000000: Retired blocks 4254087. BROB head info: B252 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@6000000: Retired blocks 4254087. BROB head info: B150 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:40 generation:358 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@6100000: Retired blocks 4325424. BROB head info: B238 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@6100000: Retired blocks 4325424. BROB head info: B238 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@6100000: Retired blocks 4325424. BROB head info: B239 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@6100000: Retired blocks 4325424. BROB head info: B101 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:36 generation:364 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@6200000: Retired blocks 4396740. BROB head info: B229 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@6200000: Retired blocks 4396740. BROB head info: B230 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@6200000: Retired blocks 4396740. BROB head info: B229 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@6200000: Retired blocks 4396740. BROB head info: B20 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:27 generation:370 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@6300000: Retired blocks 4468102. BROB head info: B174 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@6300000: Retired blocks 4468102. BROB head info: B174 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@6300000: Retired blocks 4468102. BROB head info: B175 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@6300000: Retired blocks 4468102. BROB head info: B123 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:37 generation:376 physValid:1 addr:0xc00 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@6400000: Retired blocks 4539423. BROB head info: B139 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@6400000: Retired blocks 4539423. BROB head info: B140 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@6400000: Retired blocks 4539423. BROB head info: B140 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@6400000: Retired blocks 4539423. BROB head info: B124 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:37 generation:382 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:38 generation:382 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@6500000: Retired blocks 4610839. BROB head info: B119 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@6500000: Retired blocks 4610839. BROB head info: B120 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@6500000: Retired blocks 4610839. BROB head info: B119 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@6500000: Retired blocks 4610839. BROB head info: B177 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:43 generation:388 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@6600000: Retired blocks 4682222. BROB head info: B111 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@6600000: Retired blocks 4682222. BROB head info: B109 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@6600000: Retired blocks 4682222. BROB head info: B110 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@6600000: Retired blocks 4682222. BROB head info: B164 STID3 BPC 0x139f4 [STD COND]
+tid: 0 Core@6700000: Retired blocks 4753615. BROB head info: B95 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@6700000: Retired blocks 4753615. BROB head info: B95 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@6700000: Retired blocks 4753615. BROB head info: B96 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@6700000: Retired blocks 4753615. BROB head info: B177 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:43 generation:400 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@6800000: Retired blocks 4825023. BROB head info: B89 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@6800000: Retired blocks 4825023. BROB head info: B88 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@6800000: Retired blocks 4825023. BROB head info: B90 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@6800000: Retired blocks 4825023. BROB head info: B180 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:44 generation:406 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:45 generation:406 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@6900000: Retired blocks 4896361. BROB head info: B89 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@6900000: Retired blocks 4896361. BROB head info: B89 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@6900000: Retired blocks 4896361. BROB head info: B86 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@6900000: Retired blocks 4896361. BROB head info: B97 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:34 generation:412 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:35 generation:412 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@7000000: Retired blocks 4967630. BROB head info: B72 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@7000000: Retired blocks 4967630. BROB head info: B72 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@7000000: Retired blocks 4967630. BROB head info: B73 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@7000000: Retired blocks 4967630. BROB head info: B245 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:22 generation:418 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:23 generation:418 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@7100000: Retired blocks 5039006. BROB head info: B56 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@7100000: Retired blocks 5039006. BROB head info: B55 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@7100000: Retired blocks 5039006. BROB head info: B54 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@7100000: Retired blocks 5039006. BROB head info: B249 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:24 generation:424 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@7200000: Retired blocks 5110329. BROB head info: B39 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@7200000: Retired blocks 5110329. BROB head info: B38 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@7200000: Retired blocks 5110329. BROB head info: B41 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@7200000: Retired blocks 5110329. BROB head info: B195 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:18 generation:430 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@7300000: Retired blocks 5181716. BROB head info: B29 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@7300000: Retired blocks 5181716. BROB head info: B28 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@7300000: Retired blocks 5181716. BROB head info: B29 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@7300000: Retired blocks 5181716. BROB head info: B190 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:16 generation:436 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@7400000: Retired blocks 5253005. BROB head info: B2 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@7400000: Retired blocks 5253005. BROB head info: B3 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@7400000: Retired blocks 5253005. BROB head info: B0 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@7400000: Retired blocks 5253005. BROB head info: B136 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:10 generation:442 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@7500000: Retired blocks 5324181. BROB head info: B164 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@7500000: Retired blocks 5324181. BROB head info: B165 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@7500000: Retired blocks 5324181. BROB head info: B164 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@7500000: Retired blocks 5324181. BROB head info: B168 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:15 generation:448 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@7600000: Retired blocks 5395622. BROB head info: B187 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@7600000: Retired blocks 5395622. BROB head info: B186 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@7600000: Retired blocks 5395622. BROB head info: B187 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@7600000: Retired blocks 5395622. BROB head info: B118 STID3 BPC 0x1398a [STD COND]
+tid: 0 Core@7700000: Retired blocks 5466913. BROB head info: B145 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@7700000: Retired blocks 5466913. BROB head info: B143 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@7700000: Retired blocks 5466913. BROB head info: B143 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@7700000: Retired blocks 5466913. BROB head info: B114 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:9 generation:460 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@7800000: Retired blocks 5538298. BROB head info: B139 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@7800000: Retired blocks 5538298. BROB head info: B140 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@7800000: Retired blocks 5538298. BROB head info: B142 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@7800000: Retired blocks 5538298. BROB head info: B85 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:5 generation:466 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:6 generation:466 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@7900000: Retired blocks 5609602. BROB head info: B74 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@7900000: Retired blocks 5609602. BROB head info: B74 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@7900000: Retired blocks 5609602. BROB head info: B75 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@7900000: Retired blocks 5609602. BROB head info: B163 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:13 generation:472 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@8000000: Retired blocks 5680957. BROB head info: B32 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@8000000: Retired blocks 5680957. BROB head info: B34 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@8000000: Retired blocks 5680957. BROB head info: B34 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@8000000: Retired blocks 5680957. BROB head info: B217 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:19 generation:478 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@8100000: Retired blocks 5752289. BROB head info: B14 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@8100000: Retired blocks 5752289. BROB head info: B21 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@8100000: Retired blocks 5752289. BROB head info: B22 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@8100000: Retired blocks 5752289. BROB head info: B168 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:15 generation:484 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@8200000: Retired blocks 5823690. BROB head info: B240 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@8200000: Retired blocks 5823690. BROB head info: B240 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@8200000: Retired blocks 5823690. BROB head info: B241 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@8200000: Retired blocks 5823690. BROB head info: B249 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:24 generation:490 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@8300000: Retired blocks 5895071. BROB head info: B191 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@8300000: Retired blocks 5895071. BROB head info: B193 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@8300000: Retired blocks 5895071. BROB head info: B191 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@8300000: Retired blocks 5895071. BROB head info: B96 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:34 generation:496 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@8400000: Retired blocks 5966197. BROB head info: B101 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@8400000: Retired blocks 5966197. BROB head info: B101 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@8400000: Retired blocks 5966197. BROB head info: B102 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@8400000: Retired blocks 5966197. BROB head info: B69 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:31 generation:502 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@8500000: Retired blocks 6037665. BROB head info: B96 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@8500000: Retired blocks 6037665. BROB head info: B95 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@8500000: Retired blocks 6037665. BROB head info: B98 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@8500000: Retired blocks 6037665. BROB head info: B128 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:39 generation:508 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@8600000: Retired blocks 6108981. BROB head info: B80 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@8600000: Retired blocks 6108981. BROB head info: B79 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@8600000: Retired blocks 6108981. BROB head info: B80 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@8600000: Retired blocks 6108981. BROB head info: B70 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:31 generation:514 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:32 generation:514 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@8700000: Retired blocks 6180334. BROB head info: B20 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@8700000: Retired blocks 6180334. BROB head info: B20 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@8700000: Retired blocks 6180334. BROB head info: B18 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@8700000: Retired blocks 6180334. BROB head info: B180 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:44 generation:520 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:45 generation:520 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@8800000: Retired blocks 6251714. BROB head info: B215 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@8800000: Retired blocks 6251714. BROB head info: B216 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@8800000: Retired blocks 6251714. BROB head info: B214 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@8800000: Retired blocks 6251714. BROB head info: B61 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:60 generation:526 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@8900000: Retired blocks 6323021. BROB head info: B149 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@8900000: Retired blocks 6323021. BROB head info: B151 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@8900000: Retired blocks 6323021. BROB head info: B151 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@8900000: Retired blocks 6323021. BROB head info: B138 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:67 generation:532 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:68 generation:532 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@9000000: Retired blocks 6394395. BROB head info: B129 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@9000000: Retired blocks 6394395. BROB head info: B128 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@9000000: Retired blocks 6394395. BROB head info: B128 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@9000000: Retired blocks 6394395. BROB head info: B154 STID3 BPC 0x139c6 [STD COND]
+tid: 0 Core@9100000: Retired blocks 6465701. BROB head info: B75 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@9100000: Retired blocks 6465701. BROB head info: B76 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@9100000: Retired blocks 6465701. BROB head info: B74 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@9100000: Retired blocks 6465701. BROB head info: B196 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:75 generation:544 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@9200000: Retired blocks 6537004. BROB head info: B18 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@9200000: Retired blocks 6537004. BROB head info: B19 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@9200000: Retired blocks 6537004. BROB head info: B17 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@9200000: Retired blocks 6537004. BROB head info: B246 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:79 generation:550 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:80 generation:550 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 1 Core@9300000: Retired blocks 6608335. BROB head info: B21 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@9300000: Retired blocks 6608335. BROB head info: B22 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@9300000: Retired blocks 6608335. BROB head info: B142 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:69 generation:556 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@9400000: Retired blocks 6679699. BROB head info: B230 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@9400000: Retired blocks 6679699. BROB head info: B231 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@9400000: Retired blocks 6679699. BROB head info: B231 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@9400000: Retired blocks 6679699. BROB head info: B223 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:78 generation:562 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@9500000: Retired blocks 6750997. BROB head info: B191 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@9500000: Retired blocks 6750997. BROB head info: B191 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@9500000: Retired blocks 6750997. BROB head info: B192 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@9500000: Retired blocks 6750997. BROB head info: B215 STID3 BPC 0x13b0a [STD COND]
+tid: 0 Core@9600000: Retired blocks 6822292. BROB head info: B129 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@9600000: Retired blocks 6822292. BROB head info: B129 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@9600000: Retired blocks 6822292. BROB head info: B130 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@9600000: Retired blocks 6822292. BROB head info: B16 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:82 generation:574 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@9700000: Retired blocks 6893627. BROB head info: B89 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@9700000: Retired blocks 6893627. BROB head info: B90 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@9700000: Retired blocks 6893627. BROB head info: B88 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@9700000: Retired blocks 6893627. BROB head info: B48 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:87 generation:580 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@9800000: Retired blocks 6964910. BROB head info: B69 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@9800000: Retired blocks 6964910. BROB head info: B69 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@9800000: Retired blocks 6964910. BROB head info: B69 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@9800000: Retired blocks 6964910. BROB head info: B223 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:78 generation:586 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@9900000: Retired blocks 7036288. BROB head info: B46 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@9900000: Retired blocks 7036288. BROB head info: B46 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@9900000: Retired blocks 7036288. BROB head info: B47 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@9900000: Retired blocks 7036288. BROB head info: B245 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:79 generation:592 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@10000000: Retired blocks 7107651. BROB head info: B53 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@10000000: Retired blocks 7107651. BROB head info: B53 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@10000000: Retired blocks 7107651. BROB head info: B53 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@10000000: Retired blocks 7107651. BROB head info: B164 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:70 generation:598 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@10100000: Retired blocks 7179065. BROB head info: B31 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@10100000: Retired blocks 7179065. BROB head info: B33 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@10100000: Retired blocks 7179065. BROB head info: B30 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@10100000: Retired blocks 7179065. BROB head info: B219 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:76 generation:604 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:77 generation:604 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@10200000: Retired blocks 7250445. BROB head info: B35 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@10200000: Retired blocks 7250445. BROB head info: B35 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@10200000: Retired blocks 7250445. BROB head info: B35 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@10200000: Retired blocks 7250445. BROB head info: B164 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:70 generation:610 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@10300000: Retired blocks 7321844. BROB head info: B254 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@10300000: Retired blocks 7321844. BROB head info: B0 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@10300000: Retired blocks 7321844. BROB head info: B254 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@10300000: Retired blocks 7321844. BROB head info: B248 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:80 generation:616 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:81 generation:616 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@10400000: Retired blocks 7393149. BROB head info: B231 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@10400000: Retired blocks 7393149. BROB head info: B233 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@10400000: Retired blocks 7393149. BROB head info: B233 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@10400000: Retired blocks 7393149. BROB head info: B196 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:75 generation:622 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@10500000: Retired blocks 7464593. BROB head info: B205 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@10500000: Retired blocks 7464593. BROB head info: B204 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@10500000: Retired blocks 7464593. BROB head info: B205 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@10500000: Retired blocks 7464593. BROB head info: B43 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:85 generation:628 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@10600000: Retired blocks 7535944. BROB head info: B161 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@10600000: Retired blocks 7535944. BROB head info: B160 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@10600000: Retired blocks 7535944. BROB head info: B161 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@10600000: Retired blocks 7535944. BROB head info: B102 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:93 generation:634 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@10700000: Retired blocks 7607310. BROB head info: B151 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@10700000: Retired blocks 7607310. BROB head info: B150 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@10700000: Retired blocks 7607310. BROB head info: B152 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@10700000: Retired blocks 7607310. BROB head info: B73 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:89 generation:640 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:90 generation:640 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@10800000: Retired blocks 7678695. BROB head info: B112 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@10800000: Retired blocks 7678695. BROB head info: B112 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@10800000: Retired blocks 7678695. BROB head info: B112 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@10800000: Retired blocks 7678695. BROB head info: B151 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:97 generation:646 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@10900000: Retired blocks 7750016. BROB head info: B76 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@10900000: Retired blocks 7750016. BROB head info: B76 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@10900000: Retired blocks 7750016. BROB head info: B76 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@10900000: Retired blocks 7750016. BROB head info: B156 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:99 generation:652 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@11000000: Retired blocks 7821379. BROB head info: B66 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@11000000: Retired blocks 7821379. BROB head info: B66 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@11000000: Retired blocks 7821379. BROB head info: B67 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@11000000: Retired blocks 7821379. BROB head info: B124 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:94 generation:658 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@11100000: Retired blocks 7892788. BROB head info: B42 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@11100000: Retired blocks 7892788. BROB head info: B43 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@11100000: Retired blocks 7892788. BROB head info: B44 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@11100000: Retired blocks 7892788. BROB head info: B179 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:100 generation:664 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:101 generation:664 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@11200000: Retired blocks 7964161. BROB head info: B51 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@11200000: Retired blocks 7964161. BROB head info: B52 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@11200000: Retired blocks 7964161. BROB head info: B52 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@11200000: Retired blocks 7964161. BROB head info: B102 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:93 generation:670 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@11300000: Retired blocks 8035637. BROB head info: B97 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@11300000: Retired blocks 8035637. BROB head info: B98 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@11300000: Retired blocks 8035637. BROB head info: B98 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@11300000: Retired blocks 8035637. BROB head info: B16 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:82 generation:676 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@11400000: Retired blocks 8107015. BROB head info: B64 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@11400000: Retired blocks 8107015. BROB head info: B64 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@11400000: Retired blocks 8107015. BROB head info: B65 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@11400000: Retired blocks 8107015. BROB head info: B70 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:88 generation:682 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@11500000: Retired blocks 8178211. BROB head info: B3 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@11500000: Retired blocks 8178211. BROB head info: B6 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@11500000: Retired blocks 8178211. BROB head info: B5 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@11500000: Retired blocks 8178211. BROB head info: B21 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:84 generation:688 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@11600000: Retired blocks 8249500. BROB head info: B215 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@11600000: Retired blocks 8249500. BROB head info: B215 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@11600000: Retired blocks 8249500. BROB head info: B217 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@11600000: Retired blocks 8249500. BROB head info: B21 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:84 generation:694 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@11700000: Retired blocks 8320809. BROB head info: B190 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@11700000: Retired blocks 8320809. BROB head info: B189 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@11700000: Retired blocks 8320809. BROB head info: B192 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@11700000: Retired blocks 8320809. BROB head info: B238 STID3 BPC 0x13ace [STD FALL]
+tid: 0 Core@11800000: Retired blocks 8392093. BROB head info: B168 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@11800000: Retired blocks 8392093. BROB head info: B168 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@11800000: Retired blocks 8392093. BROB head info: B169 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@11800000: Retired blocks 8392093. BROB head info: B164 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:70 generation:706 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@11900000: Retired blocks 8463346. BROB head info: B147 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@11900000: Retired blocks 8463346. BROB head info: B147 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@11900000: Retired blocks 8463346. BROB head info: B147 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@11900000: Retired blocks 8463346. BROB head info: B57 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:58 generation:712 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:59 generation:712 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@12000000: Retired blocks 8534749. BROB head info: B138 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@12000000: Retired blocks 8534749. BROB head info: B139 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@12000000: Retired blocks 8534749. BROB head info: B139 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@12000000: Retired blocks 8534749. BROB head info: B61 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:60 generation:718 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@12100000: Retired blocks 8606169. BROB head info: B155 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@12100000: Retired blocks 8606169. BROB head info: B154 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@12100000: Retired blocks 8606169. BROB head info: B157 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@12100000: Retired blocks 8606169. BROB head info: B7 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:54 generation:724 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@12200000: Retired blocks 8677430. BROB head info: B84 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@12200000: Retired blocks 8677430. BROB head info: B85 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@12200000: Retired blocks 8677430. BROB head info: B85 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@12200000: Retired blocks 8677430. BROB head info: B56 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:58 generation:730 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@12300000: Retired blocks 8748745. BROB head info: B73 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@12300000: Retired blocks 8748745. BROB head info: B74 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@12300000: Retired blocks 8748745. BROB head info: B74 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@12300000: Retired blocks 8748745. BROB head info: B236 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:51 generation:736 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@12400000: Retired blocks 8820143. BROB head info: B48 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@12400000: Retired blocks 8820143. BROB head info: B47 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@12400000: Retired blocks 8820143. BROB head info: B48 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@12400000: Retired blocks 8820143. BROB head info: B32 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:56 generation:742 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:57 generation:742 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@12500000: Retired blocks 8891377. BROB head info: B10 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@12500000: Retired blocks 8891377. BROB head info: B11 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@12500000: Retired blocks 8891377. BROB head info: B11 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@12500000: Retired blocks 8891377. BROB head info: B209 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:48 generation:748 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@12600000: Retired blocks 8962695. BROB head info: B221 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@12600000: Retired blocks 8962695. BROB head info: B227 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@12600000: Retired blocks 8962695. BROB head info: B223 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@12600000: Retired blocks 8962695. BROB head info: B232 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:49 generation:754 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:50 generation:754 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@12700000: Retired blocks 9033902. BROB head info: B195 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@12700000: Retired blocks 9033902. BROB head info: B195 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@12700000: Retired blocks 9033902. BROB head info: B195 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@12700000: Retired blocks 9033902. BROB head info: B101 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:36 generation:760 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@12800000: Retired blocks 9105270. BROB head info: B169 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@12800000: Retired blocks 9105270. BROB head info: B169 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@12800000: Retired blocks 9105270. BROB head info: B169 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@12800000: Retired blocks 9105270. BROB head info: B123 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:37 generation:766 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@12900000: Retired blocks 9176623. BROB head info: B145 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@12900000: Retired blocks 9176623. BROB head info: B145 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@12900000: Retired blocks 9176623. BROB head info: B146 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@12900000: Retired blocks 9176623. BROB head info: B123 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:37 generation:772 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@13000000: Retired blocks 9248024. BROB head info: B128 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@13000000: Retired blocks 9248024. BROB head info: B129 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@13000000: Retired blocks 9248024. BROB head info: B128 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@13000000: Retired blocks 9248024. BROB head info: B151 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:40 generation:778 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:41 generation:778 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@13100000: Retired blocks 9319378. BROB head info: B96 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@13100000: Retired blocks 9319378. BROB head info: B95 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@13100000: Retired blocks 9319378. BROB head info: B98 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@13100000: Retired blocks 9319378. BROB head info: B177 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:43 generation:784 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@13200000: Retired blocks 9390663. BROB head info: B49 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@13200000: Retired blocks 9390663. BROB head info: B46 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@13200000: Retired blocks 9390663. BROB head info: B50 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@13200000: Retired blocks 9390663. BROB head info: B182 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:45 generation:790 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@13300000: Retired blocks 9461975. BROB head info: B0 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@13300000: Retired blocks 9461975. BROB head info: B0 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@13300000: Retired blocks 9461975. BROB head info: B2 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@13300000: Retired blocks 9461975. BROB head info: B213 STID3 BPC 0x1398a [STD COND]
+tid: 0 Core@13400000: Retired blocks 9533402. BROB head info: B1 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@13400000: Retired blocks 9533402. BROB head info: B4 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@13400000: Retired blocks 9533402. BROB head info: B4 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@13400000: Retired blocks 9533402. BROB head info: B209 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:48 generation:802 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@13500000: Retired blocks 9604834. BROB head info: B244 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@13500000: Retired blocks 9604834. BROB head info: B244 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@13500000: Retired blocks 9604834. BROB head info: B243 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@13500000: Retired blocks 9604834. BROB head info: B7 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:54 generation:808 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@13600000: Retired blocks 9676177. BROB head info: B227 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@13600000: Retired blocks 9676177. BROB head info: B226 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@13600000: Retired blocks 9676177. BROB head info: B229 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@13600000: Retired blocks 9676177. BROB head info: B231 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:49 generation:814 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@13700000: Retired blocks 9747483. BROB head info: B176 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@13700000: Retired blocks 9747483. BROB head info: B179 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@13700000: Retired blocks 9747483. BROB head info: B181 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@13700000: Retired blocks 9747483. BROB head info: B3 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:52 generation:820 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:53 generation:820 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@13800000: Retired blocks 9818800. BROB head info: B141 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@13800000: Retired blocks 9818800. BROB head info: B142 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@13800000: Retired blocks 9818800. BROB head info: B142 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@13800000: Retired blocks 9818800. BROB head info: B7 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:54 generation:826 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@13900000: Retired blocks 9890099. BROB head info: B118 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@13900000: Retired blocks 9890099. BROB head info: B119 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@13900000: Retired blocks 9890099. BROB head info: B117 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@13900000: Retired blocks 9890099. BROB head info: B209 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:48 generation:832 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@14000000: Retired blocks 9961385. BROB head info: B73 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@14000000: Retired blocks 9961385. BROB head info: B72 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@14000000: Retired blocks 9961385. BROB head info: B75 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@14000000: Retired blocks 9961385. BROB head info: B205 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:46 generation:838 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:47 generation:838 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@14100000: Retired blocks 10032691. BROB head info: B70 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@14100000: Retired blocks 10032691. BROB head info: B70 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@14100000: Retired blocks 10032691. BROB head info: B70 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@14100000: Retired blocks 10032691. BROB head info: B97 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:34 generation:844 physValid:1 addr:0xc00 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:35 generation:844 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@14200000: Retired blocks 10104000. BROB head info: B56 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@14200000: Retired blocks 10104000. BROB head info: B58 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@14200000: Retired blocks 10104000. BROB head info: B58 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@14200000: Retired blocks 10104000. BROB head info: B20 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:27 generation:850 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@14300000: Retired blocks 10175408. BROB head info: B35 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@14300000: Retired blocks 10175408. BROB head info: B35 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@14300000: Retired blocks 10175408. BROB head info: B32 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@14300000: Retired blocks 10175408. BROB head info: B74 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:33 generation:856 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@14400000: Retired blocks 10246822. BROB head info: B57 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@14400000: Retired blocks 10246822. BROB head info: B58 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@14400000: Retired blocks 10246822. BROB head info: B58 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@14400000: Retired blocks 10246822. BROB head info: B249 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:24 generation:862 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@14500000: Retired blocks 10318136. BROB head info: B11 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@14500000: Retired blocks 10318136. BROB head info: B12 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@14500000: Retired blocks 10318136. BROB head info: B13 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@14500000: Retired blocks 10318136. BROB head info: B20 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:27 generation:868 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@14600000: Retired blocks 10389543. BROB head info: B0 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@14600000: Retired blocks 10389543. BROB head info: B2 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@14600000: Retired blocks 10389543. BROB head info: B2 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@14600000: Retired blocks 10389543. BROB head info: B35 STID3 BPC 0x13ace [STD FALL]
+tid: 0 Core@14700000: Retired blocks 10460932. BROB head info: B242 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@14700000: Retired blocks 10460932. BROB head info: B242 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@14700000: Retired blocks 10460932. BROB head info: B243 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@14700000: Retired blocks 10460932. BROB head info: B45 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:29 generation:880 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:30 generation:880 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@14800000: Retired blocks 10532336. BROB head info: B230 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@14800000: Retired blocks 10532336. BROB head info: B231 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@14800000: Retired blocks 10532336. BROB head info: B230 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@14800000: Retired blocks 10532336. BROB head info: B61 STID3 BPC 0x13aa0 [STD DIRECT]
+tid: 0 Core@14900000: Retired blocks 10603661. BROB head info: B221 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@14900000: Retired blocks 10603661. BROB head info: B220 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@14900000: Retired blocks 10603661. BROB head info: B221 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@14900000: Retired blocks 10603661. BROB head info: B247 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:23 generation:892 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:24 generation:892 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@15000000: Retired blocks 10674923. BROB head info: B172 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@15000000: Retired blocks 10674923. BROB head info: B173 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@15000000: Retired blocks 10674923. BROB head info: B172 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@15000000: Retired blocks 10674923. BROB head info: B230 STID3 BPC 0x139e6 [STD COND]
+tid: 0 Core@15100000: Retired blocks 10746197. BROB head info: B113 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@15100000: Retired blocks 10746197. BROB head info: B114 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@15100000: Retired blocks 10746197. BROB head info: B113 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@15100000: Retired blocks 10746197. BROB head info: B1 STID3 BPC 0x139e6 [STD COND]
+tid: 0 Core@15200000: Retired blocks 10817603. BROB head info: B100 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@15200000: Retired blocks 10817603. BROB head info: B103 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@15200000: Retired blocks 10817603. BROB head info: B102 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@15200000: Retired blocks 10817603. BROB head info: B18 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:26 generation:910 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:27 generation:910 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@15300000: Retired blocks 10888897. BROB head info: B75 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@15300000: Retired blocks 10888897. BROB head info: B78 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@15300000: Retired blocks 10888897. BROB head info: B79 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@15300000: Retired blocks 10888897. BROB head info: B217 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:19 generation:916 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@15400000: Retired blocks 10960314. BROB head info: B94 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@15400000: Retired blocks 10960314. BROB head info: B95 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@15400000: Retired blocks 10960314. BROB head info: B95 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@15400000: Retired blocks 10960314. BROB head info: B158 STID3 BPC 0x13af0 [STD COND]
+tid: 0 Core@15500000: Retired blocks 11031723. BROB head info: B96 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@15500000: Retired blocks 11031723. BROB head info: B96 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@15500000: Retired blocks 11031723. BROB head info: B94 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@15500000: Retired blocks 11031723. BROB head info: B141 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:12 generation:928 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@15600000: Retired blocks 11102980. BROB head info: B76 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@15600000: Retired blocks 11102980. BROB head info: B76 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@15600000: Retired blocks 11102980. BROB head info: B77 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@15600000: Retired blocks 11102980. BROB head info: B31 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:255 generation:933 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:0 generation:934 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@15700000: Retired blocks 11174364. BROB head info: B64 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@15700000: Retired blocks 11174364. BROB head info: B63 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@15700000: Retired blocks 11174364. BROB head info: B65 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@15700000: Retired blocks 11174364. BROB head info: B28 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:254 generation:939 physValid:1 addr:0x1c00 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@15800000: Retired blocks 11245649. BROB head info: B72 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@15800000: Retired blocks 11245649. BROB head info: B71 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@15800000: Retired blocks 11245649. BROB head info: B72 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@15800000: Retired blocks 11245649. BROB head info: B122 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:236 generation:945 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@15900000: Retired blocks 11317037. BROB head info: B102 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@15900000: Retired blocks 11317037. BROB head info: B102 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@15900000: Retired blocks 11317037. BROB head info: B105 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@15900000: Retired blocks 11317037. BROB head info: B248 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:223 generation:951 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@16000000: Retired blocks 11388355. BROB head info: B42 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@16000000: Retired blocks 11388355. BROB head info: B43 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@16000000: Retired blocks 11388355. BROB head info: B41 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@16000000: Retired blocks 11388355. BROB head info: B69 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:230 generation:957 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:231 generation:957 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@16100000: Retired blocks 11459731. BROB head info: B9 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@16100000: Retired blocks 11459731. BROB head info: B8 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@16100000: Retired blocks 11459731. BROB head info: B7 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@16100000: Retired blocks 11459731. BROB head info: B123 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:236 generation:963 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:237 generation:963 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@16200000: Retired blocks 11530998. BROB head info: B219 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@16200000: Retired blocks 11530998. BROB head info: B218 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@16200000: Retired blocks 11530998. BROB head info: B221 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@16200000: Retired blocks 11530998. BROB head info: B100 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:235 generation:969 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@16300000: Retired blocks 11602397. BROB head info: B194 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@16300000: Retired blocks 11602397. BROB head info: B193 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@16300000: Retired blocks 11602397. BROB head info: B196 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@16300000: Retired blocks 11602397. BROB head info: B150 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:239 generation:975 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:240 generation:975 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@16400000: Retired blocks 11673767. BROB head info: B193 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@16400000: Retired blocks 11673767. BROB head info: B194 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@16400000: Retired blocks 11673767. BROB head info: B194 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@16400000: Retired blocks 11673767. BROB head info: B98 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:234 generation:981 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:235 generation:981 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@16500000: Retired blocks 11745101. BROB head info: B173 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@16500000: Retired blocks 11745101. BROB head info: B172 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@16500000: Retired blocks 11745101. BROB head info: B171 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@16500000: Retired blocks 11745101. BROB head info: B73 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:232 generation:987 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@16600000: Retired blocks 11816412. BROB head info: B154 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@16600000: Retired blocks 11816412. BROB head info: B151 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@16600000: Retired blocks 11816412. BROB head info: B152 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@16600000: Retired blocks 11816412. BROB head info: B19 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:226 generation:993 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@16700000: Retired blocks 11887665. BROB head info: B78 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@16700000: Retired blocks 11887665. BROB head info: B79 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@16700000: Retired blocks 11887665. BROB head info: B80 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@16700000: Retired blocks 11887665. BROB head info: B68 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:230 generation:999 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@16800000: Retired blocks 11959021. BROB head info: B28 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@16800000: Retired blocks 11959021. BROB head info: B28 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@16800000: Retired blocks 11959021. BROB head info: B27 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@16800000: Retired blocks 11959021. BROB head info: B154 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:241 generation:1005 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@16900000: Retired blocks 12030443. BROB head info: B10 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@16900000: Retired blocks 12030443. BROB head info: B11 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@16900000: Retired blocks 12030443. BROB head info: B11 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@16900000: Retired blocks 12030443. BROB head info: B203 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:245 generation:1011 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@17000000: Retired blocks 12101815. BROB head info: B232 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@17000000: Retired blocks 12101815. BROB head info: B228 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@17000000: Retired blocks 12101815. BROB head info: B233 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@17000000: Retired blocks 12101815. BROB head info: B2 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:251 generation:1017 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:252 generation:1017 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@17100000: Retired blocks 12173215. BROB head info: B250 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@17100000: Retired blocks 12173215. BROB head info: B249 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@17100000: Retired blocks 12173215. BROB head info: B252 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@17100000: Retired blocks 12173215. BROB head info: B176 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:242 generation:1023 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@17200000: Retired blocks 12244595. BROB head info: B225 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@17200000: Retired blocks 12244595. BROB head info: B224 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@17200000: Retired blocks 12244595. BROB head info: B226 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@17200000: Retired blocks 12244595. BROB head info: B208 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:247 generation:1029 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 1 Core@17300000: Retired blocks 12315951. BROB head info: B199 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@17300000: Retired blocks 12315951. BROB head info: B200 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@17300000: Retired blocks 12315951. BROB head info: B216 STID3 BPC 0x139e6 [STD COND]
+tid: 0 Core@17400000: Retired blocks 12387345. BROB head info: B174 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@17400000: Retired blocks 12387345. BROB head info: B174 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@17400000: Retired blocks 12387345. BROB head info: B175 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@17400000: Retired blocks 12387345. BROB head info: B6 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:253 generation:1041 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@17500000: Retired blocks 12458596. BROB head info: B110 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@17500000: Retired blocks 12458596. BROB head info: B109 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@17500000: Retired blocks 12458596. BROB head info: B104 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@17500000: Retired blocks 12458596. BROB head info: B33 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:0 generation:1048 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@17600000: Retired blocks 12530021. BROB head info: B115 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@17600000: Retired blocks 12530021. BROB head info: B118 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@17600000: Retired blocks 12530021. BROB head info: B118 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@17600000: Retired blocks 12530021. BROB head info: B6 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:253 generation:1053 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@17700000: Retired blocks 12601401. BROB head info: B84 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@17700000: Retired blocks 12601401. BROB head info: B84 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@17700000: Retired blocks 12601401. BROB head info: B85 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@17700000: Retired blocks 12601401. BROB head info: B60 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:3 generation:1060 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@17800000: Retired blocks 12672785. BROB head info: B35 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@17800000: Retired blocks 12672785. BROB head info: B37 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@17800000: Retired blocks 12672785. BROB head info: B37 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@17800000: Retired blocks 12672785. BROB head info: B164 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:13 generation:1066 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:14 generation:1066 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@17900000: Retired blocks 12744178. BROB head info: B50 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@17900000: Retired blocks 12744178. BROB head info: B53 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@17900000: Retired blocks 12744178. BROB head info: B52 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@17900000: Retired blocks 12744178. BROB head info: B87 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:6 generation:1072 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@18000000: Retired blocks 12815553. BROB head info: B54 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@18000000: Retired blocks 12815553. BROB head info: B54 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@18000000: Retired blocks 12815553. BROB head info: B54 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@18000000: Retired blocks 12815553. BROB head info: B31 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:255 generation:1077 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:0 generation:1078 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@18100000: Retired blocks 12886883. BROB head info: B254 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@18100000: Retired blocks 12886883. BROB head info: B251 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@18100000: Retired blocks 12886883. BROB head info: B252 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@18100000: Retired blocks 12886883. BROB head info: B110 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:7 generation:1084 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:8 generation:1084 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@18200000: Retired blocks 12958235. BROB head info: B219 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@18200000: Retired blocks 12958235. BROB head info: B218 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@18200000: Retired blocks 12958235. BROB head info: B217 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@18200000: Retired blocks 12958235. BROB head info: B141 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:12 generation:1090 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@18300000: Retired blocks 13029529. BROB head info: B184 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@18300000: Retired blocks 13029529. BROB head info: B186 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@18300000: Retired blocks 13029529. BROB head info: B186 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@18300000: Retired blocks 13029529. BROB head info: B109 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:7 generation:1096 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@18400000: Retired blocks 13100816. BROB head info: B111 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@18400000: Retired blocks 13100816. BROB head info: B111 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@18400000: Retired blocks 13100816. BROB head info: B111 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@18400000: Retired blocks 13100816. BROB head info: B195 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:18 generation:1102 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@18500000: Retired blocks 13172165. BROB head info: B51 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@18500000: Retired blocks 13172165. BROB head info: B51 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@18500000: Retired blocks 13172165. BROB head info: B53 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@18500000: Retired blocks 13172165. BROB head info: B42 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:28 generation:1108 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@18600000: Retired blocks 13243476. BROB head info: B233 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@18600000: Retired blocks 13243476. BROB head info: B236 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@18600000: Retired blocks 13243476. BROB head info: B233 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@18600000: Retired blocks 13243476. BROB head info: B150 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:40 generation:1114 physValid:1 addr:0xc00 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@18700000: Retired blocks 13314792. BROB head info: B198 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@18700000: Retired blocks 13314792. BROB head info: B198 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@18700000: Retired blocks 13314792. BROB head info: B198 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@18700000: Retired blocks 13314792. BROB head info: B150 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:40 generation:1120 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@18800000: Retired blocks 13386077. BROB head info: B140 STID0 BPC 0x125de [STD COND]
+tid: 2 Core@18800000: Retired blocks 13386077. BROB head info: B142 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@18800000: Retired blocks 13386077. BROB head info: B182 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:45 generation:1126 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@18900000: Retired blocks 13457441. BROB head info: B94 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@18900000: Retired blocks 13457441. BROB head info: B96 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@18900000: Retired blocks 13457441. BROB head info: B97 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@18900000: Retired blocks 13457441. BROB head info: B2 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:52 generation:1132 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@19000000: Retired blocks 13528868. BROB head info: B114 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@19000000: Retired blocks 13528868. BROB head info: B115 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@19000000: Retired blocks 13528868. BROB head info: B115 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@19000000: Retired blocks 13528868. BROB head info: B204 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:46 generation:1138 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@19100000: Retired blocks 13600264. BROB head info: B122 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@19100000: Retired blocks 13600264. BROB head info: B123 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@19100000: Retired blocks 13600264. BROB head info: B124 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@19100000: Retired blocks 13600264. BROB head info: B151 STID3 BPC 0x13b3a [TEPL FALL] rdy:0  TCVT, lb0:1, lb1:1, lb2:1 E4M3 
+tid: 0 Core@19200000: Retired blocks 13671628. BROB head info: B103 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@19200000: Retired blocks 13671628. BROB head info: B103 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@19200000: Retired blocks 13671628. BROB head info: B104 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@19200000: Retired blocks 13671628. BROB head info: B150 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:40 generation:1150 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@19300000: Retired blocks 13742937. BROB head info: B67 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@19300000: Retired blocks 13742937. BROB head info: B69 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@19300000: Retired blocks 13742937. BROB head info: B70 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@19300000: Retired blocks 13742937. BROB head info: B139 STID3 BPC 0x13a0e [STD COND]
+tid: 0 Core@19400000: Retired blocks 13814261. BROB head info: B38 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@19400000: Retired blocks 13814261. BROB head info: B39 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@19400000: Retired blocks 13814261. BROB head info: B40 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@19400000: Retired blocks 13814261. BROB head info: B128 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:39 generation:1162 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@19500000: Retired blocks 13885686. BROB head info: B11 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@19500000: Retired blocks 13885686. BROB head info: B15 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@19500000: Retired blocks 13885686. BROB head info: B15 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@19500000: Retired blocks 13885686. BROB head info: B205 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:46 generation:1168 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:47 generation:1168 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@19600000: Retired blocks 13956955. BROB head info: B228 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@19600000: Retired blocks 13956955. BROB head info: B226 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@19600000: Retired blocks 13956955. BROB head info: B228 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@19600000: Retired blocks 13956955. BROB head info: B177 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:43 generation:1174 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@19700000: Retired blocks 14028333. BROB head info: B218 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@19700000: Retired blocks 14028333. BROB head info: B220 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@19700000: Retired blocks 14028333. BROB head info: B220 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@19700000: Retired blocks 14028333. BROB head info: B155 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:42 generation:1180 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@19800000: Retired blocks 14099605. BROB head info: B197 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@19800000: Retired blocks 14099605. BROB head info: B196 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@19800000: Retired blocks 14099605. BROB head info: B198 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@19800000: Retired blocks 14099605. BROB head info: B70 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:31 generation:1186 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:32 generation:1186 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@19900000: Retired blocks 14170866. BROB head info: B127 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@19900000: Retired blocks 14170866. BROB head info: B122 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@19900000: Retired blocks 14170866. BROB head info: B125 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@19900000: Retired blocks 14170866. BROB head info: B124 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:37 generation:1192 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:38 generation:1192 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@20000000: Retired blocks 14242182. BROB head info: B62 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@20000000: Retired blocks 14242182. BROB head info: B61 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@20000000: Retired blocks 14242182. BROB head info: B62 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@20000000: Retired blocks 14242182. BROB head info: B205 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:46 generation:1198 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:47 generation:1198 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@20100000: Retired blocks 14313494. BROB head info: B33 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@20100000: Retired blocks 14313494. BROB head info: B34 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@20100000: Retired blocks 14313494. BROB head info: B34 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@20100000: Retired blocks 14313494. BROB head info: B177 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:43 generation:1204 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@20200000: Retired blocks 14384829. BROB head info: B242 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@20200000: Retired blocks 14384829. BROB head info: B238 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@20200000: Retired blocks 14384829. BROB head info: B241 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@20200000: Retired blocks 14384829. BROB head info: B236 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:51 generation:1210 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@20300000: Retired blocks 14456233. BROB head info: B210 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@20300000: Retired blocks 14456233. BROB head info: B211 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@20300000: Retired blocks 14456233. BROB head info: B210 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@20300000: Retired blocks 14456233. BROB head info: B50 STID3 BPC 0x13ae2 [STD COND]
+tid: 0 Core@20400000: Retired blocks 14527612. BROB head info: B195 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@20400000: Retired blocks 14527612. BROB head info: B193 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@20400000: Retired blocks 14527612. BROB head info: B191 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@20400000: Retired blocks 14527612. BROB head info: B57 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:58 generation:1222 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:59 generation:1222 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@20500000: Retired blocks 14599001. BROB head info: B148 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@20500000: Retired blocks 14599001. BROB head info: B149 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@20500000: Retired blocks 14599001. BROB head info: B150 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@20500000: Retired blocks 14599001. BROB head info: B154 STID3 BPC 0x139c6 [STD COND]
+tid: 0 Core@20600000: Retired blocks 14670395. BROB head info: B99 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@20600000: Retired blocks 14670395. BROB head info: B100 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@20600000: Retired blocks 14670395. BROB head info: B100 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@20600000: Retired blocks 14670395. BROB head info: B16 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:82 generation:1234 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@20700000: Retired blocks 14741664. BROB head info: B64 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@20700000: Retired blocks 14741664. BROB head info: B63 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@20700000: Retired blocks 14741664. BROB head info: B66 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@20700000: Retired blocks 14741664. BROB head info: B223 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:78 generation:1240 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@20800000: Retired blocks 14812990. BROB head info: B11 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@20800000: Retired blocks 14812990. BROB head info: B15 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@20800000: Retired blocks 14812990. BROB head info: B15 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@20800000: Retired blocks 14812990. BROB head info: B21 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:84 generation:1246 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@20900000: Retired blocks 14884351. BROB head info: B213 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@20900000: Retired blocks 14884351. BROB head info: B213 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@20900000: Retired blocks 14884351. BROB head info: B214 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@20900000: Retired blocks 14884351. BROB head info: B127 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:95 generation:1252 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:96 generation:1252 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@21000000: Retired blocks 14955660. BROB head info: B185 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@21000000: Retired blocks 14955660. BROB head info: B185 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@21000000: Retired blocks 14955660. BROB head info: B184 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@21000000: Retired blocks 14955660. BROB head info: B98 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:91 generation:1258 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:92 generation:1258 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@21100000: Retired blocks 15027063. BROB head info: B176 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@21100000: Retired blocks 15027063. BROB head info: B176 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@21100000: Retired blocks 15027063. BROB head info: B177 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@21100000: Retired blocks 15027063. BROB head info: B102 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:93 generation:1264 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@21200000: Retired blocks 15098498. BROB head info: B197 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@21200000: Retired blocks 15098498. BROB head info: B200 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@21200000: Retired blocks 15098498. BROB head info: B199 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@21200000: Retired blocks 15098498. BROB head info: B46 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:86 generation:1270 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:87 generation:1270 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@21300000: Retired blocks 15169765. BROB head info: B191 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@21300000: Retired blocks 15169765. BROB head info: B191 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@21300000: Retired blocks 15169765. BROB head info: B190 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@21300000: Retired blocks 15169765. BROB head info: B169 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:72 generation:1276 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@21400000: Retired blocks 15241145. BROB head info: B167 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@21400000: Retired blocks 15241145. BROB head info: B167 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@21400000: Retired blocks 15241145. BROB head info: B167 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@21400000: Retired blocks 15241145. BROB head info: B196 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:75 generation:1282 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@21500000: Retired blocks 15312535. BROB head info: B175 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@21500000: Retired blocks 15312535. BROB head info: B174 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@21500000: Retired blocks 15312535. BROB head info: B172 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@21500000: Retired blocks 15312535. BROB head info: B142 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:69 generation:1288 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@21600000: Retired blocks 15383950. BROB head info: B156 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@21600000: Retired blocks 15383950. BROB head info: B157 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@21600000: Retired blocks 15383950. BROB head info: B147 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@21600000: Retired blocks 15383950. BROB head info: B194 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:74 generation:1294 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:75 generation:1294 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@21700000: Retired blocks 15455353. BROB head info: B120 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@21700000: Retired blocks 15455353. BROB head info: B119 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@21700000: Retired blocks 15455353. BROB head info: B122 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@21700000: Retired blocks 15455353. BROB head info: B16 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:82 generation:1300 physValid:1 addr:0xc00 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@21800000: Retired blocks 15526652. BROB head info: B78 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@21800000: Retired blocks 15526652. BROB head info: B78 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@21800000: Retired blocks 15526652. BROB head info: B79 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@21800000: Retired blocks 15526652. BROB head info: B17 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:82 generation:1306 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:83 generation:1306 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@21900000: Retired blocks 15598132. BROB head info: B86 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@21900000: Retired blocks 15598132. BROB head info: B87 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@21900000: Retired blocks 15598132. BROB head info: B87 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@21900000: Retired blocks 15598132. BROB head info: B48 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:87 generation:1312 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@22000000: Retired blocks 15669504. BROB head info: B81 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@22000000: Retired blocks 15669504. BROB head info: B79 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@22000000: Retired blocks 15669504. BROB head info: B80 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@22000000: Retired blocks 15669504. BROB head info: B16 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:82 generation:1318 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@22100000: Retired blocks 15740860. BROB head info: B47 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@22100000: Retired blocks 15740860. BROB head info: B45 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@22100000: Retired blocks 15740860. BROB head info: B48 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@22100000: Retired blocks 15740860. BROB head info: B48 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:87 generation:1324 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@22200000: Retired blocks 15812195. BROB head info: B20 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@22200000: Retired blocks 15812195. BROB head info: B19 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@22200000: Retired blocks 15812195. BROB head info: B22 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@22200000: Retired blocks 15812195. BROB head info: B38 STID3 BPC 0x13af0 [STD COND]
+tid: 0 Core@22300000: Retired blocks 15883591. BROB head info: B8 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@22300000: Retired blocks 15883591. BROB head info: B8 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@22300000: Retired blocks 15883591. BROB head info: B9 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@22300000: Retired blocks 15883591. BROB head info: B46 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:86 generation:1336 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:87 generation:1336 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@22400000: Retired blocks 15955025. BROB head info: B250 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@22400000: Retired blocks 15955025. BROB head info: B249 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@22400000: Retired blocks 15955025. BROB head info: B249 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@22400000: Retired blocks 15955025. BROB head info: B101 STID3 BPC 0x13b62 [STD FALL]
+tid: 0 Core@22500000: Retired blocks 16026301. BROB head info: B210 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@22500000: Retired blocks 16026301. BROB head info: B210 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@22500000: Retired blocks 16026301. BROB head info: B210 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@22500000: Retired blocks 16026301. BROB head info: B71 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:88 generation:1348 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:89 generation:1348 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@22600000: Retired blocks 16097624. BROB head info: B176 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@22600000: Retired blocks 16097624. BROB head info: B175 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@22600000: Retired blocks 16097624. BROB head info: B176 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@22600000: Retired blocks 16097624. BROB head info: B73 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:89 generation:1354 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:90 generation:1354 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@22700000: Retired blocks 16168947. BROB head info: B149 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@22700000: Retired blocks 16168947. BROB head info: B151 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@22700000: Retired blocks 16168947. BROB head info: B151 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@22700000: Retired blocks 16168947. BROB head info: B48 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:87 generation:1360 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@22800000: Retired blocks 16240281. BROB head info: B107 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@22800000: Retired blocks 16240281. BROB head info: B113 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@22800000: Retired blocks 16240281. BROB head info: B114 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@22800000: Retired blocks 16240281. BROB head info: B75 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:90 generation:1366 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@22900000: Retired blocks 16311692. BROB head info: B116 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@22900000: Retired blocks 16311692. BROB head info: B116 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@22900000: Retired blocks 16311692. BROB head info: B116 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@22900000: Retired blocks 16311692. BROB head info: B48 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:87 generation:1372 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@23000000: Retired blocks 16383060. BROB head info: B88 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@23000000: Retired blocks 16383060. BROB head info: B89 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@23000000: Retired blocks 16383060. BROB head info: B88 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@23000000: Retired blocks 16383060. BROB head info: B75 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:90 generation:1378 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@23100000: Retired blocks 16454497. BROB head info: B120 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@23100000: Retired blocks 16454497. BROB head info: B119 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@23100000: Retired blocks 16454497. BROB head info: B120 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@23100000: Retired blocks 16454497. BROB head info: B250 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:81 generation:1384 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@23200000: Retired blocks 16525858. BROB head info: B82 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@23200000: Retired blocks 16525858. BROB head info: B82 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@23200000: Retired blocks 16525858. BROB head info: B83 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@23200000: Retired blocks 16525858. BROB head info: B43 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:85 generation:1390 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@23300000: Retired blocks 16597176. BROB head info: B63 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@23300000: Retired blocks 16597176. BROB head info: B63 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@23300000: Retired blocks 16597176. BROB head info: B64 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@23300000: Retired blocks 16597176. BROB head info: B250 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:81 generation:1396 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@23400000: Retired blocks 16668648. BROB head info: B77 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@23400000: Retired blocks 16668648. BROB head info: B80 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@23400000: Retired blocks 16668648. BROB head info: B81 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@23400000: Retired blocks 16668648. BROB head info: B250 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:81 generation:1402 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@23500000: Retired blocks 16739985. BROB head info: B59 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@23500000: Retired blocks 16739985. BROB head info: B62 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@23500000: Retired blocks 16739985. BROB head info: B62 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@23500000: Retired blocks 16739985. BROB head info: B218 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:76 generation:1408 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@23600000: Retired blocks 16811370. BROB head info: B38 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@23600000: Retired blocks 16811370. BROB head info: B41 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@23600000: Retired blocks 16811370. BROB head info: B33 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@23600000: Retired blocks 16811370. BROB head info: B250 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:81 generation:1414 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@23700000: Retired blocks 16882723. BROB head info: B32 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@23700000: Retired blocks 16882723. BROB head info: B31 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@23700000: Retired blocks 16882723. BROB head info: B32 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@23700000: Retired blocks 16882723. BROB head info: B196 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:75 generation:1420 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@23800000: Retired blocks 16954088. BROB head info: B2 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@23800000: Retired blocks 16954088. BROB head info: B3 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@23800000: Retired blocks 16954088. BROB head info: B4 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@23800000: Retired blocks 16954088. BROB head info: B223 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:78 generation:1426 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@23900000: Retired blocks 17025581. BROB head info: B36 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@23900000: Retired blocks 17025581. BROB head info: B37 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@23900000: Retired blocks 17025581. BROB head info: B37 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@23900000: Retired blocks 17025581. BROB head info: B191 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:73 generation:1432 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@24000000: Retired blocks 17096912. BROB head info: B240 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@24000000: Retired blocks 17096912. BROB head info: B243 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@24000000: Retired blocks 17096912. BROB head info: B243 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@24000000: Retired blocks 17096912. BROB head info: B250 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:81 generation:1438 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@24100000: Retired blocks 17168203. BROB head info: B217 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@24100000: Retired blocks 17168203. BROB head info: B217 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@24100000: Retired blocks 17168203. BROB head info: B218 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@24100000: Retired blocks 17168203. BROB head info: B191 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:73 generation:1444 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@24200000: Retired blocks 17239536. BROB head info: B186 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@24200000: Retired blocks 17239536. BROB head info: B185 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@24200000: Retired blocks 17239536. BROB head info: B185 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@24200000: Retired blocks 17239536. BROB head info: B196 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:75 generation:1450 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@24300000: Retired blocks 17310832. BROB head info: B125 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@24300000: Retired blocks 17310832. BROB head info: B124 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@24300000: Retired blocks 17310832. BROB head info: B125 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@24300000: Retired blocks 17310832. BROB head info: B250 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:81 generation:1456 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@24400000: Retired blocks 17382120. BROB head info: B87 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@24400000: Retired blocks 17382120. BROB head info: B89 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@24400000: Retired blocks 17382120. BROB head info: B89 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@24400000: Retired blocks 17382120. BROB head info: B223 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:78 generation:1462 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@24500000: Retired blocks 17453409. BROB head info: B35 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@24500000: Retired blocks 17453409. BROB head info: B36 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@24500000: Retired blocks 17453409. BROB head info: B34 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@24500000: Retired blocks 17453409. BROB head info: B248 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:80 generation:1468 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:81 generation:1468 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@24600000: Retired blocks 17524625. BROB head info: B1 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@24600000: Retired blocks 17524625. BROB head info: B1 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@24600000: Retired blocks 17524625. BROB head info: B1 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@24600000: Retired blocks 17524625. BROB head info: B142 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:69 generation:1474 physValid:1 addr:0x4800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@24700000: Retired blocks 17595984. BROB head info: B236 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@24700000: Retired blocks 17595984. BROB head info: B235 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@24700000: Retired blocks 17595984. BROB head info: B235 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@24700000: Retired blocks 17595984. BROB head info: B142 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:69 generation:1480 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@24800000: Retired blocks 17667353. BROB head info: B217 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@24800000: Retired blocks 17667353. BROB head info: B217 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@24800000: Retired blocks 17667353. BROB head info: B217 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@24800000: Retired blocks 17667353. BROB head info: B142 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:69 generation:1486 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@24900000: Retired blocks 17738756. BROB head info: B176 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@24900000: Retired blocks 17738756. BROB head info: B175 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@24900000: Retired blocks 17738756. BROB head info: B176 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@24900000: Retired blocks 17738756. BROB head info: B245 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:79 generation:1492 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@25000000: Retired blocks 17810040. BROB head info: B110 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@25000000: Retired blocks 17810040. BROB head info: B112 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@25000000: Retired blocks 17810040. BROB head info: B110 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@25000000: Retired blocks 17810040. BROB head info: B44 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:85 generation:1498 physValid:1 addr:0x1c00 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:86 generation:1498 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@25100000: Retired blocks 17881324. BROB head info: B71 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@25100000: Retired blocks 17881324. BROB head info: B72 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@25100000: Retired blocks 17881324. BROB head info: B72 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@25100000: Retired blocks 17881324. BROB head info: B21 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:84 generation:1504 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@25200000: Retired blocks 17952745. BROB head info: B52 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@25200000: Retired blocks 17952745. BROB head info: B54 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@25200000: Retired blocks 17952745. BROB head info: B54 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@25200000: Retired blocks 17952745. BROB head info: B73 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:89 generation:1510 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:90 generation:1510 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@25300000: Retired blocks 18024066. BROB head info: B249 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@25300000: Retired blocks 18024066. BROB head info: B252 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@25300000: Retired blocks 18024066. BROB head info: B246 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@25300000: Retired blocks 18024066. BROB head info: B151 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:97 generation:1516 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@25400000: Retired blocks 18095405. BROB head info: B238 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@25400000: Retired blocks 18095405. BROB head info: B239 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@25400000: Retired blocks 18095405. BROB head info: B234 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@25400000: Retired blocks 18095405. BROB head info: B102 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:93 generation:1522 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@25500000: Retired blocks 18166829. BROB head info: B221 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@25500000: Retired blocks 18166829. BROB head info: B221 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@25500000: Retired blocks 18166829. BROB head info: B215 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@25500000: Retired blocks 18166829. BROB head info: B156 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:99 generation:1528 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@25600000: Retired blocks 18238255. BROB head info: B221 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@25600000: Retired blocks 18238255. BROB head info: B221 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@25600000: Retired blocks 18238255. BROB head info: B222 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@25600000: Retired blocks 18238255. BROB head info: B151 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:97 generation:1534 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@25700000: Retired blocks 18309575. BROB head info: B185 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@25700000: Retired blocks 18309575. BROB head info: B184 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@25700000: Retired blocks 18309575. BROB head info: B186 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@25700000: Retired blocks 18309575. BROB head info: B156 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:99 generation:1540 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@25800000: Retired blocks 18380904. BROB head info: B180 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@25800000: Retired blocks 18380904. BROB head info: B180 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@25800000: Retired blocks 18380904. BROB head info: B181 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@25800000: Retired blocks 18380904. BROB head info: B75 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:90 generation:1546 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@25900000: Retired blocks 18452260. BROB head info: B159 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@25900000: Retired blocks 18452260. BROB head info: B158 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@25900000: Retired blocks 18452260. BROB head info: B161 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@25900000: Retired blocks 18452260. BROB head info: B70 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:88 generation:1552 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@26000000: Retired blocks 18523508. BROB head info: B101 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@26000000: Retired blocks 18523508. BROB head info: B100 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@26000000: Retired blocks 18523508. BROB head info: B101 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@26000000: Retired blocks 18523508. BROB head info: B70 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:88 generation:1558 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@26100000: Retired blocks 18594910. BROB head info: B66 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@26100000: Retired blocks 18594910. BROB head info: B66 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@26100000: Retired blocks 18594910. BROB head info: B67 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@26100000: Retired blocks 18594910. BROB head info: B151 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:97 generation:1564 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@26200000: Retired blocks 18666274. BROB head info: B17 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@26200000: Retired blocks 18666274. BROB head info: B18 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@26200000: Retired blocks 18666274. BROB head info: B18 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@26200000: Retired blocks 18666274. BROB head info: B237 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:108 generation:1570 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@26300000: Retired blocks 18737749. BROB head info: B35 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@26300000: Retired blocks 18737749. BROB head info: B37 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@26300000: Retired blocks 18737749. BROB head info: B37 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@26300000: Retired blocks 18737749. BROB head info: B232 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:106 generation:1576 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@26400000: Retired blocks 18809125. BROB head info: B0 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@26400000: Retired blocks 18809125. BROB head info: B3 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@26400000: Retired blocks 18809125. BROB head info: B4 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@26400000: Retired blocks 18809125. BROB head info: B30 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:112 generation:1582 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@26500000: Retired blocks 18880455. BROB head info: B245 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@26500000: Retired blocks 18880455. BROB head info: B244 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@26500000: Retired blocks 18880455. BROB head info: B245 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@26500000: Retired blocks 18880455. BROB head info: B233 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:106 generation:1588 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:107 generation:1588 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@26600000: Retired blocks 18951777. BROB head info: B218 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@26600000: Retired blocks 18951777. BROB head info: B220 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@26600000: Retired blocks 18951777. BROB head info: B221 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@26600000: Retired blocks 18951777. BROB head info: B206 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:103 generation:1594 physValid:1 addr:0xc00 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:104 generation:1594 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@26700000: Retired blocks 19023136. BROB head info: B215 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@26700000: Retired blocks 19023136. BROB head info: B214 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@26700000: Retired blocks 19023136. BROB head info: B215 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@26700000: Retired blocks 19023136. BROB head info: B156 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:99 generation:1600 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@26800000: Retired blocks 19094591. BROB head info: B207 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@26800000: Retired blocks 19094591. BROB head info: B207 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@26800000: Retired blocks 19094591. BROB head info: B207 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@26800000: Retired blocks 19094591. BROB head info: B210 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:105 generation:1606 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@26900000: Retired blocks 19165997. BROB head info: B174 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@26900000: Retired blocks 19165997. BROB head info: B174 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@26900000: Retired blocks 19165997. BROB head info: B174 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@26900000: Retired blocks 19165997. BROB head info: B35 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:114 generation:1612 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@27000000: Retired blocks 19237348. BROB head info: B152 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@27000000: Retired blocks 19237348. BROB head info: B152 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@27000000: Retired blocks 19237348. BROB head info: B149 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@27000000: Retired blocks 19237348. BROB head info: B31 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:112 generation:1618 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:113 generation:1618 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@27100000: Retired blocks 19308683. BROB head info: B103 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@27100000: Retired blocks 19308683. BROB head info: B102 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@27100000: Retired blocks 19308683. BROB head info: B101 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@27100000: Retired blocks 19308683. BROB head info: B89 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:120 generation:1624 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@27200000: Retired blocks 19380045. BROB head info: B90 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@27200000: Retired blocks 19380045. BROB head info: B89 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@27200000: Retired blocks 19380045. BROB head info: B92 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@27200000: Retired blocks 19380045. BROB head info: B62 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:117 generation:1630 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@27300000: Retired blocks 19451473. BROB head info: B65 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@27300000: Retired blocks 19451473. BROB head info: B64 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@27300000: Retired blocks 19451473. BROB head info: B67 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@27300000: Retired blocks 19451473. BROB head info: B141 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:125 generation:1636 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:126 generation:1636 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@27400000: Retired blocks 19522899. BROB head info: B40 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@27400000: Retired blocks 19522899. BROB head info: B39 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@27400000: Retired blocks 19522899. BROB head info: B41 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@27400000: Retired blocks 19522899. BROB head info: B219 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:133 generation:1642 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@27500000: Retired blocks 19594250. BROB head info: B34 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@27500000: Retired blocks 19594250. BROB head info: B34 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@27500000: Retired blocks 19594250. BROB head info: B28 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@27500000: Retired blocks 19594250. BROB head info: B170 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:129 generation:1648 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@27600000: Retired blocks 19665623. BROB head info: B5 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@27600000: Retired blocks 19665623. BROB head info: B6 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@27600000: Retired blocks 19665623. BROB head info: B7 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@27600000: Retired blocks 19665623. BROB head info: B197 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:132 generation:1654 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@27700000: Retired blocks 19736956. BROB head info: B250 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@27700000: Retired blocks 19736956. BROB head info: B251 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@27700000: Retired blocks 19736956. BROB head info: B248 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@27700000: Retired blocks 19736956. BROB head info: B143 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:126 generation:1660 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@27800000: Retired blocks 19808438. BROB head info: B233 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@27800000: Retired blocks 19808438. BROB head info: B233 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@27800000: Retired blocks 19808438. BROB head info: B233 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@27800000: Retired blocks 19808438. BROB head info: B251 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:138 generation:1666 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@27900000: Retired blocks 19879769. BROB head info: B213 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@27900000: Retired blocks 19879769. BROB head info: B211 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@27900000: Retired blocks 19879769. BROB head info: B212 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@27900000: Retired blocks 19879769. BROB head info: B221 STID3 BPC 0x13b4c [STD FALL]
+tid: 0 Core@28000000: Retired blocks 19951119. BROB head info: B170 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@28000000: Retired blocks 19951119. BROB head info: B170 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@28000000: Retired blocks 19951119. BROB head info: B170 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@28000000: Retired blocks 19951119. BROB head info: B17 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:139 generation:1678 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@28100000: Retired blocks 20022544. BROB head info: B152 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@28100000: Retired blocks 20022544. BROB head info: B152 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@28100000: Retired blocks 20022544. BROB head info: B152 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@28100000: Retired blocks 20022544. BROB head info: B72 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:145 generation:1684 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:146 generation:1684 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@28200000: Retired blocks 20093782. BROB head info: B126 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@28200000: Retired blocks 20093782. BROB head info: B126 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@28200000: Retired blocks 20093782. BROB head info: B126 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@28200000: Retired blocks 20093782. BROB head info: B220 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:133 generation:1690 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:134 generation:1690 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@28300000: Retired blocks 20165119. BROB head info: B88 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@28300000: Retired blocks 20165119. BROB head info: B87 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@28300000: Retired blocks 20165119. BROB head info: B90 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@28300000: Retired blocks 20165119. BROB head info: B246 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:136 generation:1696 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@28400000: Retired blocks 20236508. BROB head info: B102 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@28400000: Retired blocks 20236508. BROB head info: B102 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@28400000: Retired blocks 20236508. BROB head info: B104 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@28400000: Retired blocks 20236508. BROB head info: B168 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:128 generation:1702 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:129 generation:1702 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@28500000: Retired blocks 20307939. BROB head info: B86 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@28500000: Retired blocks 20307939. BROB head info: B85 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@28500000: Retired blocks 20307939. BROB head info: B88 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@28500000: Retired blocks 20307939. BROB head info: B224 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:135 generation:1708 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@28600000: Retired blocks 20379216. BROB head info: B48 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@28600000: Retired blocks 20379216. BROB head info: B48 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@28600000: Retired blocks 20379216. BROB head info: B48 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@28600000: Retired blocks 20379216. BROB head info: B192 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:130 generation:1714 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@28700000: Retired blocks 20450603. BROB head info: B14 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@28700000: Retired blocks 20450603. BROB head info: B18 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@28700000: Retired blocks 20450603. BROB head info: B18 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@28700000: Retired blocks 20450603. BROB head info: B249 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:137 generation:1720 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:138 generation:1720 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@28800000: Retired blocks 20521975. BROB head info: B6 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@28800000: Retired blocks 20521975. BROB head info: B6 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@28800000: Retired blocks 20521975. BROB head info: B7 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@28800000: Retired blocks 20521975. BROB head info: B228 STID3 BPC 0x1398a [STD COND]
+tid: 0 Core@28900000: Retired blocks 20593346. BROB head info: B238 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@28900000: Retired blocks 20593346. BROB head info: B238 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@28900000: Retired blocks 20593346. BROB head info: B237 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@28900000: Retired blocks 20593346. BROB head info: B249 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:137 generation:1732 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:138 generation:1732 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@29000000: Retired blocks 20664762. BROB head info: B234 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@29000000: Retired blocks 20664762. BROB head info: B235 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@29000000: Retired blocks 20664762. BROB head info: B236 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@29000000: Retired blocks 20664762. BROB head info: B249 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:137 generation:1738 physValid:1 addr:0x800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:138 generation:1738 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@29100000: Retired blocks 20736100. BROB head info: B198 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@29100000: Retired blocks 20736100. BROB head info: B198 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@29100000: Retired blocks 20736100. BROB head info: B199 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@29100000: Retired blocks 20736100. BROB head info: B17 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:139 generation:1744 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@29200000: Retired blocks 20807552. BROB head info: B199 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@29200000: Retired blocks 20807552. BROB head info: B199 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@29200000: Retired blocks 20807552. BROB head info: B201 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@29200000: Retired blocks 20807552. BROB head info: B41 STID3 BPC 0x13b0a [STD COND]
+tid: 0 Core@29300000: Retired blocks 20878906. BROB head info: B192 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@29300000: Retired blocks 20878906. BROB head info: B192 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@29300000: Retired blocks 20878906. BROB head info: B191 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@29300000: Retired blocks 20878906. BROB head info: B251 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:138 generation:1756 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@29400000: Retired blocks 20950254. BROB head info: B180 STID0 BPC 0x125de [STD COND]
+tid: 2 Core@29400000: Retired blocks 20950254. BROB head info: B180 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@29400000: Retired blocks 20950254. BROB head info: B209 STID3 BPC 0x139c6 [STD COND]
+tid: 0 Core@29500000: Retired blocks 21021590. BROB head info: B140 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@29500000: Retired blocks 21021590. BROB head info: B141 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@29500000: Retired blocks 21021590. BROB head info: B135 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@29500000: Retired blocks 21021590. BROB head info: B246 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:136 generation:1768 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@29600000: Retired blocks 21092928. BROB head info: B108 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@29600000: Retired blocks 21092928. BROB head info: B110 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@29600000: Retired blocks 21092928. BROB head info: B107 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@29600000: Retired blocks 21092928. BROB head info: B251 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:138 generation:1774 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@29700000: Retired blocks 21164215. BROB head info: B82 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@29700000: Retired blocks 21164215. BROB head info: B80 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@29700000: Retired blocks 21164215. BROB head info: B82 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@29700000: Retired blocks 21164215. BROB head info: B195 STID3 BPC 0x13b50 [TEPL FALL] rdy:1  TMULS, lb0:32, lb1:32, lb2:32 FP16 T0[T#1 TileTag:131 generation:1780 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:132 generation:1780 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@29800000: Retired blocks 21235554. BROB head info: B42 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@29800000: Retired blocks 21235554. BROB head info: B43 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@29800000: Retired blocks 21235554. BROB head info: B45 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@29800000: Retired blocks 21235554. BROB head info: B224 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:135 generation:1786 physValid:1 addr:0x3800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@29900000: Retired blocks 21306939. BROB head info: B57 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@29900000: Retired blocks 21306939. BROB head info: B56 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@29900000: Retired blocks 21306939. BROB head info: B59 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@29900000: Retired blocks 21306939. BROB head info: B143 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:126 generation:1792 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@30000000: Retired blocks 21378406. BROB head info: B63 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@30000000: Retired blocks 21378406. BROB head info: B64 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@30000000: Retired blocks 21378406. BROB head info: B64 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@30000000: Retired blocks 21378406. BROB head info: B167 STID3 BPC 0x13b4c [STD FALL]
+tid: 0 Core@30100000: Retired blocks 21449728. BROB head info: B47 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@30100000: Retired blocks 21449728. BROB head info: B49 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@30100000: Retired blocks 21449728. BROB head info: B49 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@30100000: Retired blocks 21449728. BROB head info: B111 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:121 generation:1804 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@30200000: Retired blocks 21521129. BROB head info: B66 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@30200000: Retired blocks 21521129. BROB head info: B65 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@30200000: Retired blocks 21521129. BROB head info: B67 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@30200000: Retired blocks 21521129. BROB head info: B35 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:114 generation:1810 physValid:1 addr:0x2000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@30300000: Retired blocks 21592563. BROB head info: B87 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@30300000: Retired blocks 21592563. BROB head info: B86 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@30300000: Retired blocks 21592563. BROB head info: B89 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@30300000: Retired blocks 21592563. BROB head info: B237 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:108 generation:1816 physValid:1 addr:0x4000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@30400000: Retired blocks 21663874. BROB head info: B89 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@30400000: Retired blocks 21663874. BROB head info: B86 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@30400000: Retired blocks 21663874. BROB head info: B87 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@30400000: Retired blocks 21663874. BROB head info: B124 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:94 generation:1822 physValid:1 addr:0x1400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@30500000: Retired blocks 21735282. BROB head info: B94 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@30500000: Retired blocks 21735282. BROB head info: B94 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@30500000: Retired blocks 21735282. BROB head info: B92 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@30500000: Retired blocks 21735282. BROB head info: B90 STID3 BPC 0x13ace [STD FALL]
+tid: 0 Core@30600000: Retired blocks 21806713. BROB head info: B84 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@30600000: Retired blocks 21806713. BROB head info: B85 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@30600000: Retired blocks 21806713. BROB head info: B84 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@30600000: Retired blocks 21806713. BROB head info: B124 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:94 generation:1834 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@30700000: Retired blocks 21878014. BROB head info: B52 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@30700000: Retired blocks 21878014. BROB head info: B51 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@30700000: Retired blocks 21878014. BROB head info: B54 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@30700000: Retired blocks 21878014. BROB head info: B97 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:91 generation:1840 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@30800000: Retired blocks 21949327. BROB head info: B14 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@30800000: Retired blocks 21949327. BROB head info: B12 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@30800000: Retired blocks 21949327. BROB head info: B15 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@30800000: Retired blocks 21949327. BROB head info: B102 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:93 generation:1846 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
+tid: 0 Core@30900000: Retired blocks 22020751. BROB head info: B252 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@30900000: Retired blocks 22020751. BROB head info: B254 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@30900000: Retired blocks 22020751. BROB head info: B254 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@30900000: Retired blocks 22020751. BROB head info: B151 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:97 generation:1852 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@31000000: Retired blocks 22092095. BROB head info: B244 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@31000000: Retired blocks 22092095. BROB head info: B245 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@31000000: Retired blocks 22092095. BROB head info: B245 STID2 BPC 0x125ec [STD COND]
+tid: 3 Core@31000000: Retired blocks 22092095. BROB head info: B97 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:91 generation:1858 physValid:1 addr:0x400 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@31100000: Retired blocks 22163359. BROB head info: B173 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@31100000: Retired blocks 22163359. BROB head info: B174 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@31100000: Retired blocks 22163359. BROB head info: B172 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@31100000: Retired blocks 22163359. BROB head info: B152 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:97 generation:1864 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:98 generation:1864 physValid:1 addr:0x2800 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@31200000: Retired blocks 22234695. BROB head info: B151 STID0 BPC 0x125de [STD COND]
+tid: 1 Core@31200000: Retired blocks 22234695. BROB head info: B154 STID1 BPC 0x125de [STD COND]
+tid: 2 Core@31200000: Retired blocks 22234695. BROB head info: B153 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@31200000: Retired blocks 22234695. BROB head info: B125 STID3 BPC 0x13b3a [TEPL FALL] rdy:1  TCVT, lb0:32, lb1:32, lb2:32 E4M3 T0[T#1 TileTag:94 generation:1870 physValid:1 addr:0x0 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:1 isZero: 0 cellTracked: 0], -> T TileTag:95 generation:1870 physValid:1 addr:0x1000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@31300000: Retired blocks 22305989. BROB head info: B92 STID0 BPC 0x125ec [STD COND]
+tid: 1 Core@31300000: Retired blocks 22305989. BROB head info: B92 STID1 BPC 0x125f6 [STD DIRECT]
+tid: 2 Core@31300000: Retired blocks 22305989. BROB head info: B91 STID2 BPC 0x125de [STD COND]
+tid: 3 Core@31300000: Retired blocks 22305989. BROB head info: B178 STID3 BPC 0x13b28 [TMA FALL] rdy:1  TLOAD, lb0:32, lb1:32, lb2:32 E4M3 DR, NORM.normal, E4M3, zero GMBase:0x1e000 stride:0 -> T TileTag:100 generation:1876 physValid:1 addr:0x1800 regCat:0 accSrcCat:0 accDstCat:0 size:1024 ready:0 isZero: 0 cellTracked: 0
+tid: 0 Core@31400000: Retired blocks 22377406. BROB head info: B68 STID0 BPC 0x125f6 [STD DIRECT]
+tid: 1 Core@31400000: Retired blocks 22377406. BROB head info: B71 STID1 BPC 0x125ec [STD COND]
+tid: 2 Core@31400000: Retired blocks 22377406. BROB head info: B70 STID2 BPC 0x125f6 [STD DIRECT]
+tid: 3 Core@31400000: Retired blocks 22377406. BROB head info: B237 STID3 BPC 0x13b72 [TMA FALL] rdy:1  TSTORE, lb0:32, lb1:32, lb2:32 FP16 DR, NORM.normal, FP16, zero T#1 TileTag:108 generation:1882 physValid:1 addr:0x3000 regCat:0 accSrcCat:0 accDstCat:0 size:2048 ready:1 isZero: 0 cellTracked: 0-> GMBase:0x0 stride:106496
