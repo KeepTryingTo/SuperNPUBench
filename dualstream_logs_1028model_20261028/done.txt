@@ -1,0 +1,6 @@
+tag=single_dispatch rc=0 seconds=12.4
+tag=single_combine rc=0 seconds=17.9
+tag=single_matmul_N192 rc=0 seconds=8880.9
+tag=dual2_combine_matmul rc=134 seconds=16548.8
+tag=dual1_dispatch_matmul rc=134 seconds=16989.0
+ALL_DONE
